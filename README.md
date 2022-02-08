@@ -76,5 +76,26 @@ Proceed to reinstall? [y/N]
 - `nupac upgrade` — update "mirrorlist" .csv, then look for newer versions of packages from "installed" .csv
 
 
-## Note
-Everything here is a matter of discussion and I'd be happy to take in consideration your ideas before starting my work with the PoC.
+## TODO list and progress status:
+Firstly I have to say that I'll focus on Linux development. When nupac works flawlessly on Linux, I'll start adjusting it to Windows as well. I'm going to need someone that could test and debug the script on Mac.
+
+I'd rather have the list completed accordingly to this order but of course any help is appreciated.
+
+- [x] Develop a way to organize needed files:
+  - ~/.local/bin — for independent scripts, like for Python. 
+  - ~/.config/nu/scripts — for scripts to be sourced in config.toml
+  - ~/.config/nu/.nupac/ — place for 2 files:
+    - packages_list.nu — list of packages in repo, format explained before
+    - installed_packages.nu — self-explanatory
+- [ ] Create sample template of local and server-side `.nu` files for `nupac`
+- [ ] `nupac install`
+- [ ] `nupac search`
+- [ ] `nupac uninstall`
+- [ ] `nupac upgrade`
+- [ ] `nupac install $package to $path"
+- [ ] Start porting to Windows
+- [ ] Find a tester for Mac
+- [ ] Add package description from `packages_list.nu` handling for `nupac install` and `nupac search` (Mentioned [here](#desired-output-of-search))
+- [ ] Write a simple documentation
+- [ ] Plan and organize merging `nupac` with the [main repo](https://github.com/nushell/nushell). 
+- [ ] Further development in a more or less distant future...
