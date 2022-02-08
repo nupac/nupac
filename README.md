@@ -92,7 +92,7 @@ I'd rather have the list completed accordingly to this order but of course any h
 - [ ] `nupac search`
 - [ ] `nupac uninstall`
 - [ ] `nupac upgrade`
-- [ ] `nupac install $package to $path"
+- [ ] `nupac install $package to $path`
 - [ ] Start porting to Windows
 - [ ] Find a tester for Mac
 - [ ] Add package description from `packages_list.nu` handling for `nupac install` and `nupac search` (Mentioned [here](#desired-output-of-search))
