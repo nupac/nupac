@@ -88,7 +88,7 @@ I'd rather have the list completed accordingly to this order but of course any h
     - packages_list.nu — list of packages in repo, format explained before
     - installed_packages.nu — self-explanatory
 - [ ] Create sample template of local and server-side `.nu` files for `nupac`
-  - [ ] Do it as a .nu file to `source` or do .csv file and `open mirrorlist.csv | from csv`? nu is a nice format but sourcing instead of creating a disposable, local variable seems like an overkill to me.
+  - [x] ~~Do it as a .nu file to `source` or do .csv file and `open mirrorlist.csv | from csv`? nu is a nice format but sourcing instead of creating a disposable, local variable seems like an overkill to me.~~ source seems not to have a global scope, I'll stick to .nu then.
 - [ ] `nupac install`
 - [ ] `nupac search`
 - [ ] `nupac uninstall`
