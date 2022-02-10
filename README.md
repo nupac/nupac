@@ -1,7 +1,8 @@
 # NUPAC 
 Nu package manager written entirely in nu
 
-
+## Current status:
+**Development suspended until engine-q release**
 
 ## Name
 To be discussed, just a suggestion.
