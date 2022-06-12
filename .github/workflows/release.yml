@@ -6,6 +6,10 @@ on:
     branches:
       - main
 
+defaults:
+  run:
+    shell: nu {0}
+
 jobs:
   generate-repo-index:
     name: Generate repo index
