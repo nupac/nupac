@@ -1,0 +1,13 @@
+[
+  {
+    "version": "1.0.0",
+    "name": "nupac",
+    "long-desc": "Very long description of nushell as package manager wow so many words\n",
+    "keywords":
+    [
+      "package",
+      "management"
+    ],
+    "short-desc": "package manager for nushell"
+  }
+]
