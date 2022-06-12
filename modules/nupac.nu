@@ -50,10 +50,11 @@ def get-metadata [
     |from yaml
 }
 
-# downloads fresh repository cache WIP
+# downloads fresh repository cache
 def update-repo [] {
     echo "placeholder"
-    #fetch url|save (mirrorlist)
+    fetch https://raw.githubusercontent.com/skelly37/nupac/main/nupac.json
+    |save (repo)
 }
 
 # returns cached contents of nupac repo
