@@ -18,6 +18,7 @@ Nu package manager written entirely in nu
 - [ ] Add template files for new submissions
 - [ ] Add ignore-pkg functionality
 - [ ] Add dependencies management both internal and external
+- [ ] Add automated license and copyright insertion
 - [ ] Add supported OS to metadata and installation flow (so stuff like winget or homebrew completion doesn't show up on Linux etc)
 - [ ] Add config flags
 - [ ] Add ability to specify version in dependencies
