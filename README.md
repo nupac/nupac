@@ -52,7 +52,6 @@ Proceed to reinstall? [y/N]
 ## Proposed list of commands
 - `nupac install` — download to /home/$username/.config/nu/scripts and source package in config or add the script to /home/$username/./local/bin
 - `nupac uninstall` — delete package and unsource it from config if needed.
-- `nupac install $package to $path` — specify installation path of a package (won't be sourced)
 - `nupac search` — just look for the matching package(s) in our "mirrorlist" .csv and list all packages with version, description and installation status.
 - `nupac upgrade` — update "mirrorlist", then look for newer versions of package(s) from ~/.config/nushell/nupac/.local_state
   - `--all` flag to update everything
@@ -70,7 +69,6 @@ I'd rather have the list completed accordingly to this order but of course any h
 - [ ] `nupac search`
 - [ ] `nupac uninstall`
 - [ ] `nupac upgrade`
-- [ ] `nupac install $package to $path`
 - [ ] Start porting to Windows
 - [ ] Find a tester for Mac
 - [ ] Add package description from `packages_list.nu` handling for `nupac install` and `nupac search` (Mentioned [here](#desired-output-of-search))
