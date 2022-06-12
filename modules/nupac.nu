@@ -1,5 +1,5 @@
 #?name: nupac
-#?version: 1.0.0
+#?version: 0.1.0
 #?short-desc: package manager for nushell
 #?long-desc: >
 #?    Very long description
