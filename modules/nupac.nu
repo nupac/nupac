@@ -38,6 +38,15 @@ def keywords [] {
     }
 }
 
+# checks if $env.NUPAC_IGNOREPKG has been declared (ignores installing and upgrading packages in the list)
+def get-ignored [] {
+    if "NUPAC_IGNOREPKG" in (env).name {
+        $env.NUPAC_IGNOREPKG
+    } else {
+        []
+    }
+}
+
 # returns record containing script metadata
 def get-metadata [
     script: path
@@ -86,6 +95,7 @@ def user-approves [] {
 # if no arguments were provided returns all packages
 def get-packages [
     ...names
+    --all
 ] {
     ls (scripts-path)
     |where ($it.name|path parse|get extension) == nu
@@ -96,8 +106,10 @@ def get-packages [
     |where {|it|
         if ($names|length) > 0 {
             $it.name in $names
-        } else {
+        } else if $all {
             true
+        } else {
+            false
         }
     }
 }
@@ -181,7 +193,11 @@ export def "nupac install" [
     # Installs package named example and adds it to global scope
     #> nupac install example -a
 ] {
-    let to_ins = (get-repo-contents | where name in $packages)
+    let to_ins = (
+    get-repo-contents 
+    | where name in $packages
+    | where name not-in (get-ignored)
+    )
 
     if ($to_ins|empty?) {
         print "No packages to install"
@@ -278,13 +294,11 @@ export def "nupac upgrade" [
     #> nupac upgrade --all --ignore-self
 ] {
     if (($packages|length) > 0 or $all) {
-        let to_upgrade = if ($packages|length) > 0 {
-            (get-packages $packages)
-        } else {
-            (get-packages)
-        }
-
-        let to_upgrade = ($to_upgrade | where name != (if $ignore-self {'nupac'}))
+        let to_upgrade = (
+            (get-packages $packages $all)
+            | where name not-in (get-ignored)
+            | where name != (if $ignore-self {"nupac"} else {""})
+        )
 
         if ($to_upgrade|empty?) {
             print "No upgrades found"
