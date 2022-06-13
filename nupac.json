@@ -1,13 +1,37 @@
 [
   {
+    "long-desc": "This module contains completions for make build tool\n",
+    "name": "make",
     "version": "1.0.0",
+    "keywords":
+    [
+      "make",
+      "build",
+      "completions"
+    ],
+    "short-desc": "makefile completions for nu"
+  },
+  {
+    "short-desc": "package manager for nushell",
+    "version": "0.1.0",
     "name": "nupac",
     "long-desc": "Very long description of nushell as package manager wow so many words\n",
     "keywords":
     [
       "package",
       "management"
+    ]
+  },
+  {
+    "keywords":
+    [
+      "ssh",
+      "remote",
+      "automation"
     ],
-    "short-desc": "package manager for nushell"
+    "short-desc": "Remoting module for nu",
+    "long-desc": "This module exports commands that simplify management of remote hosts over ssh\n",
+    "version": "1.0.0",
+    "name": "remoting"
   }
 ]
