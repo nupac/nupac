@@ -54,6 +54,12 @@ def get-metadata [
 def update-repo [] {
     fetch https://raw.githubusercontent.com/skelly37/nupac/main/nupac.json
     |save (repo)
+
+    if ($env.LAST_EXIT_CODE == 0) {
+        print "Repository cached updated successfully"
+    } else {
+        print "Error updating the repository cache"
+    }
 }
 
 # returns cached contents of nupac repo
@@ -175,16 +181,38 @@ export def "nupac install" [
     # Installs package named example and adds it to global scope
     #> nupac install example -a
 ] {
-    get-repo-contents
-    |where name in $packages
-    |each {|package|
-        if $add-to-config {
-            install-package $package --add-to-config
-        } else {
-            install-package $package
+    let to_ins = (get-repo-contents | where name in $packages)
+
+    if ($to_ins|empty?) {
+        print "No packages to install"
+    } else {
+        print ($to_ins | select name version)
+        print "The listed packages will be installed"
+
+        if (user-approves) {
+            $to_ins
+            |each {|package|
+                if $add-to-config {
+                    install-package $package --add-to-config
+                } else {
+                    install-package $package
+                }
+            }
         }
-    }
+    }   
 }
+
+# Lists installed packages
+export def "nupac list" [] {
+    get-packages
+    |move short-desc long-desc --after name
+}
+
+# Refreshes the repo cache
+export def "nupac refresh" [] {
+  update-repo
+}
+
 # Removes provided set of packages and removes use statement from config.nu
 export def "nupac remove" [
     ...packages: string
@@ -199,22 +227,22 @@ export def "nupac remove" [
 ] {
     let to_del = (get-repo-contents | where name in $packages)
     
-    print "Packages to remove:"
-    print $to_del
-    
-    if (user-approves) {
-        $to del
-        | each {|package|
-        remove-package $package
+    if ($to_del|empty?) {
+        print "No packages to remove"
+    } else {
+        print ($to_del | select name version)
+        print "The listed packages will be removed"
+        
+        if (user-approves) {
+            $to_del
+            | each {|package|
+            remove-package $package
+            }
         }
     }
 }
-# Refreshes the repo cache
-export def "nupac refresh" [] {
-  update-repo
-}
 
-# Searches remote repository for packages matching query
+# Searches remote repository for packages matching query with name, descriptions or keywords
 export def "nupac search" [
     query: string
     #
@@ -227,12 +255,9 @@ export def "nupac search" [
     |where name =~ $query or short-desc =~ $query or long-desc =~ $query or keywords =~ $query
     |reject script-url script-raw-url
 }
-# Lists installed packages
-export def "nupac list" [] {
-    get-packages
-    |move short-desc long-desc --after name
-}
-# Upgrades packages
+
+
+# Upgrades all or selected packages
 export def "nupac upgrade" [
     ...packages:string
     --all(-a)
@@ -252,20 +277,27 @@ export def "nupac upgrade" [
     # Upgrade all packages excluding nupac itself
     #> nupac upgrade --all --ignore-self
 ] {
-    if ($packages|length) > 0 {
-        get-packages $packages
-        |where name != (if $ignore-self {'nupac'})
-        |each {|package|
-            print $"upgrading ($package.name)"
-            upgrade-package $package
+    if (($packages|length) > 0 or $all) {
+        let to_upgrade = if ($packages|length) > 0 {
+            (get-packages $packages)
+        } else {
+            (get-packages)
         }
-    } else if $all {
-        print "upgrading all packages"
-        get-packages
-        |where name != (if $ignore-self {'nupac'})
-        |each {|package|
-            print $"upgrading ($package.name)"
-            upgrade-package $package
+
+        let to_upgrade = ($to_upgrade | where name != (if $ignore-self {'nupac'}))
+
+        if ($to_upgrade|empty?) {
+            print "No upgrades found"
+        } else {
+            print ($to_upgrade | select name version)
+            print "The listed packages will be upgraded"
+
+            if (user-approves) {
+                $to_upgrade
+                |each {|package|
+                upgrade-package $package
+                }
+            }
         }
     } else {
         error make {
