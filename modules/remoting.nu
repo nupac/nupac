@@ -5,6 +5,7 @@
 #?    This module exports commands
 #?    that simplify management of
 #?    remote hosts over ssh
+#?    before using you need to fill the config
 #?keywords:
 #? - ssh
 #? - remote
@@ -16,7 +17,6 @@ def hosts [] {
     # Put your config here
   ]
 }
-
 
 def "nu-complete wol" [] {
   hosts
