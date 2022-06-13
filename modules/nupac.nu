@@ -71,6 +71,11 @@ def get-repo-contents [] {
     |keywords
 }
 
+def user-approves [] {
+    input "Do you want to proceed? [Y/n]"
+    | $in in ['' 'y' 'Y']
+}
+
 # returns packages with names matching provided arguments
 # if no arguments were provided returns all packages
 def get-packages [
@@ -192,10 +197,16 @@ export def "nupac remove" [
     # Remove packages example, second-example and third-example
     #> nupac remove example second-example third-example
 ] {
-    get-repo-contents
-    |where name in $packages
-    |each {|package|
+    let to_del = (get-repo-contents | where name in $packages)
+    
+    print "Packages to remove:"
+    print $to_del
+    
+    if (user-approves) {
+        $to del
+        | each {|package|
         remove-package $package
+        }
     }
 }
 # Refreshes the repo cache
