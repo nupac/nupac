@@ -52,7 +52,6 @@ def get-metadata [
 
 # downloads fresh repository cache
 def update-repo [] {
-    echo "placeholder"
     fetch https://raw.githubusercontent.com/skelly37/nupac/main/nupac.json
     |save (repo)
 }
@@ -147,7 +146,7 @@ def remove-package [
 def upgrade-package [
     package: record
 ] {
-    if (get-mirrorlist|where name == $package.name|get -i 0.version) > $package.version {
+    if (get-repo-contents|where name == $package.name|get -i 0.version) > $package.version {
         print $"Upgrading package ($package.name)"
         install-package $package.name
     } else {
@@ -171,7 +170,7 @@ export def "nupac install" [
     # Installs package named example and adds it to global scope
     #> nupac install example -a
 ] {
-    get-mirrorlist
+    get-repo-contents
     |where name in $packages
     |each {|package|
         if $add-to-config {
@@ -193,7 +192,7 @@ export def "nupac remove" [
     # Remove packages example, second-example and third-example
     #> nupac remove example second-example third-example
 ] {
-    get-mirrorlist
+    get-repo-contents
     |where name in $packages
     |each {|package|
         remove-package $package
@@ -213,7 +212,7 @@ export def "nupac search" [
     # Search for package named example
     #> nupac search example
 ] {
-    get-mirrorlist
+    get-repo-contents
     |where name =~ $query or short-desc =~ $query or long-desc =~ $query or keywords =~ $query
     |reject script-url script-raw-url
 }
