@@ -178,7 +178,7 @@ def upgrade-package [
 }
 
 # Installs provided set of packages and optionally adds them to the global scope
-export def "nupac install" [
+export def install [
     ...packages: string # packages you want to install
     --add-to-config(-a):bool # add packages to config
     #
@@ -219,18 +219,18 @@ export def "nupac install" [
 }
 
 # Lists installed packages
-export def "nupac list" [] {
+export def list [] {
     get-packages
     |move short-desc long-desc --after name
 }
 
 # Refreshes the repo cache
-export def "nupac refresh" [] {
+export def refresh [] {
   update-repo
 }
 
 # Removes provided set of packages and removes use statement from config.nu
-export def "nupac remove" [
+export def remove [
     ...packages: string
     #
     # Examples:
@@ -259,7 +259,7 @@ export def "nupac remove" [
 }
 
 # Searches remote repository for packages matching query with name, descriptions or keywords
-export def "nupac search" [
+export def search [
     query: string
     #
     # Examples:
@@ -274,7 +274,7 @@ export def "nupac search" [
 
 
 # Upgrades all or selected packages
-export def "nupac upgrade" [
+export def upgrade [
     ...packages:string
     --all(-a)
     --ignore-self(-i)
