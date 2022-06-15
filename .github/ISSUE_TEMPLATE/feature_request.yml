@@ -1,4 +1,4 @@
-ame: Feature Request
+name: Feature Request
 description: "When you want a new feature for something that doesn't already exist"
 body:
   - type: textarea
