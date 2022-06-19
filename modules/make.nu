@@ -4,6 +4,8 @@
 #?long-desc: >
 #?    This module contains completions for
 #?    make build tool
+#?url: https://github.com/skelly37/nupac/blob/main/modules/make.nu
+#?script-raw-url: https://raw.githubusercontent.com/skelly37/nupac/main/modules/make.nu
 #?keywords:
 #? - make
 #? - build

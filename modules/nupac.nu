@@ -5,6 +5,8 @@
 #?    Very long description
 #?    of nushell as package manager
 #?    wow so many words
+#?url: https://github.com/skelly37/nupac/blob/main/modules/nupac.nu
+#?script-raw-url: https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu
 #?keywords:
 #? - package
 #? - management
