@@ -11,11 +11,35 @@
 #? - package
 #? - management
 
+# If the enviroment variable exists
+def is-in-env [name: string] {
+    not ($env | get -i name | empty?)
+}
+
+# Specified value, env value or hardcoded value of the flag
+def get-flag-value [
+    flag: bool
+    env-var: string
+    ] {
+    if ($flag) {
+        true
+    } else if (is-in-env $env-var) {
+        $env | get $env-var
+    } else {
+        false
+    }
+}
+
 # Path where packages will be installed, can be changed to any other directory provided it is added to NU_LIB_DIRS variable
 def scripts-path [] {
-    $nu.config-path
-    |path dirname
-    |path join 'scripts'
+    if (is-in-env "NUPAC_DEFAULT_LIB_DIR") {
+        $env.NUPAC_DEFAULT_LIB_DIR
+    } else {
+        $nu.config-path
+        |path dirname
+        |path join 'scripts'
+    }
+    
 }
 
 # We store cache index locally to avoid redownloading it on every command invocation
@@ -88,9 +112,14 @@ def get-repo-contents [] {
     |keywords
 }
 
+# whether the action was approved or not
 def user-approves [] {
-    input "Do you want to proceed? [Y/n]"
-    | $in in ['' 'y' 'Y']
+    if (($env | get -i "NUPAC_NO_CONFIRM") == true) {
+        true
+    } else {
+        input "Do you want to proceed? [Y/n]"
+        |$in in ['' 'y' 'Y']
+    }
 }
 
 # returns packages with names matching provided arguments
@@ -148,10 +177,10 @@ def remove-from-config [
 # actual package installation happens here
 def install-package [
     package: record
-    --add-to-config(-a):bool
+    --add-to-config(-a): bool
 ] {
     print $"Installing ($package.name)"
-    fetch $package.script-raw-url
+    fetch ($package.script-raw-url | into string)
     |save (scripts-path|path join ($package.script-url|path basename))
 
     if $add-to-config {
@@ -180,7 +209,7 @@ def upgrade-package [
 }
 
 # Installs provided set of packages and optionally adds them to the global scope
-export def install [
+export def "nupac install" [
     ...packages: string # packages you want to install
     --add-to-config(-a):bool # add packages to config
     #
@@ -195,25 +224,30 @@ export def install [
     # Installs package named example and adds it to global scope
     #> nupac install example -a
 ] {
-    let to_ins = (
+    let add-to-config = (get-flag-value $add-to-config "NUPAC_ADD_TO_SCRIPTS_LIST")
+
+    let to-ins = (
     get-repo-contents 
-    | where name in $packages
-    | where name not-in (get-ignored)
+    |where name in $packages
+    |where name not-in (get-ignored)
     )
 
-    if ($to_ins|empty?) {
+    if ($to-ins|empty?) {
         print "No packages to install"
     } else {
-        print ($to_ins | select name version)
+        print ($to-ins | select name version)
         print "The listed packages will be installed"
 
         if (user-approves) {
-            $to_ins
-            |each {|package|
-                if $add-to-config {
+            if $add-to-config {
+                $to-ins
+                |each {|package|
                     install-package $package --add-to-config
-                } else {
-                    install-package $package
+                } 
+            } else {
+                $to-ins
+                |each {|package|    
+                install-package $package
                 }
             }
         }
@@ -221,18 +255,18 @@ export def install [
 }
 
 # Lists installed packages
-export def list [] {
+export def "nupac list" [] {
     get-packages
     |move short-desc long-desc --after name
 }
 
 # Refreshes the repo cache
-export def refresh [] {
+export def "nupac refresh" [] {
   update-repo
 }
 
 # Removes provided set of packages and removes use statement from config.nu
-export def remove [
+export def "nupac remove" [
     ...packages: string
     #
     # Examples:
@@ -243,17 +277,17 @@ export def remove [
     # Remove packages example, second-example and third-example
     #> nupac remove example second-example third-example
 ] {
-    let to_del = (get-repo-contents | where name in $packages)
+    let to-del = (get-repo-contents | where name in $packages)
     
-    if ($to_del|empty?) {
+    if ($to-del|empty?) {
         print "No packages to remove"
     } else {
-        print ($to_del | select name version)
+        print ($to-del | select name version)
         print "The listed packages will be removed"
         
         if (user-approves) {
-            $to_del
-            | each {|package|
+            $to-del
+            |each {|package|
             remove-package $package
             }
         }
@@ -261,7 +295,7 @@ export def remove [
 }
 
 # Searches remote repository for packages matching query with name, descriptions or keywords
-export def search [
+export def "nupac search" [
     query: string
     #
     # Examples:
@@ -276,7 +310,7 @@ export def search [
 
 
 # Upgrades all or selected packages
-export def upgrade [
+export def "nupac upgrade" [
     ...packages:string
     --all(-a)
     --ignore-self(-i)
@@ -295,21 +329,23 @@ export def upgrade [
     # Upgrade all packages excluding nupac itself
     #> nupac upgrade --all --ignore-self
 ] {
+    let ignore-self = (get-flag-value $ignore-self "NUPAC_IGNORE_SELF")
+
     if (($packages|length) > 0 or $all) {
-        let to_upgrade = (
+        let to-upgrade = (
             (get-packages $packages $all)
-            | where name not-in (get-ignored)
-            | where name != (if $ignore-self {"nupac"} else {""})
+            |where name not-in (get-ignored)
+            |where name != (if $ignore-self {"nupac"} else {""})
         )
 
-        if ($to_upgrade|empty?) {
+        if ($to-upgrade|empty?) {
             print "No upgrades found"
         } else {
-            print ($to_upgrade | select name version)
+            print ($to-upgrade | select name version)
             print "The listed packages will be upgraded"
 
             if (user-approves) {
-                $to_upgrade
+                $to-upgrade
                 |each {|package|
                 upgrade-package $package
                 }
