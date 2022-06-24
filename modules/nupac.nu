@@ -332,20 +332,20 @@ export def "nupac upgrade" [
     let ignore-self = (get-flag-value $ignore-self "NUPAC_IGNORE_SELF")
 
     if (($packages|length) > 0 or $all) {
-        let to_upgrade = (
+        let to-upgrade = (
             (get-packages $packages $all)
             |where name not-in (get-ignored)
             |where name != (if $ignore-self {"nupac"} else {""})
         )
 
-        if ($to_upgrade|empty?) {
+        if ($to-upgrade|empty?) {
             print "No upgrades found"
         } else {
-            print ($to_upgrade | select name version)
+            print ($to-upgrade | select name version)
             print "The listed packages will be upgraded"
 
             if (user-approves) {
-                $to_upgrade
+                $to-upgrade
                 |each {|package|
                 upgrade-package $package
                 }
