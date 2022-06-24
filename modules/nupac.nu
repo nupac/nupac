@@ -11,11 +11,35 @@
 #? - package
 #? - management
 
+# If the enviroment variable exists
+def is-in-env [name: string] {
+    not ($env | get -i name | empty?)
+}
+
+# Specified value, env value or hardcoded value of the flag
+def get-flag-value [
+    flag: bool
+    env-var: string
+    ] {
+    if ($flag) {
+        true
+    } else if (is-in-env $env-var) {
+        $env | get $env-var
+    } else {
+        false
+    }
+}
+
 # Path where packages will be installed, can be changed to any other directory provided it is added to NU_LIB_DIRS variable
 def scripts-path [] {
-    $nu.config-path
-    |path dirname
-    |path join 'scripts'
+    if (is-in-env "NUPAC_DEFAULT_INSTALL_DIR") {
+            $env.NUPAC_DEFAULT_INSTALL_DIR
+        } else {
+            $nu.config-path
+            |path dirname
+            |path join 'scripts'
+        }
+    
 }
 
 # We store cache index locally to avoid redownloading it on every command invocation
@@ -89,8 +113,12 @@ def get-repo-contents [] {
 }
 
 def user-approves [] {
-    input "Do you want to proceed? [Y/n]"
-    | $in in ['' 'y' 'Y']
+    if (($env | get -i "NUPAC_NO_CONFIRM") == true) {
+        true
+    } else {
+        input "Do you want to proceed? [Y/n]"
+        | $in in ['' 'y' 'Y']
+    }
 }
 
 # returns packages with names matching provided arguments
@@ -148,10 +176,10 @@ def remove-from-config [
 # actual package installation happens here
 def install-package [
     package: record
-    --add-to-config(-a):bool
+    --add-to-config(-a): bool
 ] {
     print $"Installing ($package.name)"
-    fetch $package.script-raw-url
+    fetch ($package.script-raw-url | into string)
     |save (scripts-path|path join ($package.script-url|path basename))
 
     if $add-to-config {
@@ -180,7 +208,7 @@ def upgrade-package [
 }
 
 # Installs provided set of packages and optionally adds them to the global scope
-export def install [
+export def "nupac install" [
     ...packages: string # packages you want to install
     --add-to-config(-a):bool # add packages to config
     #
@@ -195,6 +223,8 @@ export def install [
     # Installs package named example and adds it to global scope
     #> nupac install example -a
 ] {
+    let add-to-config = (get-flag-value $add-to-config "NUPAC_ADD_TI_SCRIPTS_LIST")
+
     let to_ins = (
     get-repo-contents 
     | where name in $packages
@@ -208,12 +238,15 @@ export def install [
         print "The listed packages will be installed"
 
         if (user-approves) {
-            $to_ins
-            |each {|package|
-                if $add-to-config {
+            if $add-to-config {
+                $to_ins
+                |each {|package|
                     install-package $package --add-to-config
-                } else {
-                    install-package $package
+                } 
+            } else {
+                $to_ins
+                |each {|package|    
+                install-package $package
                 }
             }
         }
@@ -221,18 +254,18 @@ export def install [
 }
 
 # Lists installed packages
-export def list [] {
+export def "nupac list" [] {
     get-packages
     |move short-desc long-desc --after name
 }
 
 # Refreshes the repo cache
-export def refresh [] {
+export def "nupac refresh" [] {
   update-repo
 }
 
 # Removes provided set of packages and removes use statement from config.nu
-export def remove [
+export def "nupac remove" [
     ...packages: string
     #
     # Examples:
@@ -261,7 +294,7 @@ export def remove [
 }
 
 # Searches remote repository for packages matching query with name, descriptions or keywords
-export def search [
+export def "nupac search" [
     query: string
     #
     # Examples:
@@ -276,7 +309,7 @@ export def search [
 
 
 # Upgrades all or selected packages
-export def upgrade [
+export def "nupac upgrade" [
     ...packages:string
     --all(-a)
     --ignore-self(-i)
@@ -295,6 +328,8 @@ export def upgrade [
     # Upgrade all packages excluding nupac itself
     #> nupac upgrade --all --ignore-self
 ] {
+    let ignore-self = (get-flag-value $ignore-self "NUPAC_IGNORE_SELF")
+
     if (($packages|length) > 0 or $all) {
         let to_upgrade = (
             (get-packages $packages $all)
