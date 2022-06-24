@@ -33,12 +33,12 @@ def get-flag-value [
 # Path where packages will be installed, can be changed to any other directory provided it is added to NU_LIB_DIRS variable
 def scripts-path [] {
     if (is-in-env "NUPAC_DEFAULT_INSTALL_DIR") {
-            $env.NUPAC_DEFAULT_INSTALL_DIR
-        } else {
-            $nu.config-path
-            |path dirname
-            |path join 'scripts'
-        }
+        $env.NUPAC_DEFAULT_INSTALL_DIR
+    } else {
+        $nu.config-path
+        |path dirname
+        |path join 'scripts'
+    }
     
 }
 
