@@ -11,9 +11,11 @@
 #? - package
 #? - management
 
-# If the enviroment variable exists
-def is-in-env [name: string] {
-    not ($env | get -i name | empty?)
+# get enviroment flag's value or return false
+def get-env-flag [name: string] {
+    $env
+    |get -i $name
+    |default false    
 }
 
 # Specified value, env value or hardcoded value of the flag
@@ -23,23 +25,20 @@ def get-flag-value [
     ] {
     if ($flag) {
         true
-    } else if (is-in-env $env-var) {
-        $env | get $env-var
     } else {
-        false
+        get-env-flag $env-var
     }
 }
 
 # Path where packages will be installed, can be changed to any other directory provided it is added to NU_LIB_DIRS variable
 def scripts-path [] {
-    if (is-in-env "NUPAC_DEFAULT_LIB_DIR") {
+    if ("NUPAC_DEFAULT_LIB_DIR" in $env) {
         $env.NUPAC_DEFAULT_LIB_DIR
     } else {
         $nu.config-path
         |path dirname
         |path join 'scripts'
     }
-    
 }
 
 # We store cache index locally to avoid redownloading it on every command invocation
@@ -66,7 +65,7 @@ def keywords [] {
 
 # checks if $env.NUPAC_IGNOREPKG has been declared (ignores installing and upgrading packages in the list)
 def get-ignored [] {
-    if "NUPAC_IGNOREPKG" in (env).name {
+    if ("NUPAC_IGNOREPKG" in $env) {
         $env.NUPAC_IGNOREPKG
     } else {
         []
@@ -114,7 +113,7 @@ def get-repo-contents [] {
 
 # whether the action was approved or not
 def user-approves [] {
-    if (($env | get -i "NUPAC_NO_CONFIRM") == true) {
+    if (get-env-flag "NUPAC_NO_CONFIRM") {
         true
     } else {
         input "Do you want to proceed? [Y/n]"
