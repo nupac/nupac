@@ -16,7 +16,7 @@ Metadata inserted at the beginning of your nu_scripts package that make the whol
 
 ### Just for the nupac
 - **url**: URL of the package
-- **os**: List of supported operating systems, available: `["linux" "macos" "windows"]`
+- **os**: List of supported operating systems, available: `["android" "linux" "macos" "windows"]`
 
 ## Optional attributes
 ### Displayed to the users
