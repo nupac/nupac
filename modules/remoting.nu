@@ -1,4 +1,5 @@
 #?name: remoting
+#?author: Yethal
 #?version: 1.0.0
 #?short-desc: Remoting module for nu
 #?long-desc: >
@@ -8,10 +9,7 @@
 #?    before using you need to fill the config
 #?url: https://github.com/skelly37/nupac/blob/main/modules/remoting.nu
 #?script-raw-url: https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting.nu
-#?keywords:
-#? - ssh
-#? - remote
-#? - automation
+#?keywords: [ssh, remote, automation]
 
 # internal function that holds the host data. We could store it in a yaml file as well but that would require nushell to read it from disk every single time
 def hosts [] {

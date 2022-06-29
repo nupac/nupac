@@ -1,4 +1,5 @@
 #?name: make
+#?author: Yethal
 #?version: 1.0.0
 #?short-desc: makefile completions for nu
 #?long-desc: >
@@ -6,11 +7,7 @@
 #?    make build tool
 #?url: https://github.com/skelly37/nupac/blob/main/modules/make.nu
 #?script-raw-url: https://raw.githubusercontent.com/skelly37/nupac/main/modules/make.nu
-#?keywords:
-#? - make
-#? - build
-#? - completions
-
+#?keywords: [make, build, completions]
 
 def "nu-complete make" [] {
   open Makefile

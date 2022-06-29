@@ -34,7 +34,7 @@ def add-optional-attributes [
                 error make {msg: $"$($metadata) lacks: name"}
                 exit 1
     }
-    
+
     {"pre-install-msg": "",
     "post-install-msg": "",
     "keywords": $metadata.name, 
@@ -51,4 +51,4 @@ ls modules
     check-required-attributes $metadata
     echo $metadata
 }
-|save nupac.json
+| save nupac.json

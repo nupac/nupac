@@ -1,4 +1,5 @@
 #?name: nupac
+#?author: skelly37, Yethal
 #?version: 0.1.0
 #?short-desc: package manager for nushell
 #?long-desc: >
@@ -7,7 +8,7 @@
 #?    wow so many words
 #?url: https://github.com/skelly37/nupac/blob/main/modules/nupac.nu
 #?script-raw-url: https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu
-#?keywords: ["package" "management"]
+#?keywords: [package, management]
 
 # get enviroment flag's value or return false
 def get-env-flag [name: string] {
@@ -286,9 +287,16 @@ export def "nupac search" [
     # Search for package named example
     #> nupac search example
 ] {
-    get-repo-contents
-    |where name =~ $query or short-desc =~ $query or long-desc =~ $query or $query in keywords
-    |select name version author os short-desc
+    let contents = (
+        get-repo-contents
+        |where name =~ $query or short-desc =~ $query or long-desc =~ $query or $query in keywords
+        |select name version author short-desc os
+        )
+
+    $contents
+    |reject os
+    |merge {[["supported OS"]; [($contents.os | str collect ", "))]]}
+    |move "supported OS" --before short-desc
     |rename name version "author(s)" "supported OS" description
 }
 
