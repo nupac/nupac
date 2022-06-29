@@ -12,8 +12,25 @@ def get-metadata [
     |from yaml
 }
 
+def check-required-attributes [
+    metadata
+] {
+    $metadata
+    |each { |entry|
+        ["author" "name" "os" "short-desc" "url" "version"]
+        |each {|attribute|
+            if ($attribute not-in $entry) {
+                error make {msg: "Files lack required attributes"}
+                exit 1
+            }
+        }
+    }
+
+}
+
+
 ls modules
 |each {|module|
-    get-metadata $module.name
+    let metadata = (get-metadata $module.name)
+    check-required-attributes $metadata
 }
-|save nupac.json
