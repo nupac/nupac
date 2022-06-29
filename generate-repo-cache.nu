@@ -30,6 +30,11 @@ def check-required-attributes [
 def add-optional-attributes [
     metadata
 ] {
+    if ("name" not-in $metadata) {
+                error make {msg: $"$($metadata) lacks: name"}
+                exit 1
+    }
+    
     {"pre-install-msg": "",
     "post-install-msg": "",
     "keywords": $metadata.name, 
