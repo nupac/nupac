@@ -7,9 +7,7 @@
 #?    wow so many words
 #?url: https://github.com/skelly37/nupac/blob/main/modules/nupac.nu
 #?script-raw-url: https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu
-#?keywords:
-#? - package
-#? - management
+#?keywords: ["package" "management"]
 
 # get enviroment flag's value or return false
 def get-env-flag [name: string] {
@@ -49,18 +47,6 @@ def repo [] {
 # tweak this value if you want to change how often cache is refreshed
 def freshness [] {
     1day
-}
-# sets the keywords field to empty string if missing to maintain data shape across packages
-def keywords [] {
-    upsert keywords {|x|
-        if 'keywords' not-in ($x|columns) {
-            ' '
-        } else if ($x.keywords|describe) starts-with list {
-            $x.keywords|str collect ', '
-        } else {
-            $x.keywords
-        }
-    }
 }
 
 # checks if $env.NUPAC_IGNOREPKG has been declared (ignores installing and upgrading packages in the list)
@@ -108,7 +94,6 @@ def get-repo-contents [] {
         ignore
     }
     open (repo)
-    |keywords
 }
 
 # whether the action was approved or not
@@ -132,7 +117,6 @@ def get-packages [
     |each {|package|
      get-metadata (scripts-path|path join $package.name)
     }
-    |keywords
     |where {|it|
         if ($names|length) > 0 {
             $it.name in $names
@@ -303,8 +287,9 @@ export def "nupac search" [
     #> nupac search example
 ] {
     get-repo-contents
-    |where name =~ $query or short-desc =~ $query or long-desc =~ $query or keywords =~ $query
-    |reject script-url script-raw-url
+    |where name =~ $query or short-desc =~ $query or long-desc =~ $query or $query in keywords
+    |select name version author os short-desc
+    |rename name version "author(s)" "supported OS" description
 }
 
 
