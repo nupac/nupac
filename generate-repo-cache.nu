@@ -17,20 +17,33 @@ def check-required-attributes [
 ] {
     $metadata
     |each { |entry|
-        ["author" "name" "os" "short-desc" "url" "version"]
+        ["author" "name" "os" "short-desc" "url" "version" "keywords"]
         |each {|attribute|
             if ($attribute not-in $entry) {
-                error make {msg: "Files lack required attributes"}
+                error make {msg: $"$($entry) lacks: $($attribute)"}
                 exit 1
             }
         }
     }
+}
 
+def add-optional-attributes [
+    metadata
+] {
+    {"pre-install-msg": "",
+    "post-install-msg": "",
+    "keywords": $metadata.name, 
+    "nu-dependencies": "", 
+    "installer": "",
+    "os": ["android" "macos" "linux" "windows"]}
+    | merge {$metadata}
 }
 
 
 ls modules
 |each {|module|
-    let metadata = (get-metadata $module.name)
+    let metadata = (add-optional-attributes (get-metadata $module.name))
     check-required-attributes $metadata
+    echo $metadata
 }
+|save nupac.json
