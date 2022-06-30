@@ -1,5 +1,5 @@
 #?name: make
-#?author: Yethal
+#?author: [Yethal,]
 #?version: 1.0.0
 #?short-desc: makefile completions for nu
 #?long-desc: >

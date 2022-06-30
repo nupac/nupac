@@ -1,5 +1,5 @@
 #?name: remoting
-#?author: Yethal
+#?author: [Yethal,]
 #?version: 1.0.0
 #?short-desc: Remoting module for nu
 #?long-desc: >

@@ -12,35 +12,43 @@ def get-metadata [
     |from yaml
 }
 
+def required-attributes [] {
+    echo ["author" "name" "os" "short-desc" "url" "version" "keywords"]
+}
+
 def check-required-attributes [
     metadata
 ] {
-    $metadata
-    |each { |entry|
-        ["author" "name" "os" "short-desc" "url" "version" "keywords"]
-        |each {|attribute|
-            if ($attribute not-in $entry) {
-                error make {msg: $"$($entry) lacks: $($attribute)"}
+    required-attributes
+    |each { |attribute|
+            if ($attribute not-in ($metadata|columns)) {
+                error make {msg: $"$($attribute) not present in metadata"}
                 exit 1
+            } else {
+                $metadata
+                | each { |entry|
+                    if ($entry|get $attribute|empty?) {
+                        error make {msg: $"($entry) lacks required attribute: ($attribute)"}
+                        exit 1
+                    }
+                }
             }
         }
-    }
+}
+
+def default-attributes [] {
+    {"pre-install-msg": "",
+    "post-install-msg": "",
+    "keywords": [], 
+    "nu-dependencies": "", 
+    "installer": "",
+    "os": ["android" "macos" "linux" "windows"]}
 }
 
 def add-optional-attributes [
     metadata
 ] {
-    if ("name" not-in $metadata) {
-                error make {msg: $"$($metadata) lacks: name"}
-                exit 1
-    }
-
-    {"pre-install-msg": "",
-    "post-install-msg": "",
-    "keywords": $metadata.name, 
-    "nu-dependencies": "", 
-    "installer": "",
-    "os": ["android" "macos" "linux" "windows"]}
+    default-attributes
     | merge {$metadata}
 }
 

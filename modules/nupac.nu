@@ -1,5 +1,5 @@
 #?name: nupac
-#?author: skelly37, Yethal
+#?author: [skelly37, Yethal]
 #?version: 0.1.0
 #?short-desc: package manager for nushell
 #?long-desc: >
@@ -287,17 +287,13 @@ export def "nupac search" [
     # Search for package named example
     #> nupac search example
 ] {
-    let contents = (
-        get-repo-contents
-        |where name =~ $query or short-desc =~ $query or long-desc =~ $query or $query in keywords
-        |select name version author short-desc os
-        )
 
-    $contents
-    |reject os
-    |merge {[["supported OS"]; [($contents.os | str collect ", "))]]}
-    |move "supported OS" --before short-desc
-    |rename name version "author(s)" "supported OS" description
+    get-repo-contents
+    |where name =~ $query or short-desc =~ $query or long-desc =~ $query or $query in keywords or $query in author
+    |select name version author short-desc os
+    |move "author" --before short-desc
+    |move "os" --before short-desc        
+    
 }
 
 
