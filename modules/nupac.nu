@@ -160,6 +160,14 @@ def remove-from-config [
     |save $nu.config-path
 }
 
+# package location in the filesystem
+def get-package-location [
+    package: record
+] {
+    scripts-path
+    |path join ($package.url|path basename)
+}
+
 # actual package installation happens here
 def install-package [
     package: record
@@ -167,8 +175,9 @@ def install-package [
 ] {
     print $"Installing ($package.name)"
     fetch ($package.script-raw-url | into string)
-    |save (scripts-path|path join ($package.url|path basename))
+    |save (get-package-location $package)
 
+    # TODO replace with nupac's own file
     if $add-to-config {
         add-to-config (config-entry ($package.url|path basename))
     }
@@ -178,7 +187,8 @@ def remove-package [
     package: record
 ] {
     print $"Uninstalling ($package.name)"
-    rm -r (scripts-path|path join ($package.url|path basename))
+    rm -r (get-package-location $package)
+    # TODO replace with nupac's own file
     remove-from-config (config-entry ($package.url|path basename))
 }
 
@@ -236,6 +246,8 @@ export def "nupac install" [
     # Installs package named example and adds it to global scope
     #> nupac install example -a
 ] {
+    let add-to-config = (get-flag-value $add-to-config "NUPAC_ADD_TO_SCRIPTS_LIST")
+
     let to-ins = (
         get-repo-contents
         |where name in $packages
@@ -250,7 +262,7 @@ export def "nupac install" [
         if (user-approves) {
             $to-ins
             |each {|package|
-                install-package $package (get-flag-value $add-to-config "NUPAC_ADD_TO_SCRIPTS_LIST")
+                install-package $package $add-to-config
             } 
         }
     }   
@@ -331,11 +343,13 @@ export def "nupac upgrade" [
     # Upgrade all packages excluding nupac itself
     #> nupac upgrade --all --ignore-self
 ] {
+    let ignore-self = (get-flag-value $ignore-self "NUPAC_IGNORE_SELF")
+
     if (($packages|length) > 0 or $all) {
         let to-upgrade = (
             (get-packages $packages $all)
             |where name not-in (get-ignored)
-            |where name != (if (get-flag-value $ignore-self "NUPAC_IGNORE_SELF") {"nupac"} else {""})
+            |where name != (if $ignore-self {"nupac"} else {""})
         )
 
         if ($to-upgrade|empty?) {
