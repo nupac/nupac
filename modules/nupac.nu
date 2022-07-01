@@ -163,14 +163,14 @@ def remove-from-config [
 # actual package installation happens here
 def install-package [
     package: record
-    --add-to-config(-a): bool
+    add-to-config: bool
 ] {
     print $"Installing ($package.name)"
     fetch ($package.script-raw-url | into string)
-    |save (scripts-path|path join ($package.script-url|path basename))
+    |save (scripts-path|path join ($package.url|path basename))
 
     if $add-to-config {
-        add-to-config (config-entry ($package.script-url|path basename))
+        add-to-config (config-entry ($package.url|path basename))
     }
 }
 # actual package removal happens here
@@ -178,8 +178,8 @@ def remove-package [
     package: record
 ] {
     print $"Uninstalling ($package.name)"
-    rm -r (scripts-path|path join ($package.script-url|path basename))
-    remove-from-config (config-entry ($package.script-url|path basename))
+    rm -r (scripts-path|path join ($package.url|path basename))
+    remove-from-config (config-entry ($package.url|path basename))
 }
 
 # checks whether version in repo cache is newer than version in script metadata, installs newer version if yes
@@ -188,7 +188,7 @@ def upgrade-package [
 ] {
     if (get-repo-contents|where name == $package.name|get -i 0.version) > $package.version {
         print $"Upgrading package ($package.name)"
-        install-package $package.name
+        install-package $package.name false
     } else {
         print $"Package ($package.name) up to date, not upgrading"
     }
@@ -236,10 +236,8 @@ export def "nupac install" [
     # Installs package named example and adds it to global scope
     #> nupac install example -a
 ] {
-    let add-to-config = (get-flag-value $add-to-config "NUPAC_ADD_TO_SCRIPTS_LIST")
-
     let to-ins = (
-        get-repo-contents 
+        get-repo-contents
         |where name in $packages
         |where name not-in (get-ignored)
     )
@@ -250,17 +248,10 @@ export def "nupac install" [
         display-action-data $to-ins "install"
 
         if (user-approves) {
-            if $add-to-config {
-                $to-ins
-                |each {|package|
-                    install-package $package --add-to-config
-                } 
-            } else {
-                $to-ins
-                |each {|package|    
-                    install-package $package
-                }
-            }
+            $to-ins
+            |each {|package|
+                install-package $package (get-flag-value $add-to-config "NUPAC_ADD_TO_SCRIPTS_LIST")
+            } 
         }
     }   
 }
@@ -340,13 +331,11 @@ export def "nupac upgrade" [
     # Upgrade all packages excluding nupac itself
     #> nupac upgrade --all --ignore-self
 ] {
-    let ignore-self = (get-flag-value $ignore-self "NUPAC_IGNORE_SELF")
-
     if (($packages|length) > 0 or $all) {
         let to-upgrade = (
             (get-packages $packages $all)
             |where name not-in (get-ignored)
-            |where name != (if $ignore-self {"nupac"} else {""})
+            |where name != (if (get-flag-value $ignore-self "NUPAC_IGNORE_SELF") {"nupac"} else {""})
         )
 
         if ($to-upgrade|empty?) {
