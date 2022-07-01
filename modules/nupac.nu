@@ -11,7 +11,9 @@
 #?keywords: [package, management]
 
 # get enviroment flag's value or return false
-def get-env-flag [name: string] {
+def get-env-flag [
+    name: string
+] {
     $env
     |get -i $name
     |default false    
@@ -21,7 +23,7 @@ def get-env-flag [name: string] {
 def get-flag-value [
     flag: bool
     env-var: string
-    ] {
+] {
     if ($flag) {
         true
     } else {
@@ -110,13 +112,13 @@ def user-approves [] {
 # returns packages with names matching provided arguments
 # if no arguments were provided returns all packages
 def get-packages [
-    ...names
-    --all
+    ...names: string
+    --all: bool
 ] {
     ls (scripts-path)
     |where ($it.name|path parse|get extension) == nu
     |each {|package|
-     get-metadata (scripts-path|path join $package.name)
+        get-metadata (scripts-path|path join $package.name)
     }
     |where {|it|
         if ($names|length) > 0 {
@@ -192,10 +194,36 @@ def upgrade-package [
     }
 }
 
+# display info about the package for the user
+def user-readable-pkg-info [
+    pkgs: table
+] {
+    $pkgs
+    |select name version author os short-desc
+    |update cells -c ["author" "os"] {|x| $x|str collect ', '}
+    |rename name version "author(s)" "supported OS" description
+}
+
+# prompt user what's going to be done
+def display-action-data [
+    pkgs: table
+    action: string
+] {
+    let action = if ($action|str ends-with "e") {
+        $action
+    } else {
+        $action + "e"
+    }
+
+    print (user-readable-pkg-info $pkgs)
+    print ($"The listed packages will be ($action)d")
+
+}
+
 # Installs provided set of packages and optionally adds them to the global scope
 export def "nupac install" [
     ...packages: string # packages you want to install
-    --add-to-config(-a):bool # add packages to config
+    --add-to-config(-a): bool # add packages to config
     #
     # Examples:
     #
@@ -211,16 +239,15 @@ export def "nupac install" [
     let add-to-config = (get-flag-value $add-to-config "NUPAC_ADD_TO_SCRIPTS_LIST")
 
     let to-ins = (
-    get-repo-contents 
-    |where name in $packages
-    |where name not-in (get-ignored)
+        get-repo-contents 
+        |where name in $packages
+        |where name not-in (get-ignored)
     )
 
     if ($to-ins|empty?) {
         print "No packages to install"
     } else {
-        print ($to-ins | select name version)
-        print "The listed packages will be installed"
+        display-action-data $to-ins "install"
 
         if (user-approves) {
             if $add-to-config {
@@ -231,7 +258,7 @@ export def "nupac install" [
             } else {
                 $to-ins
                 |each {|package|    
-                install-package $package
+                    install-package $package
                 }
             }
         }
@@ -266,13 +293,12 @@ export def "nupac remove" [
     if ($to-del|empty?) {
         print "No packages to remove"
     } else {
-        print ($to-del | select name version)
-        print "The listed packages will be removed"
+        display-action-data $to-del "remove"
         
         if (user-approves) {
             $to-del
             |each {|package|
-            remove-package $package
+                remove-package $package
             }
         }
     }
@@ -287,21 +313,18 @@ export def "nupac search" [
     # Search for package named example
     #> nupac search example
 ] {
-
-    get-repo-contents
-    |where name =~ $query or short-desc =~ $query or long-desc =~ $query or $query in keywords or $query in author
-    |select name version author short-desc os
-    |move "author" --before short-desc
-    |move "os" --before short-desc        
-    
+    user-readable-pkg-info (
+        get-repo-contents
+        |where name =~ $query or short-desc =~ $query or long-desc =~ $query or $query in keywords or $query in author
+    )
 }
 
 
 # Upgrades all or selected packages
 export def "nupac upgrade" [
-    ...packages:string
-    --all(-a)
-    --ignore-self(-i)
+    ...packages: string
+    --all(-a): bool
+    --ignore-self(-i): bool
     #
     # Examples:
     #
@@ -329,13 +352,12 @@ export def "nupac upgrade" [
         if ($to-upgrade|empty?) {
             print "No upgrades found"
         } else {
-            print ($to-upgrade | select name version)
-            print "The listed packages will be upgraded"
+            display-action-data $to-upgrade "upgrade"
 
             if (user-approves) {
                 $to-upgrade
                 |each {|package|
-                upgrade-package $package
+                    upgrade-package $package
                 }
             }
         }
@@ -343,5 +365,6 @@ export def "nupac upgrade" [
         error make {
           msg: "Either a list of packages or --all flag must be provided"
         }
+        exit 1
     }
 }
