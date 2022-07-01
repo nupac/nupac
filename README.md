@@ -5,10 +5,10 @@ Nu package manager written entirely in nu
 **Initial implementation done a lot of work to be done still**
 
 ## TODO
-See [TODO.md](TODO.md)
+See [TODO.md](docs/TODO.md)
 
 ## Design Doc
-See [DESIGN.md](DESIGN.md)
+See [DESIGN.md](docs/DESIGN.md)
 
 ## Package Manifest Doc
-See [PACKAGE_MANIFEST.md](https://github.com/skelly37/nupac/blob/main/PACKAGE_MANIFEST.md)
+See [PACKAGE_MANIFEST.md](docs/PACKAGE_MANIFEST.md)
