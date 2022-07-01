@@ -13,7 +13,7 @@ def get-metadata [
 }
 
 def required-attributes [] {
-    echo ["author" "name" "os" "short-desc" "url" "version"]
+    echo ["author" "name" "os" "short-desc" "raw-url" "url" "version"]
 }
 
 def check-required-attributes [

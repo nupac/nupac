@@ -7,7 +7,7 @@
 #?    of nushell as package manager
 #?    wow so many words
 #?url: https://github.com/skelly37/nupac/blob/main/modules/nupac.nu
-#?script-raw-url: https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu
+#?raw-url: https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu
 #?keywords: [package, management]
 
 # get enviroment flag's value or return false
@@ -174,7 +174,7 @@ def install-package [
     add-to-config: bool
 ] {
     print $"Installing ($package.name)"
-    fetch ($package.script-raw-url | into string)
+    fetch ($package.raw-url | into string)
     |save (get-package-location $package)
 
     # TODO replace with nupac's own file

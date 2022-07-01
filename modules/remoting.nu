@@ -8,7 +8,7 @@
 #?    remote hosts over ssh
 #?    before using you need to fill the config
 #?url: https://github.com/skelly37/nupac/blob/main/modules/remoting.nu
-#?script-raw-url: https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting.nu
+#?raw-url: https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting.nu
 #?keywords: [ssh, remote, automation]
 
 # internal function that holds the host data. We could store it in a yaml file as well but that would require nushell to read it from disk every single time
