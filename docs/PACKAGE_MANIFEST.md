@@ -16,6 +16,7 @@ Metadata inserted at the beginning of your nu_scripts package that make the whol
 
 ### Just for the nupac
 - **url**: URL of the package
+- **raw-url**: download URL of the package
 - **os**: List of supported operating systems, available: `["android" "linux" "macos" "windows"]`
 
 ## Optional attributes
