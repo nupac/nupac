@@ -175,7 +175,7 @@ def install-package [
 ] {
     print $"Installing ($package.name)"
     fetch ($package.raw-url | into string)
-    |save (get-package-location $package)
+    |save (get-package-location $package | into string)
 
     # TODO replace with nupac's own file
     if $add-to-config {
@@ -187,7 +187,7 @@ def remove-package [
     package: record
 ] {
     print $"Uninstalling ($package.name)"
-    rm -r (get-package-location $package)
+    rm -r (get-package-location $package | into string)
     # TODO replace with nupac's own file
     remove-from-config (config-entry ($package.url|path basename))
 }
