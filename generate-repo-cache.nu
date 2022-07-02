@@ -1,5 +1,14 @@
 #!/usr/bin/env nu
 
+let REQUIRED-ATTRIBUTES = ["author" "name" "os" "short-desc" "raw-url" "url" "version"]
+let DEFAULT-ATTRIBUTES = {"pre-install-msg": "",
+    "post-install-msg": "",
+    "keywords": [], 
+    "nu-dependencies": "", 
+    "installer": "",
+    "os": ["android" "macos" "linux" "windows"]
+}
+
 # returns record containing script metadata
 def get-metadata [
     script: path
@@ -12,43 +21,30 @@ def get-metadata [
     |from yaml
 }
 
-def required-attributes [] {
-    echo ["author" "name" "os" "short-desc" "raw-url" "url" "version"]
-}
-
 def check-required-attributes [
     metadata
 ] {
-    required-attributes
+    if (($metadata |columns| append $REQUIRED-ATTRIBUTES | uniq) != ($metadata|columns)) {
+        error make {msg: $"Some required attributes not present in metadata"}
+        exit 1
+    }
+
+    $REQUIRED-ATTRIBUTES
     |each { |attribute|
-            if ($attribute not-in ($metadata|columns)) {
-                error make {msg: $"$($attribute) not present in metadata"}
+        $metadata
+        | each { |entry|
+            if ($entry|get $attribute|empty?) {
+                error make {msg: $"($entry) lacks required attribute: ($attribute)"}
                 exit 1
-            } else {
-                $metadata
-                | each { |entry|
-                    if ($entry|get $attribute|empty?) {
-                        error make {msg: $"($entry) lacks required attribute: ($attribute)"}
-                        exit 1
-                    }
-                }
             }
         }
-}
-
-def default-attributes [] {
-    {"pre-install-msg": "",
-    "post-install-msg": "",
-    "keywords": [], 
-    "nu-dependencies": "", 
-    "installer": "",
-    "os": ["android" "macos" "linux" "windows"]}
+    }
 }
 
 def add-optional-attributes [
     metadata
 ] {
-    default-attributes
+    $DEFAULT-ATTRIBUTES
     | merge {$metadata}
 }
 
@@ -59,4 +55,4 @@ ls modules
     check-required-attributes $metadata
     echo $metadata
 }
-| save nupac.json
+| save nupac.nuon

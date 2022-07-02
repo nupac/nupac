@@ -44,7 +44,7 @@ def scripts-path [] {
 
 # We store cache index locally to avoid redownloading it on every command invocation
 def repo [] {
-    (scripts-path|path join 'nupac.json')
+    (scripts-path|path join 'nupac.nuon')
 }
 
 # tweak this value if you want to change how often cache is refreshed
@@ -75,7 +75,7 @@ def get-metadata [
 
 # downloads fresh repository cache
 def update-repo [] {
-    fetch https://raw.githubusercontent.com/skelly37/nupac/main/nupac.json
+    fetch https://raw.githubusercontent.com/skelly37/nupac/main/nupac.nuon
     |save (repo)
 
     if ($env.LAST_EXIT_CODE == 0) {
