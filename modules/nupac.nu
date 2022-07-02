@@ -72,19 +72,12 @@ def get-metadata [
     |from yaml
 }
 
-# looks for current OS name in OSes supported by the package
-def os-is-supported [
-    package: record
-] {
-    $nu.os-info.name in $package.os
-}
-
 # returns all packages if os-supported, else raises errors and returns empty table (temp workaround for error errors)
 def packages-to-process [
     packages: table
 ] {
     let unsupported-pkgs = ($packages
-        |where {|it| (not (os-is-supported $it))}
+        |where $nu.os-info.name not-in $it.os
     )
 
     let packages = (
@@ -348,6 +341,9 @@ export def "nupac search" [
     #
     # Search for package named example
     #> nupac search example
+    #
+    # Search for package named example and display also packages unsupported by your OS
+    #> nupac search example --all
 ] {
     let found = (
         get-repo-contents
@@ -359,7 +355,7 @@ export def "nupac search" [
     } else {
         user-readable-pkg-info (
             $found
-            |where {|it| (os-is-supported $it)}
+            |where $nu.os-info.name in $it.os
         )
     }
 }
