@@ -34,7 +34,7 @@ def check-required-attributes [
     $REQUIRED_ATTRIBUTES
     |each { |attribute|
         $metadata
-        | each { |entry|
+        |each { |entry|
             if ($entry|get $attribute|empty?) {
                 error make {msg: $"($entry) lacks required attribute: ($attribute)"}
                 exit 1
@@ -47,7 +47,7 @@ def add-optional-attributes [
     metadata
 ] {
     $DEFAULT_ATTRIBUTES
-    | merge {$metadata}
+    |merge {$metadata}
 }
 
 
@@ -57,4 +57,4 @@ ls modules
     check-required-attributes $metadata
     echo $metadata
 }
-| save nupac.nuon
+|save nupac.nuon
