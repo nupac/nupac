@@ -33,13 +33,12 @@ def get-flag-value [
 
 # Path where packages will be installed, can be changed to any other directory provided it is added to NU_LIB_DIRS variable
 def scripts-path [] {
-    if ("NUPAC_DEFAULT_LIB_DIR" in $env) {
-        $env.NUPAC_DEFAULT_LIB_DIR
-    } else {
-        $nu.config-path
+    $env
+    |get -i "NUPAC_DEFAULT_LIB_DIR" 
+    |default ($nu.config-path
         |path dirname
         |path join 'scripts'
-    }
+    )
 }
 
 # We store cache index locally to avoid redownloading it on every command invocation
