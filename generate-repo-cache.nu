@@ -24,8 +24,10 @@ def get-metadata [
 def check-required-attributes [
     metadata
 ] {
-    if (($metadata |columns| append $REQUIRED_ATTRIBUTES | uniq) != ($metadata|columns)) {
-        error make {msg: $"Some required attributes not present in metadata"}
+    let missing-columns = ($REQUIRED_ATTRIBUTES|where $it not-in ($metadata|columns)|str collect ", ")
+
+    if (not ($missing-columns|empty?)) {
+        error make {msg: $"Required columns: ($missing-columns) not present in metadata"}
         exit 1
     }
 
