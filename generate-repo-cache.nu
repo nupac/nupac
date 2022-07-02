@@ -1,7 +1,7 @@
 #!/usr/bin/env nu
 
-let REQUIRED-ATTRIBUTES = ["author" "name" "os" "short-desc" "raw-url" "url" "version"]
-let DEFAULT-ATTRIBUTES = {"pre-install-msg": "",
+let REQUIRED_ATTRIBUTES = ["author" "name" "os" "short-desc" "raw-url" "url" "version"]
+let DEFAULT_ATTRIBUTES = {"pre-install-msg": "",
     "post-install-msg": "",
     "keywords": [], 
     "nu-dependencies": "", 
@@ -24,12 +24,12 @@ def get-metadata [
 def check-required-attributes [
     metadata
 ] {
-    if (($metadata |columns| append $REQUIRED-ATTRIBUTES | uniq) != ($metadata|columns)) {
+    if (($metadata |columns| append $REQUIRED_ATTRIBUTES | uniq) != ($metadata|columns)) {
         error make {msg: $"Some required attributes not present in metadata"}
         exit 1
     }
 
-    $REQUIRED-ATTRIBUTES
+    $REQUIRED_ATTRIBUTES
     |each { |attribute|
         $metadata
         | each { |entry|
@@ -44,7 +44,7 @@ def check-required-attributes [
 def add-optional-attributes [
     metadata
 ] {
-    $DEFAULT-ATTRIBUTES
+    $DEFAULT_ATTRIBUTES
     | merge {$metadata}
 }
 
