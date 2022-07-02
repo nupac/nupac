@@ -72,6 +72,37 @@ def get-metadata [
     |from yaml
 }
 
+# looks for current OS name in OSes supported by the package
+def os-is-supported [
+    package: record
+] {
+    $nu.os-info.name in $package.os
+}
+
+# returns all packages if os-supported, else raises errors and returns empty table (temp workaround for error errors)
+def packages-to-process [
+    packages: table
+] {
+    let unsupported-pkgs = ($packages
+        |where {|it| (not (os-is-supported $it))}
+    )
+
+    let packages = (
+        $packages
+        |where $it not-in $unsupported-pkgs
+    )
+
+    if (not ($unsupported-pkgs|empty?)) {
+        user-readable-pkg-info $unsupported-pkgs
+        error make {
+            msg: "The listed packages cannot be installed, because OS is not supported"
+        }
+        []
+    } else {
+        $packages
+    }
+}
+
 # downloads fresh repository cache
 def update-repo [] {
     fetch https://raw.githubusercontent.com/skelly37/nupac/main/nupac.nuon
@@ -80,7 +111,9 @@ def update-repo [] {
     if ($env.LAST_EXIT_CODE == 0) {
         print "Repository cached updated successfully"
     } else {
-        print "Error updating the repository cache"
+        error make {
+            msg: "Could not update the repository cache"
+        }
     }
 }
 
@@ -247,24 +280,24 @@ export def "nupac install" [
 ] {
     let add-to-config = (get-flag-value $add-to-config "NUPAC_ADD_TO_SCRIPTS_LIST")
 
-    let to-ins = (
-        get-repo-contents
-        |where name in $packages
-        |where name not-in (get-ignored)
+    let to-ins = ( 
+        packages-to-process (
+            get-repo-contents
+            |where name in $packages
+            |where name not-in (get-ignored)
+        )
     )
-
     if ($to-ins|empty?) {
         print "No packages to install"
     } else {
         display-action-data $to-ins "install"
-
         if (user-approves) {
             $to-ins
             |each {|package|
                 install-package $package $add-to-config
             } 
         }
-    }   
+    }
 }
 
 # Lists installed packages
@@ -309,16 +342,26 @@ export def "nupac remove" [
 # Searches remote repository for packages matching query with name, descriptions or keywords
 export def "nupac search" [
     query: string
+    --all(-a): bool 
     #
     # Examples:
     #
     # Search for package named example
     #> nupac search example
 ] {
-    user-readable-pkg-info (
+    let found = (
         get-repo-contents
         |where name =~ $query or short-desc =~ $query or long-desc =~ $query or $query in keywords or $query in author
     )
+
+    if $all {
+        user-readable-pkg-info $found
+    } else {
+        user-readable-pkg-info (
+            $found
+            |where {|it| (os-is-supported $it)}
+        )
+    }
 }
 
 
@@ -345,10 +388,11 @@ export def "nupac upgrade" [
     let ignore-self = (get-flag-value $ignore-self "NUPAC_IGNORE_SELF")
 
     if (($packages|length) > 0 or $all) {
-        let to-upgrade = (
-            (get-packages $packages $all)
-            |where name not-in (get-ignored)
-            |where name != (if $ignore-self {"nupac"} else {""})
+        let to-upgrade = ( package-to-process (
+                (get-packages $packages $all)
+                |where name not-in (get-ignored)
+                |where name != (if $ignore-self {"nupac"} else {""})
+            )
         )
 
         if ($to-upgrade|empty?) {
@@ -367,6 +411,5 @@ export def "nupac upgrade" [
         error make {
           msg: "Either a list of packages or --all flag must be provided"
         }
-        exit 1
     }
 }
