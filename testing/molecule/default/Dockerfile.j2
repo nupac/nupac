@@ -38,4 +38,4 @@ RUN set -xe \
   && usermod -aG ${SUDO_GROUP} ${ANSIBLE_USER} \
   && usermod -aG ${DEPLOY_GROUP} ${ANSIBLE_USER} \
   && sed -i "/^%${SUDO_GROUP}/s/ALL\$/NOPASSWD:ALL/g" /etc/sudoers
-{% endif %}}
+{% endif %}
