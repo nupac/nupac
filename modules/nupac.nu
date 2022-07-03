@@ -1,4 +1,5 @@
 #?name: nupac
+#?author: [skelly37, Yethal]
 #?version: 0.1.0
 #?short-desc: package manager for nushell
 #?long-desc: >
@@ -6,23 +7,23 @@
 #?    of nushell as package manager
 #?    wow so many words
 #?url: https://github.com/skelly37/nupac/blob/main/modules/nupac.nu
-#?script-raw-url: https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu
-#?keywords:
-#? - package
-#? - management
+#?raw-url: https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu
+#?keywords: [package, management]
 
 # get enviroment flag's value or return false
-def get-env-flag [name: string] {
+def get-env-flag [
+    name: string
+] {
     $env
     |get -i $name
-    |default false    
+    |default false
 }
 
 # Specified value, env value or hardcoded value of the flag
 def get-flag-value [
     flag: bool
     env-var: string
-    ] {
+] {
     if ($flag) {
         true
     } else {
@@ -32,35 +33,26 @@ def get-flag-value [
 
 # Path where packages will be installed, can be changed to any other directory provided it is added to NU_LIB_DIRS variable
 def scripts-path [] {
-    if ("NUPAC_DEFAULT_LIB_DIR" in $env) {
-        $env.NUPAC_DEFAULT_LIB_DIR
-    } else {
-        $nu.config-path
+    $env
+    |get -i "NUPAC_DEFAULT_LIB_DIR"
+    |default ($nu.config-path
         |path dirname
         |path join 'scripts'
-    }
+    )
 }
 
 # We store cache index locally to avoid redownloading it on every command invocation
 def repo [] {
-    (scripts-path|path join 'nupac.json')
+    (scripts-path|path join 'nupac.nuon')
 }
 
 # tweak this value if you want to change how often cache is refreshed
 def freshness [] {
     1day
 }
-# sets the keywords field to empty string if missing to maintain data shape across packages
-def keywords [] {
-    upsert keywords {|x|
-        if 'keywords' not-in ($x|columns) {
-            ' '
-        } else if ($x.keywords|describe) starts-with list {
-            $x.keywords|str collect ', '
-        } else {
-            $x.keywords
-        }
-    }
+
+def nu-pkgs [] {
+    (scripts-path|path join 'nu-pkgs.nu')
 }
 
 # checks if $env.NUPAC_IGNOREPKG has been declared (ignores installing and upgrading packages in the list)
@@ -84,15 +76,41 @@ def get-metadata [
     |from yaml
 }
 
+# returns all packages if os-supported, else raises errors and returns empty table (temp workaround for error errors)
+def packages-to-process [
+    packages: table
+] {
+    let unsupported-pkgs = ($packages
+        |where $nu.os-info.name not-in $it.os
+    )
+
+    let packages = (
+        $packages
+        |where $it not-in $unsupported-pkgs
+    )
+
+    if (not ($unsupported-pkgs|empty?)) {
+        user-readable-pkg-info $unsupported-pkgs
+        error make {
+            msg: "The listed packages cannot be installed, because OS is not supported"
+        }
+        []
+    } else {
+        $packages
+    }
+}
+
 # downloads fresh repository cache
 def update-repo [] {
-    fetch https://raw.githubusercontent.com/skelly37/nupac/main/nupac.json
+    fetch https://raw.githubusercontent.com/skelly37/nupac/main/nupac.nuon
     |save (repo)
 
     if ($env.LAST_EXIT_CODE == 0) {
         print "Repository cached updated successfully"
     } else {
-        print "Error updating the repository cache"
+        error make {
+            msg: "Could not update the repository cache"
+        }
     }
 }
 
@@ -108,7 +126,6 @@ def get-repo-contents [] {
         ignore
     }
     open (repo)
-    |keywords
 }
 
 # whether the action was approved or not
@@ -116,7 +133,7 @@ def user-approves [] {
     if (get-env-flag "NUPAC_NO_CONFIRM") {
         true
     } else {
-        input "Do you want to proceed? [Y/n]"
+        input "Do you want to proceed? [Y/n] "
         |$in in ['' 'y' 'Y']
     }
 }
@@ -124,15 +141,14 @@ def user-approves [] {
 # returns packages with names matching provided arguments
 # if no arguments were provided returns all packages
 def get-packages [
-    ...names
-    --all
+    ...names: string
+    --all: bool
 ] {
     ls (scripts-path)
     |where ($it.name|path parse|get extension) == nu
     |each {|package|
-     get-metadata (scripts-path|path join $package.name)
+        get-metadata (scripts-path|path join $package.name)
     }
-    |keywords
     |where {|it|
         if ($names|length) > 0 {
             $it.name in $names
@@ -155,35 +171,44 @@ def config-entry [
 def add-to-config [
     content: string
 ] {
-    open $nu.config-path
+    open (nu-pkgs)
         |lines -s
         |append $content
         |str collect (char nl)
-        |save $nu.config-path
+        |save (nu-pkgs)
 }
 
 # removes use statement from config on package removal
 def remove-from-config [
     content: string
 ] {
-    open $nu.config-path
+    open (nu-pkgs)
     |lines -s
     |where $it != $content
     |str collect (char nl)
-    |save $nu.config-path
+    |save (nu-pkgs)
+}
+
+# package location in the filesystem
+def get-package-location [
+    package: record
+] {
+    scripts-path
+    |path join ($package.url|path basename)
 }
 
 # actual package installation happens here
 def install-package [
     package: record
-    --add-to-config(-a): bool
+    add-to-config: bool
 ] {
     print $"Installing ($package.name)"
-    fetch ($package.script-raw-url | into string)
-    |save (scripts-path|path join ($package.script-url|path basename))
+    fetch ($package.raw-url | into string)
+    |save (get-package-location $package | into string)
 
+    # TODO replace with nupac's own file
     if $add-to-config {
-        add-to-config (config-entry ($package.script-url|path basename))
+        add-to-config (config-entry ($package.url|path basename))
     }
 }
 # actual package removal happens here
@@ -191,8 +216,9 @@ def remove-package [
     package: record
 ] {
     print $"Uninstalling ($package.name)"
-    rm -r (scripts-path|path join ($package.script-url|path basename))
-    remove-from-config (config-entry ($package.script-url|path basename))
+    rm -r (get-package-location $package | into string)
+    # TODO replace with nupac's own file
+    remove-from-config (config-entry ($package.url|path basename))
 }
 
 # checks whether version in repo cache is newer than version in script metadata, installs newer version if yes
@@ -201,16 +227,42 @@ def upgrade-package [
 ] {
     if (get-repo-contents|where name == $package.name|get -i 0.version) > $package.version {
         print $"Upgrading package ($package.name)"
-        install-package $package.name
+        install-package $package.name false
     } else {
         print $"Package ($package.name) up to date, not upgrading"
     }
 }
 
+# display info about the package for the user
+def user-readable-pkg-info [
+    pkgs: table
+] {
+    $pkgs
+    |select name version author os short-desc
+    |update cells -c ["author" "os"] {|x| $x|str collect ', '}
+    |rename name version "author(s)" "supported OS" description
+}
+
+# prompt user what's going to be done
+def display-action-data [
+    pkgs: table
+    action: string
+] {
+    let action = if ($action|str ends-with "e") {
+        $action
+    } else {
+        $action + "e"
+    }
+
+    print (user-readable-pkg-info $pkgs)
+    print ($"The listed packages will be ($action)d")
+
+}
+
 # Installs provided set of packages and optionally adds them to the global scope
 export def "nupac install" [
     ...packages: string # packages you want to install
-    --add-to-config(-a):bool # add packages to config
+    --add-to-config(-a): bool # add packages to config
     #
     # Examples:
     #
@@ -226,31 +278,23 @@ export def "nupac install" [
     let add-to-config = (get-flag-value $add-to-config "NUPAC_ADD_TO_SCRIPTS_LIST")
 
     let to-ins = (
-    get-repo-contents 
-    |where name in $packages
-    |where name not-in (get-ignored)
+        packages-to-process (
+            get-repo-contents
+            |where name in $packages
+            |where name not-in (get-ignored)
+        )
     )
-
     if ($to-ins|empty?) {
         print "No packages to install"
     } else {
-        print ($to-ins | select name version)
-        print "The listed packages will be installed"
-
+        display-action-data $to-ins "install"
         if (user-approves) {
-            if $add-to-config {
-                $to-ins
-                |each {|package|
-                    install-package $package --add-to-config
-                } 
-            } else {
-                $to-ins
-                |each {|package|    
-                install-package $package
-                }
+            $to-ins
+            |each {|package|
+                install-package $package $add-to-config
             }
         }
-    }   
+    }
 }
 
 # Lists installed packages
@@ -277,17 +321,16 @@ export def "nupac remove" [
     #> nupac remove example second-example third-example
 ] {
     let to-del = (get-repo-contents | where name in $packages)
-    
+
     if ($to-del|empty?) {
         print "No packages to remove"
     } else {
-        print ($to-del | select name version)
-        print "The listed packages will be removed"
-        
+        display-action-data $to-del "remove"
+
         if (user-approves) {
             $to-del
             |each {|package|
-            remove-package $package
+                remove-package $package
             }
         }
     }
@@ -296,23 +339,37 @@ export def "nupac remove" [
 # Searches remote repository for packages matching query with name, descriptions or keywords
 export def "nupac search" [
     query: string
+    --all(-a): bool
     #
     # Examples:
     #
     # Search for package named example
     #> nupac search example
+    #
+    # Search for package named example and display also packages unsupported by your OS
+    #> nupac search example --all
 ] {
-    get-repo-contents
-    |where name =~ $query or short-desc =~ $query or long-desc =~ $query or keywords =~ $query
-    |reject script-url script-raw-url
+    let found = (
+        get-repo-contents
+        |where name =~ $query or short-desc =~ $query or long-desc =~ $query or $query in keywords or $query in author
+    )
+
+    if $all {
+        user-readable-pkg-info $found
+    } else {
+        user-readable-pkg-info (
+            $found
+            |where $nu.os-info.name in $it.os
+        )
+    }
 }
 
 
 # Upgrades all or selected packages
 export def "nupac upgrade" [
-    ...packages:string
-    --all(-a)
-    --ignore-self(-i)
+    ...packages: string
+    --all(-a): bool
+    --ignore-self(-i): bool
     #
     # Examples:
     #
@@ -331,22 +388,22 @@ export def "nupac upgrade" [
     let ignore-self = (get-flag-value $ignore-self "NUPAC_IGNORE_SELF")
 
     if (($packages|length) > 0 or $all) {
-        let to-upgrade = (
-            (get-packages $packages $all)
-            |where name not-in (get-ignored)
-            |where name != (if $ignore-self {"nupac"} else {""})
+        let to-upgrade = ( package-to-process (
+                (get-packages $packages $all)
+                |where name not-in (get-ignored)
+                |where name != (if $ignore-self {"nupac"} else {""})
+            )
         )
 
         if ($to-upgrade|empty?) {
             print "No upgrades found"
         } else {
-            print ($to-upgrade | select name version)
-            print "The listed packages will be upgraded"
+            display-action-data $to-upgrade "upgrade"
 
             if (user-approves) {
                 $to-upgrade
                 |each {|package|
-                upgrade-package $package
+                    upgrade-package $package
                 }
             }
         }

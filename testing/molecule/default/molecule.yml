@@ -1,0 +1,21 @@
+---
+role_name_check: 1
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: instance
+    image: ubuntu:2204
+    dockerfile: Dockerfile.j2
+    command: ""
+    privileged: false
+  - name: instance2
+    image: alpine
+    dockerfile: Dockerfile.j2
+    command: ""
+    privileged: false
+provisioner:
+  name: ansible
+verifier:
+  name: ansible

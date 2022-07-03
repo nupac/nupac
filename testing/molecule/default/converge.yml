@@ -1,0 +1,21 @@
+---
+- name: Converge
+  hosts: all
+  become: false
+  gather_facts: true
+  vars:
+    install_path: /usr/bin
+
+  tasks:
+    - name: Verify nushell is installed
+      ansible.builtin.shell:
+        cmd: "version|to json"
+        executable: "{{ install_path }}/nu"
+      changed_when: false
+      register: output
+
+    - name: Assert that version is 0.64.0
+      assert:
+        that: parsed_version.pkg_version == '0.64.0'
+      vars:
+        parsed_version: "{{ output.stdout | from_json }}"
