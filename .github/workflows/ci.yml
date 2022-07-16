@@ -18,6 +18,7 @@ jobs:
       matrix:
         distro:
           - ubuntu:20.04
+          - alpine:3.16.0
         test:
           - basic_test.yml
     steps:
