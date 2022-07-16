@@ -31,8 +31,8 @@ RUN set -xe \
   && wget -q https://raw.githubusercontent.com/nushell/nushell/main/docs/sample_config/default_env.nu -O /home/${ANSIBLE_USER}/.config/nushell/env.nu \
   && cd /tmp \
   && wget -qO - https://api.github.com/repos/nushell/nushell/releases/tags/${NUSHELL_INSTALL_VERSION} \
-  |grep x86_64 \
   |grep browser_download_url \
+  |grep x86_64 \
   |grep {{'musl' if 'alpine' in item.image else 'gnu' }} \
   |cut -f4 -d '"' \
   |xargs -I{} wget {} \

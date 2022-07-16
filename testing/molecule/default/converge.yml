@@ -2,13 +2,15 @@
 - name: Converge
   hosts: all
   become: false
-  vars:
-    install_path: /usr/bin
 
   tasks:
     - name: Set nushell binary as fact
       set_fact:
         nu: "{{ ansible_env.NUSHELL_INSTALL_DIR }}/nu"
+
+    - name: Debug
+      debug:
+        msg: "{{ ansible_env }}"
 
     - name: Verify nushell is installed
       ansible.builtin.shell:
@@ -19,13 +21,14 @@
 
     - name: Assert that version is 0.65.0
       assert:
-        that: parsed_version == '0.65.0'
+        that: version == '0.65.0'
       vars:
-        parsed_version: "{{ output.stdout | from_json | json_query('pkg_version') }}"
+        version: "{{ output.stdout | from_json | json_query('pkg_version') }}"
 
     # - name: Run the installer
     #   ansible.builtin.shell:
-    #     cmd: "nu -c (fetch https://raw.githubusercontent.com/skelly37/nupac/add-nu-pkgs/installer.nu)"
-    #     executable: "{{ install_path }}/nu"
+    #     cmd: "nu -c (fetch https://raw.githubusercontent.com/skelly37/nupac/{{ ansible_env.NUPAC_INSTALLER_BRANCH }}/installer.nu)"
+    #     executable: "{{ nu }}"
     #   changed_when: false
-    #   register: output
+    #   register: installer
+    #   ignore_errors: true
