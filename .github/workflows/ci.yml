@@ -5,6 +5,7 @@ name: CI
   push:
     branches:
       - main
+      - add-nu-pkgs
   pull_request:
     branches:
       - main
