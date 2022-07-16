@@ -6,16 +6,19 @@ driver:
   name: docker
 platforms:
   - name: instance
-    image: ubuntu:2204
+    image: ubuntu:20.04
     dockerfile: Dockerfile.j2
-    command: ""
-    privileged: false
-  - name: instance2
-    image: alpine
-    dockerfile: Dockerfile.j2
-    command: ""
-    privileged: false
+    command: "/sbin/init"
+    priviledged: false
+    pre_build_image: false
+    env:
+      NUSHELL_INSTALL_DIR: /usr/bin
+      NUSHELL_INSTALL_VERSION: 0.65.0
 provisioner:
   name: ansible
-verifier:
-  name: ansible
+  playbooks:
+    converge: "${PLAYBOOK:-converge.yml}"
+  inventory:
+    host_vars:
+      instance:
+        ansible_user: ansible

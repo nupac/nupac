@@ -14,28 +14,30 @@ ENV {{ var }} {{ value }}
 {% endfor %}
 {% endif %}
 
-RUN if [ $(command -v apt-get) ]; then apt-get update && apt-get install -y python3 sudo bash ca-certificates iproute2 && apt-get clean; \
+RUN if [ $(command -v apt-get) ]; then apt-get update && apt-get install -y python3 sudo bash ca-certificates iproute2 init wget && apt-get clean; \
     elif [ $(command -v dnf) ]; then dnf makecache && dnf --assumeyes install python sudo python-devel python*-dnf bash iproute && dnf clean all; \
     elif [ $(command -v yum) ]; then yum makecache fast && yum install -y python sudo yum-plugin-ovl bash iproute && sed -i 's/plugins=0/plugins=1/g' /etc/yum.conf && yum clean all; \
     elif [ $(command -v zypper) ]; then zypper refresh && zypper install -y python sudo bash python-xml iproute2 && zypper clean -a; \
     elif [ $(command -v apk) ]; then apk update && apk add --no-cache python sudo bash ca-certificates; \
     elif [ $(command -v xbps-install) ]; then xbps-install -Syu && xbps-install -y python sudo bash ca-certificates iproute2 && xbps-remove -O; fi
-ENV ANSIBLE_USER=ansible SUDO_GROUP=wheel DEPLOY_GROUP=deployer
-{% if item.image == 'alpine' %}
+ENV ANSIBLE_USER=ansible SUDO_GROUP=sudo
 RUN set -xe \
   && groupadd -r ${ANSIBLE_USER} \
-  && groupadd -r ${DEPLOY_GROUP} \
-  && adduser -m -g ${ANSIBLE_USER} ${ANSIBLE_USER} \
-  && usermod -aG ${SUDO_GROUP} ${ANSIBLE_USER} \
-  && usermod -aG ${DEPLOY_GROUP} ${ANSIBLE_USER} \
-  && sed -i "/^%${SUDO_GROUP}/s/ALL\$/NOPASSWD:ALL/g" /etc/sudoers
-{% else %}
-# Create `ansible` user with sudo permissions and membership in `DEPLOY_GROUP`
-RUN set -xe \
-  && addgroup -S ${ANSIBLE_USER} \
-  && addgroup -S ${DEPLOY_GROUP} \
   && useradd -m -g ${ANSIBLE_USER} ${ANSIBLE_USER} \
   && usermod -aG ${SUDO_GROUP} ${ANSIBLE_USER} \
-  && usermod -aG ${DEPLOY_GROUP} ${ANSIBLE_USER} \
-  && sed -i "/^%${SUDO_GROUP}/s/ALL\$/NOPASSWD:ALL/g" /etc/sudoers
-{% endif %}
+  && sed -i "/^%${SUDO_GROUP}/s/ALL\$/NOPASSWD:ALL/g" /etc/sudoers \
+  && mkdir -p /home/${ANSIBLE_USER}/.config/nushell/ \
+  && wget -q https://raw.githubusercontent.com/nushell/nushell/main/docs/sample_config/default_config.nu -O /home/${ANSIBLE_USER}/.config/nushell/config.nu \
+  && wget -q https://raw.githubusercontent.com/nushell/nushell/main/docs/sample_config/default_env.nu -O /home/${ANSIBLE_USER}/.config/nushell/env.nu \
+  && cd /tmp \
+  && wget -qO - https://api.github.com/repos/nushell/nushell/releases/tags/${NUSHELL_INSTALL_VERSION} \
+  |grep x86_64 \
+  |grep browser_download_url \
+  |grep {{'musl' if 'alpine' in item.image else 'gnu' }} \
+  |cut -f4 -d '"' \
+  |xargs -I{} wget {} \
+  && tar -xzf nu* \
+  && chmod +x nu \
+  && mv nu ${NUSHELL_INSTALL_DIR}/nu \
+  && chown -R ${ANSIBLE_USER}:${ANSIBLE_USER} /home/${ANSIBLE_USER}/.config/nushell \
+  && rm -rf /tmp/*
