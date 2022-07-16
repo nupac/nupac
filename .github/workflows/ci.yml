@@ -1,0 +1,39 @@
+---
+name: CI
+'on':
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        distro:
+          - ubuntu22.04
+        test:
+          - basic_test.yml
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Python 3
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip3 install -r testing/requirements.txt
+
+      - name: Run tests
+        run: cd testing && molecule test
+        env:
+          TEST: ${{ matrix.test }}
+          DISTRO: ${{ matrix.distro }}
+

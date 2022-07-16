@@ -3,7 +3,7 @@
 {% if item.registry is defined %}
 FROM {{ item.registry.url }}/{{ item.image }}
 {% else %}
-FROM {{ item.image }}
+FROM {{ getenv['PWD'] }}
 {% endif %}
 
 {% if item.env is defined %}

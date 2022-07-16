@@ -1,5 +1,5 @@
 ---
-- name: Converge
+- name: Basic Test
   hosts: all
   become: false
 

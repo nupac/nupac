@@ -6,7 +6,7 @@ driver:
   name: docker
 platforms:
   - name: instance
-    image: ubuntu:20.04
+    image: ${DISTRO:-ubuntu:20.04}
     dockerfile: Dockerfile.j2
     command: "/sbin/init"
     priviledged: false
@@ -19,7 +19,7 @@ platforms:
 provisioner:
   name: ansible
   playbooks:
-    converge: "${PLAYBOOK:-converge.yml}"
+    converge: "${TEST:-basic_test.yml}"
   inventory:
     host_vars:
       instance:
