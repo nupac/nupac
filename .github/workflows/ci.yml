@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         distro:
-          - ubuntu:22.04
+          - ubuntu:20.04
         test:
           - basic_test.yml
     steps:
@@ -30,10 +30,14 @@ jobs:
           python-version: '3.x'
 
       - name: Install dependencies
-        run: pip3 install -r testing/requirements.txt
+        run: |
+          pip3 install wheel setuptools
+          pip3 install -r testing/requirements.txt
 
       - name: Run tests
-        run: cd testing && molecule test
+        run: |
+          cd testing
+          molecule test
         env:
           TEST: ${{ matrix.test }}
           DISTRO: ${{ matrix.distro }}
