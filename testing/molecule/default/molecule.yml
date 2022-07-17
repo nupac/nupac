@@ -21,7 +21,7 @@ platforms:
 provisioner:
   name: ansible
   playbooks:
-    converge: "${TEST:-basic_test.yml}"
+    converge: "${TEST:-install_package.yml}"
   inventory:
     host_vars:
       instance:
@@ -32,10 +32,12 @@ scenario:
   test_sequence:
     - destroy
     - create
+    - prepare
     - converge
     - destroy
   converge_sequence:
     - create
+    - prepare
     - converge
   destroy_sequence:
     - destroy

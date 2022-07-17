@@ -20,7 +20,9 @@ jobs:
           - ubuntu:20.04
           - alpine:3.16.0
         test:
-          - basic_test.yml
+          - install_package.yml
+          - install_package_with_scope.yml
+          - refresh_cache.yml
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

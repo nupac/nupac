@@ -1,0 +1,27 @@
+---
+- name: Smoke Test
+  hosts: all
+  become: false
+
+  tasks:
+  - name: Run the installer
+    raw: "nu -c (fetch https://raw.githubusercontent.com/skelly37/nupac/{{ ansible_env.NUPAC_INSTALLER_BRANCH }}/installer.nu)"
+    args:
+      executable: "{{ nu }}"
+    register: installer
+
+  - name: Verify the installer ran successfully
+    block:
+      - name: Stat files
+        stat:
+          path: "{{ nushell_dir }}/scripts/{{ item }}"
+        loop:
+          - nupac.nu
+          - nu-pkgs.nu
+        register: files
+
+      - name: Assert files exist
+        assert:
+          that:
+            - '"nupac has been successfully installed" in installer.stdout'
+            - "{{ files.results | map(attribute='stat.exists') }} is all"
