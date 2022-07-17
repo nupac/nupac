@@ -33,6 +33,8 @@ if not ($nu-pkgs|path exists) {
         print 'You will have to source the nu-pkgs file manually'
     }
 } else {
-    print 'nu-pkgs already exists.'
+    error make {
+        msg: 'nu-pkgs already exists.'
+    }
 }
 print 'nupac has been successfully installed'
