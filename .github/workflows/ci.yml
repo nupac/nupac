@@ -23,6 +23,7 @@ jobs:
           - install_package.yml
           - install_package_with_scope.yml
           - refresh_cache.yml
+          - thows_error_on_rerun.yml
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
