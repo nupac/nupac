@@ -3,7 +3,7 @@
 # used to install nupac from PR branch on CI/CD
 let default-branch = ($env|get -i NUPAC_DEFAULT_BRANCH|default 'main')
 
-let noconfirm = ($env|get -i NUPAC_NOCONFIRM|default false|into bool)
+let noconfirm = ($env|get -i NUPAC_NO_CONFIRM|default false|into bool)
 
 let nupac-module = $"https://raw.githubusercontent.com/skelly37/nupac/($default-branch)/modules/nupac.nu"
 

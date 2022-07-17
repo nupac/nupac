@@ -4,35 +4,53 @@
   become: false
 
   tasks:
-    - name: Set nushell binary as fact
-      set_fact:
-        nu: "{{ ansible_env.NUSHELL_INSTALL_DIR }}/nu"
+    # - name: Run the installer
+    #   raw: "fetch https://raw.githubusercontent.com/skelly37/nupac/{{ ansible_env.NUPAC_INSTALLER_BRANCH }}/installer.nu|save installer.nu; chmod +x installer.nu; nu installer.nu"
+    #   args:
+    #     executable: "{{ nu }}"
+    #   register: installer
 
-    - name: Debug
-      debug:
-        msg: "{{ ansible_env }}"
+    # - name: Assert the installer ran successfully
+    #   assert:
+    #     that: '"nupac has been successfully installed" in installer.stdout'
 
-    - name: Verify nushell is installed
-      ansible.builtin.shell:
-        cmd: "version|to json"
+    # - name: Assert nupac files were created
+    #   block:
+    #     - name: Stat files
+    #       stat:
+    #         path: "{{ansible_env.HOME}}/.config/nushell/scripts/{{ item }}"
+    #       loop:
+    #         - nupac.nu
+    #         - nu-pkgs.nu
+    #       register: files
+
+    #     - name: Assert files exist
+    #       assert:
+    #         that: "{{ files.results | map(attribute='stat.exists') }} is all"
+
+    - name: Get scope commands
+      raw: "$nu.scope.commands|where not is_builtin|get command|to json"
+      args:
         executable: "{{ nu }}"
-      changed_when: false
-      register: output
-
-    - name: Assert that version is 0.65.0
-      assert:
-        that: version == '0.65.0'
-      vars:
-        version: "{{ output.stdout | from_json | json_query('pkg_version') }}"
-
-    - name: Run the installer
-      ansible.builtin.shell:
-        cmd: "fetch https://raw.githubusercontent.com/skelly37/nupac/{{ ansible_env.NUPAC_INSTALLER_BRANCH }}/installer.nu|save installer.nu; chmod +x installer.nu; nu installer.nu"
-        executable: "{{ nu }}"
-      changed_when: false
-      register: installer
+      register: scope
       ignore_errors: true
 
-    - name: Debug
+    - name: debug scope
       debug:
-        msg: "{{installer.stdout}}"
+        msg: "{{ scope.stdout | from_json }}"
+
+
+    - name: debug binary
+      debug:
+        msg: "{{ nu }}"
+
+
+    # - name: Assert package file was created
+    #   block:
+    #     - name: Stat file
+    #       stat:
+    #         path: "{{ansible_env.HOME}}/.config/nushell/scripts/make.nu"
+    #       register: package
+    #     - name: Assert make.nu exists
+    #       assert:
+    #         that: package.stat.exists
