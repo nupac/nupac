@@ -5,7 +5,7 @@
 
   tasks:
     - name: Run the installer
-      raw: "fetch https://raw.githubusercontent.com/skelly37/nupac/{{ ansible_env.NUPAC_INSTALLER_BRANCH }}/installer.nu|save installer.nu; chmod +x installer.nu; nu installer.nu"
+      raw: "nu -c (fetch https://raw.githubusercontent.com/skelly37/nupac/{{ ansible_env.NUPAC_INSTALLER_BRANCH }}/installer.nu)"
       args:
         executable: "{{ nu }}"
       register: installer
@@ -32,20 +32,13 @@
       raw: "nupac install make"
       args:
         executable: "{{ nu }}"
-      register: scope
-      ignore_errors: true
 
-    - name: debug scope
-      debug:
-        msg: "{{ scope }}"
-
-
-    # - name: Assert package file was created
-    #   block:
-    #     - name: Stat file
-    #       stat:
-    #         path: "{{ansible_env.HOME}}/.config/nushell/scripts/make.nu"
-    #       register: package
-    #     - name: Assert make.nu exists
-    #       assert:
-    #         that: package.stat.exists
+    - name: Assert package file was created
+      block:
+        - name: Stat make.nu
+          stat:
+            path: "{{ nushell_dir }}/scripts/make.nu"
+          register: package
+        - name: Assert make.nu exists
+          assert:
+            that: package.stat.exists
