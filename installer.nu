@@ -3,6 +3,8 @@
 # used to install nupac from PR branch on CI/CD
 let default-branch = ($env|get -i NUPAC_DEFAULT_BRANCH|default 'main')
 
+let noconfirm = ($env|get -i NUPAC_NOCONFIRM|default false)
+
 let nupac-module = $"https://raw.githubusercontent.com/skelly37/nupac/($default-branch)/modules/nupac.nu"
 
 # Directory where nupac modules will be stored
@@ -20,10 +22,7 @@ if not ($nu-pkgs|path exists) {
     echo 'use nupac.nu *'
     |save --append $nu-pkgs
 
-    let add-source = (
-        input "Do you want to add nu-pkgs to your config.nu file? [y/N] "
-        |$in in ['y' 'Y']
-    )
+    let add-source = ($noconfirm or (input "Do you want to add nu-pkgs to your config.nu file? [y/N] "|$in in ['y' 'Y']))
     if $add-source {
         open $nu.config-path
         |lines

@@ -25,10 +25,10 @@
       vars:
         version: "{{ output.stdout | from_json | json_query('pkg_version') }}"
 
-    # - name: Run the installer
-    #   ansible.builtin.shell:
-    #     cmd: "nu -c (fetch https://raw.githubusercontent.com/skelly37/nupac/{{ ansible_env.NUPAC_INSTALLER_BRANCH }}/installer.nu)"
-    #     executable: "{{ nu }}"
-    #   changed_when: false
-    #   register: installer
-    #   ignore_errors: true
+    - name: Run the installer
+      ansible.builtin.shell:
+        cmd: " -c (fetch https://raw.githubusercontent.com/skelly37/nupac/{{ ansible_env.NUPAC_INSTALLER_BRANCH }}/installer.nu)"
+        executable: "{{ nu }}"
+      changed_when: false
+      register: installer
+      #ignore_errors: true
