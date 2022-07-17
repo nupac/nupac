@@ -51,10 +51,6 @@ def freshness [] {
     1day
 }
 
-def nu-pkgs [] {
-    (scripts-path|path join 'nu-pkgs.nu')
-}
-
 # checks if $env.NUPAC_IGNOREPKG has been declared (ignores installing and upgrading packages in the list)
 def get-ignored [] {
     if ("NUPAC_IGNOREPKG" in $env) {
@@ -130,10 +126,10 @@ def get-repo-contents [] {
 
 # whether the action was approved or not
 def user-approves [] {
-    if (get-env-flag "NUPAC_NO_CONFIRM"|into bool) {
+    if (get-env-flag "NUPAC_NO_CONFIRM") {
         true
     } else {
-        input "Do you want to proceed? [Y/n] "
+        input "Do you want to proceed? [Y/n]"
         |$in in ['' 'y' 'Y']
     }
 }
@@ -171,22 +167,22 @@ def config-entry [
 def add-to-config [
     content: string
 ] {
-    open (nu-pkgs)
+    open $nu.config-path
         |lines -s
         |append $content
         |str collect (char nl)
-        |save (nu-pkgs)
+        |save $nu.config-path
 }
 
 # removes use statement from config on package removal
 def remove-from-config [
     content: string
 ] {
-    open (nu-pkgs)
+    open $nu.config-path
     |lines -s
     |where $it != $content
     |str collect (char nl)
-    |save (nu-pkgs)
+    |save $nu.config-path
 }
 
 # package location in the filesystem

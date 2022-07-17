@@ -39,6 +39,3 @@ Simple nupac config, just declare the specific variable in your env, if you want
   - If not declared, nupac will act as if it's false and it will not add them to the list of scripts to maintain
 - `$env.NUPAC_IGNORE_SELF`: *If true, nupac won't upgrade itself*
   - If not declared, nupac will act as if it's false and it will upgrade itself when needed
-
-- `$env.NUPAC_DEFAULT_BRANCH`: *git branch from which nupac will be installed by the installer script*
-  - If not declared, defaults to `main`
