@@ -8,8 +8,9 @@ platforms:
   - name: instance
     image: ${DISTRO:-ubuntu:20.04}
     dockerfile: Dockerfile.j2
-    command: "/sbin/init"
-    priviledged: false
+    tmpfs:
+      - /run
+      - /tmp
     pre_build_image: false
     env:
       NUSHELL_INSTALL_DIR: /usr/bin

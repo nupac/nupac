@@ -34,15 +34,14 @@ RUN if [ $(command -v apt-get) ]; then apt-get update && apt-get install -y pyth
         /etc/init.d/modules \
         /etc/init.d/modules-load \
         /etc/init.d/modloop \
+        /etc/init.d/machine-id \
       && sed -i 's/\tcgroup_add_service/\t#cgroup_add_service/g' /lib/rc/sh/openrc-run.sh \
       && sed -i 's/VSERVER/DOCKER/Ig' /lib/rc/sh/init.sh; \
     elif [ $(command -v xbps-install) ]; then xbps-install -Syu && xbps-install -y python sudo bash ca-certificates iproute2 && xbps-remove -O; fi
-ENV ANSIBLE_USER=ansible SUDO_GROUP=sudo
+ENV ANSIBLE_USER=ansible SUDO_GROUP={{'wheel' if 'alpine' in item.image else 'sudo' }}
 RUN set -xe \
-  && adduser --disabled-password --gecos "" --no-create-home ${ANSIBLE_USER} \
-  && addgroup --system ${SUDO_GROUP} \
-  && addgroup ${ANSIBLE_USER} ${SUDO_GROUP} || true \
-  && sed -i "/^%${SUDO_GROUP}/s/ALL\$/NOPASSWD:ALL/g" /etc/sudoers \
+  && adduser {{'-SD' if 'alpine' in item.image else '--system --disabled-password'}} ${ANSIBLE_USER} \
+  && adduser ${ANSIBLE_USER} ${SUDO_GROUP} \
   && mkdir -p /home/${ANSIBLE_USER}/.config/nushell/ \
   && wget -q https://raw.githubusercontent.com/nushell/nushell/main/docs/sample_config/default_config.nu -O /home/${ANSIBLE_USER}/.config/nushell/config.nu \
   && wget -q https://raw.githubusercontent.com/nushell/nushell/main/docs/sample_config/default_env.nu -O /home/${ANSIBLE_USER}/.config/nushell/env.nu \
@@ -56,5 +55,6 @@ RUN set -xe \
   && tar -xzf nu* \
   && chmod +x nu \
   && mv nu ${NUSHELL_INSTALL_DIR}/nu \
-  && chown -R ${ANSIBLE_USER}:${ANSIBLE_USER} /home/${ANSIBLE_USER}/.config/nushell \
+  && chown -R ${ANSIBLE_USER}:${SUDO_GROUP} /home/${ANSIBLE_USER}/.config/nushell \
   && rm -rf /tmp/*
+CMD ["/sbin/init"]
