@@ -22,6 +22,8 @@ provisioner:
   name: ansible
   playbooks:
     converge: "${TEST:-install_package.yml}"
+  env:
+    MOLECULE_NO_LOG: true
   inventory:
     host_vars:
       instance:
