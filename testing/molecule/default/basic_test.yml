@@ -4,32 +4,32 @@
   become: false
 
   tasks:
-    # - name: Run the installer
-    #   raw: "fetch https://raw.githubusercontent.com/skelly37/nupac/{{ ansible_env.NUPAC_INSTALLER_BRANCH }}/installer.nu|save installer.nu; chmod +x installer.nu; nu installer.nu"
-    #   args:
-    #     executable: "{{ nu }}"
-    #   register: installer
+    - name: Run the installer
+      raw: "fetch https://raw.githubusercontent.com/skelly37/nupac/{{ ansible_env.NUPAC_INSTALLER_BRANCH }}/installer.nu|save installer.nu; chmod +x installer.nu; nu installer.nu"
+      args:
+        executable: "{{ nu }}"
+      register: installer
 
-    # - name: Assert the installer ran successfully
-    #   assert:
-    #     that: '"nupac has been successfully installed" in installer.stdout'
+    - name: Assert the installer ran successfully
+      assert:
+        that: '"nupac has been successfully installed" in installer.stdout'
 
-    # - name: Assert nupac files were created
-    #   block:
-    #     - name: Stat files
-    #       stat:
-    #         path: "{{ansible_env.HOME}}/.config/nushell/scripts/{{ item }}"
-    #       loop:
-    #         - nupac.nu
-    #         - nu-pkgs.nu
-    #       register: files
+    - name: Assert nupac files were created
+      block:
+        - name: Stat files
+          stat:
+            path: "{{ansible_env.HOME}}/.config/nushell/scripts/{{ item }}"
+          loop:
+            - nupac.nu
+            - nu-pkgs.nu
+          register: files
 
-    #     - name: Assert files exist
-    #       assert:
-    #         that: "{{ files.results | map(attribute='stat.exists') }} is all"
+        - name: Assert files exist
+          assert:
+            that: "{{ files.results | map(attribute='stat.exists') }} is all"
 
-    - name: Get scope commands
-      raw: "$nu.scope.commands|where not is_builtin|get command|to json"
+    - name: Install package
+      raw: "nupac install make"
       args:
         executable: "{{ nu }}"
       register: scope
@@ -37,12 +37,7 @@
 
     - name: debug scope
       debug:
-        msg: "{{ scope.stdout | from_json }}"
-
-
-    - name: debug binary
-      debug:
-        msg: "{{ nu }}"
+        msg: "{{ scope }}"
 
 
     # - name: Assert package file was created
