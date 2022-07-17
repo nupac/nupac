@@ -18,7 +18,7 @@
       block:
         - name: Stat files
           stat:
-            path: "{{ansible_env.HOME}}/.config/nushell/scripts/{{ item }}"
+            path: "{{ nushell_dir }}/scripts/{{ item }}"
           loop:
             - nupac.nu
             - nu-pkgs.nu
