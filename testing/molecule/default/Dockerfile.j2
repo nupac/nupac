@@ -58,3 +58,5 @@ RUN set -xe \
   && chown -R ${ANSIBLE_USER}:${SUDO_GROUP} /home/${ANSIBLE_USER}/.config/nushell \
   && rm -rf /tmp/*
 CMD ["/sbin/init"]
+USER ${ANSIBLE_USER}
+WORKDIR /home/${ANSIBLE_USER}
