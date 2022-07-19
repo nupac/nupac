@@ -6,7 +6,7 @@ driver:
   name: docker
 platforms:
   - name: instance
-    image: ${DISTRO:-ubuntu:20.04}
+    image: ${DISTRO:-alpine:3.16.0}
     dockerfile: Dockerfile.j2
     tmpfs:
       - /run
@@ -23,7 +23,7 @@ provisioner:
   playbooks:
     converge: "${TEST:-install-package.yml}"
   env:
-    MOLECULE_NO_LOG: true
+    MOLECULE_NO_LOG: false
   inventory:
     host_vars:
       instance:

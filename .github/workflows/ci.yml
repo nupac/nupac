@@ -12,6 +12,7 @@ name: CI
 
 jobs:
   generate-test-list:
+    name: Generate test list
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

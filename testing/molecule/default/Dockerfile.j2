@@ -14,29 +14,11 @@ ENV {{ var }} {{ value }}
 {% endfor %}
 {% endif %}
 
-RUN if [ $(command -v apt-get) ]; then apt-get update && apt-get install -y python3 sudo bash ca-certificates iproute2 init wget && apt-get clean; \
+RUN if [ $(command -v apt-get) ]; then apt-get update && apt-get install -y python3 sudo bash ca-certificates iproute2 wget && apt-get clean; \
     elif [ $(command -v dnf) ]; then dnf makecache && dnf --assumeyes install python sudo python-devel python*-dnf bash iproute && dnf clean all; \
     elif [ $(command -v yum) ]; then yum makecache fast && yum install -y python sudo yum-plugin-ovl bash iproute && sed -i 's/plugins=0/plugins=1/g' /etc/yum.conf && yum clean all; \
     elif [ $(command -v zypper) ]; then zypper refresh && zypper install -y python sudo bash python-xml iproute2 && zypper clean -a; \
-    elif [ $(command -v apk) ]; then apk update \
-      && apk add --no-cache python3 sudo bash ca-certificates openrc \
-      && sed -i 's/^\(tty\d\:\:\)/#\1/g' /etc/inittab \
-      && sed -i \
-        -e 's/#rc_sys=".*"/rc_sys="docker"/g' \
-        -e 's/#rc_env_allow=".*"/rc_env_allow="\*"/g' \
-        -e 's/#rc_crashed_stop=.*/rc_crashed_stop=NO/g' \
-        -e 's/#rc_crashed_start=.*/rc_crashed_start=YES/g' \
-        -e 's/#rc_provide=".*"/rc_provide="loopback net"/g' \
-        /etc/rc.conf \
-      && rm -f /etc/init.d/hwdrivers \
-        /etc/init.d/hwclock \
-        /etc/init.d/hwdrivers \
-        /etc/init.d/modules \
-        /etc/init.d/modules-load \
-        /etc/init.d/modloop \
-        /etc/init.d/machine-id \
-      && sed -i 's/\tcgroup_add_service/\t#cgroup_add_service/g' /lib/rc/sh/openrc-run.sh \
-      && sed -i 's/VSERVER/DOCKER/Ig' /lib/rc/sh/init.sh; \
+    elif [ $(command -v apk) ]; then apk update && apk add --no-cache python3 sudo bash ca-certificates; \
     elif [ $(command -v xbps-install) ]; then xbps-install -Syu && xbps-install -y python sudo bash ca-certificates iproute2 && xbps-remove -O; fi
 ENV ANSIBLE_USER=ansible SUDO_GROUP={{'wheel' if 'alpine' in item.image else 'sudo' }}
 RUN set -xe \
@@ -57,6 +39,6 @@ RUN set -xe \
   && mv nu ${NUSHELL_INSTALL_DIR}/nu \
   && chown -R ${ANSIBLE_USER}:${SUDO_GROUP} /home/${ANSIBLE_USER}/.config/nushell \
   && rm -rf /tmp/*
-CMD ["/sbin/init"]
+CMD ["/usr/bin/cat"]
 USER ${ANSIBLE_USER}
 WORKDIR /home/${ANSIBLE_USER}
