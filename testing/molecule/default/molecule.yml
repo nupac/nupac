@@ -21,7 +21,7 @@ platforms:
 provisioner:
   name: ansible
   playbooks:
-    converge: "${TEST:-install_package.yml}"
+    converge: "${TEST:-install-package.yml}"
   env:
     MOLECULE_NO_LOG: true
   inventory:
