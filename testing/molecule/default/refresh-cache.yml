@@ -1,5 +1,5 @@
 ---
-- name: Install package test
+- name: Refresh cache
   hosts: all
   become: false
 

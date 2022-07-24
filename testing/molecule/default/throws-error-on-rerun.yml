@@ -1,5 +1,5 @@
 ---
-- name: Throws error on rerun test
+- name: Throws error on rerun
   hosts: all
   become: false
 
