@@ -10,10 +10,6 @@ name: CI
     branches:
       - main
 
-defaults:
-  run:
-    shell: nu {0}
-
 jobs:
   lint:
     name: Lint
@@ -29,6 +25,7 @@ jobs:
 
       - name: Run linter on all modules
         run: ./testing/linter.nu
+        shell: nu {0}
 
   generate-test-list:
     name: Linter and test setup
@@ -45,6 +42,7 @@ jobs:
       - name: Generate test list
         id: generate-matrix
         run: ./testing/get-testcases.nu
+        shell: nu {0}
 
     outputs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
