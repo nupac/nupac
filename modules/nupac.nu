@@ -35,6 +35,7 @@ def get-flag-value [
 def scripts-path [] {
     $env
     |get -i "NUPAC_DEFAULT_LIB_DIR"
+    |get -i "NUPAC_DEFAULT_LIB_DIR" 
     |default ($nu.config-path
         |path dirname
         |path join 'scripts'
@@ -322,7 +323,6 @@ export def "nupac remove" [
         print "No packages to remove"
     } else {
         display-action-data $to-del "remove"
-
         if (user-approves) {
             $to-del
             |each {|package|
