@@ -24,23 +24,23 @@
         - debug:
             msg: "{{ file }}"
 
-        - name: Check contents of nu-pkgs.nu file
-          lineinfile:
-            path: "{{ nushell_dir }}/scripts/nu-pkgs.nu"
-            line: "use {{ package }}.nu *"
-            state: present
-          check_mode: yes
-          register: line
-          failed_when: line is failed or line is changed
+        # - name: Check contents of nu-pkgs.nu file
+        #   lineinfile:
+        #     path: "{{ nushell_dir }}/scripts/nu-pkgs.nu"
+        #     line: "use {{ package }}.nu *"
+        #     state: present
+        #   check_mode: yes
+        #   register: line
+        #   failed_when: line is failed or line is changed
 
-        - name: Get nushell scope
-          raw: "$nu.scope.commands|get command|to json"
-          args:
-            executable: "{{ nu }}"
-          register: scope
+        # - name: Get nushell scope
+        #   raw: "$nu.scope.commands|get command|to json"
+        #   args:
+        #     executable: "{{ nu }}"
+        #   register: scope
 
-        - name: Run assertions
-          assert:
-            that:
-              - package_state.stat.exists
-              - '{{ package }} in {{ scope.stdout | from_json }}'
+        # - name: Run assertions
+        #   assert:
+        #     that:
+        #       - package_state.stat.exists
+        #       - '{{ package }} in {{ scope.stdout | from_json }}'

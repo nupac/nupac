@@ -1,72 +1,136 @@
-#?name: make
+#?name: remoting
 #?author: [Yethal,]
 #?version: 1.0.0
-#?short-desc: makefile completions for nu
+#?short-desc: Remoting module for nu
 #?long-desc: >
-#?    This module contains completions for
-#?    make build tool
-#?url: https://github.com/skelly37/nupac/blob/main/modules/make.nu
-#?raw-url: https://raw.githubusercontent.com/skelly37/nupac/main/modules/make.nu
-#?keywords: [make, build, completions]
+#?    This module exports commands
+#?    that simplify management of
+#?    remote hosts over ssh
+#?    before using you need to fill the config
+#?url: https://github.com/skelly37/nupac/blob/main/modules/remoting.nu
+#?raw-url: https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting.nu
+#?keywords: [ssh, remote, automation]
 
-def "nu-complete make" [] {
-  open Makefile
-  |lines -s
-  |str trim
-  |where not $it starts-with '.'
-  |split column ' '
-  |get column1
-  |where ($it|str ends-with ':')
-  |str replace ':' ''
+# internal function that holds the host data. We could store it in a yaml file as well but that would require nushell to read it from disk every single time
+def hosts [] {
+  [
+    # Put your config here
+  ]
 }
 
-def "nu-complete make jobs" [] {
-  seq 1 (sys|get cpu|length)
+def "nu-complete wol" [] {
+  hosts
+  |where mac != ''
+  |get name
 }
 
-def "nu-complete make files" [] {
-  ls **/*|where type == file|get name
+def "nu-complete nu" [] {
+  hosts
+  |where nu
+  |get name
 }
-def "nu-complete make dirs" [] {
-  ls **/*|where type == dir|get name
+
+def "nu-complete hosts" [] {
+  hosts
+  |upsert description {|a| $"nushell: ($a.nu)"}
+  |rename value
+  |select value description
 }
-export extern "make" [
-  command?: string@"nu-complete make"
-  --always-make(-B)                                 # Unconditionally make all targets.
-  --directory(-C): string@"nu-complete make dirs"   # Change to DIRECTORY before doing anything.
-  --debug(-d)                                       # Print various types of debugging information.
-  --environment-overrides(-e)                       # Environment variables override makefiles.
-  --eval(-E): string                                # Evaluate STRING as a makefile statement.
-  --file(-f)                                        # Read FILE as a makefile.
-  --help(-h)                                        # Print this message and exit.
-  --ignore-errors(-i)                               # Ignore errors from recipes.
-  --include-dir(-I): string@"nu-complete make dirs" # Search DIRECTORY for included makefiles.
-  --jobs(-j): int@"nu-complete make jobs"           # Allow N jobs at once; infinite jobs with no arg.
-  --keep-going(-k)                                  # Keep going when some targets can't be made.
-  --load-average(-l): int@"nu-complete make jobs"   # Don't start multiple jobs unless load is below N.
-  --check-symlink-times(-L)                         # Use the latest mtime between symlinks and target.
-  --just-print(-n)                                  # Don't actually run any recipe; just print them.
-  --dry-run
-  --recon
-  --assume-old: string@"nu-complete make files"     # Consider FILE to be very old and don't remake it.
-  --old-file(-o): string@"nu-complete make files"
-  --output-sync(-O)                                 # Synchronize output of parallel jobs by TYPE.
-  --print-data-base(-p)                             # Print make's internal database.
-  --question(-q)                                    # Run no recipe; exit status says if up to date.
-  --no-builtin-rules(-r)                            # Disable the built-in implicit rules.
-  --no-builtin-variables(-R)                        # Disable the built-in variable settings.
-  --silent(-s)                                      # Don't echo recipes.
-  --quiet
-  --no-silent                                       # Echo recipes (disable --silent mode).
-  --stop(-S)                                        # Turns off -k.
-  --no-keep-going
-  --touch(-t)                                       # Touch targets instead of remaking them.
-  --trace                                           # Print tracing information.
-  --version(-v)                                     # Print the version number of make and exit.
-  --print-directory(-w)                             # Print the current directory.
-  --no-print-directory                              # Turn off -w, even if it was turned on implicitly.
-  --what-if(-W): string@"nu-complete make files"    # Consider FILE to be infinitely new.
-  --new-file: string@"nu-complete make files"
-  --assume-new: string@"nu-complete make files"
-  --warn-undefined-variables                        # Warn when an undefined variable is referenced.
-]
+
+def "nu-complete scripts" [] {
+  $nu.scope.commands
+  |where is_custom
+  |get -i command
+}
+
+# Returns ssh connection as url to be consumed by original ssh command
+def get-url [
+    host: record
+] {
+    if 'ip' in ($host|columns) {
+        echo $"ssh://($host.username)@($host.ip):($host.port)"
+    } else {
+        echo $"ssh://($host.username)@($host.name).($host.domain):($host.port)"
+    }
+}
+
+# Connect over ssh to one of predefined hosts, execute nushell commands and parse them on the host
+export def ssh [
+    hostname:string@"nu-complete hosts"                  # name of the host you want to connect to
+    ...args                                                 # commands you wish to run on the host
+    #
+    #Examples:
+    #List containers running on <server>
+    #> ssh <server> docker ps
+    #Commands that accept flags need to be put in quotes
+    #> ssh <server> 'df -h'
+] {
+    if $hostname in (hosts|get name) {
+        let host = (hosts|where name == $hostname|get -i 0)
+        if ($host.nu) {
+            if ($args|length) > 0 {
+                ^ssh (get-url $host) (build-string ($args|str collect ' ') '|to json -r')|from json
+            } else {
+                ^ssh (get-url $host)
+            }
+        } else {
+            ^ssh (get-url $host) $args
+        }
+    } else {
+        error make {
+            msg: "Unsupported host use ^ssh command instead"
+        }
+    }
+}
+
+# Connect over ssh to one of predefined hosts, execute nushell script with arguments passed from the host
+export def "ssh script" [
+    hostname: string@"nu-complete nu"                          # name of the host you want to connect to
+    script: string@"nu-complete scripts"                       # name of the script
+  ...args:                                                     # arguments you wish to pass to the script
+] {
+    let span = (metadata $script).span
+    if $hostname in ("nu-complete nu") {
+        if $script in ($nu.scope.commands|where is_custom|get command) {
+        let host = (hosts|where name == $hostname|get 0)
+        let full-command = (build-string (view-source $script) '; ' $script ' ' ($args|str collect ' ') '|to json -r')
+        ^ssh (get-url $host) ($full-command)|from json
+        } else {
+            error make {
+                msg: $"($script) is not a custom command, use regular ssh command instead"
+                label: {
+                    text: "Not a custom command",
+                    start: $span.start,
+                    end: $span.end
+                }
+            }
+        }
+    }
+}
+
+# Connect over ssh to one of predefined hosts, execute one or more commands wrapped in a block
+export def "ssh block" [
+    hostname: string@"nu-complete nu"                # name of the host you want to connect to
+    script: block                                    # name of the script
+] {
+    let host = (hosts|where name == $hostname|get 0)
+    ^ssh (get-url $host) $"do (view-source $script)"
+}
+
+# Turns on specified hosts using Wake on Lan
+export def wake [
+    ...names: string@"nu-complete wol" # list of host names to wake
+] {
+    hosts
+    |where name in $names
+    |each {|host|
+        if $host.mac != '' {
+        echo $"Waking ($host.name)"
+        wakeonlan $host.mac|ignore
+        } else {
+            error make {
+                msg: $"($host.name) does not support Wake on Lan"
+            }
+        }
+    }
+}
