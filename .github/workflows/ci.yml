@@ -60,12 +60,16 @@ jobs:
         test: ${{ fromJson(needs.generate-test-list.outputs.matrix) }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Python 3
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.x'
+          cache: 'pip'
+
+      - name: Set up Docker caching
+        uses: satackey/action-docker-layer-caching@v0.0.11
 
       - name: Install dependencies
         run: |
