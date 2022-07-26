@@ -13,7 +13,8 @@
       register: package_list
 
     - debug:
-        msg: "{{package_list}}"
+        msg: "{{ package_list }}"
+
     - name: Assert that package list is empty
       assert:
         that: "package_list.stdout|from_json|length == 0"
@@ -30,7 +31,7 @@
       register: package_list2
 
     - debug:
-        msg: "{{package_list2}}"
+        msg: "{{ package_list2 }}"
 
     - name: Assert package list contains a single package
       assert:

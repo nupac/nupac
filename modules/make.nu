@@ -1,3 +1,13 @@
+#?name: make
+#?author: [Yethal]
+#?version: 1.0.0
+#?short-desc: makefile completions for nu
+#?long-desc: >
+#?    This module contains completions for make build tool
+#?url: https://github.com/skelly37/nupac/blob/main/modules/make.nu
+#?raw-url: https://raw.githubusercontent.com/skelly37/nupac/main/modules/make.nu
+#?os: [windows, linux, macos, android]
+
 def "nu-complete make" [] {
     open ./Makefile|lines|find ':'|where ($it|str starts-with '.') == false|split column ' '|get column1|find ':'|str replace ':' ''
   }

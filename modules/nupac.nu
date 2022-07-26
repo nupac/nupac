@@ -9,6 +9,7 @@
 #?url: https://github.com/skelly37/nupac/blob/main/modules/nupac.nu
 #?raw-url: https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu
 #?keywords: [package, management]
+#?os: [windows, linux, macos, android]
 
 # get enviroment flag's value or return false
 def get-env-flag [
@@ -299,7 +300,7 @@ export def "nupac install" [
 
 # Lists installed packages
 export def "nupac list" [] {
-    get-packages
+    user-readable-pkg-info (get-packages --all)
     |move short-desc long-desc --after name
 }
 
