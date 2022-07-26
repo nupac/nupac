@@ -1,6 +1,7 @@
 ---
 - name: Smoke Test
   hosts: all
+  no_log: true
   become: false
   vars:
     command_list:

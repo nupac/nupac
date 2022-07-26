@@ -1,0 +1,37 @@
+---
+- name: List installed packages
+  hosts: all
+  become: false
+  vars:
+    package: make
+
+  tasks:
+    - name: List installed packages
+      raw: "nupac list|to json"
+      args:
+        executable: "{{ nu }}"
+      register: package_list
+
+    - debug:
+        msg: "{{package_list}}"
+    - name: Assert that package list is empty
+      assert:
+        that: "package_list.stdout|from_json|length == 0"
+
+    - name: Install {{package}}.nu
+      raw: "nupac install make -a"
+      args:
+        executable: "{{ nu }}"
+
+    - name: List installed packages again
+      raw: "nupac list|to json"
+      args:
+        executable: "{{ nu }}"
+      register: package_list2
+
+    - debug:
+        msg: "{{package_list2}}"
+
+    - name: Assert package list contains a single package
+      assert:
+        that: "package_list2.stdout|from_json|length == 1"

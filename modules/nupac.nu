@@ -308,7 +308,7 @@ export def "nupac refresh" [] {
   update-repo
 }
 
-# Removes provided set of packages and removes use statement from config.nu
+# Removes provided set of packages and removes use statement from nu-pkgs.nu
 export def "nupac remove" [
     ...packages: string
     #

@@ -2,57 +2,65 @@
 - name: Uninstall package
   hosts: all
   become: false
+  vars:
+    package: make
 
   tasks:
     - name: Install package
-      raw: "nupac install make"
+      raw: "nupac install {{ package }} -a"
       args:
         executable: "{{ nu }}"
+
+    - name: Stat {{ package }}.nu
+      stat:
+        path: "{{ nushell_dir }}/scripts/{{ package }}.nu"
+      register: package_state
+
+    - name: Check nu-pkgs.nu content
+      slurp:
+        src: "{{ nushell_dir }}/scripts/nu-pkgs.nu"
+      register: nupkgs
+
+    - name: Get nushell scope
+      raw: "$nu.scope.commands|get command|to json"
+      args:
+        executable: "{{ nu }}"
+      register: scope
 
     - name: Assert package file was created and command was added to scope
-      block:
-
-        - name: Stat make.nu
-          stat:
-            path: "{{ nushell_dir }}/scripts/make.nu"
-          register: package
-
-        - name: Get nushell scope
-          raw: "$nu.scope.commands|get command|to json"
-          args:
-            executable: "{{ nu }}"
-          register: scope
-
-        - name: Run assertions
-          assert:
-            that:
-              - package.stat.exists
-              - '"make" in {{ scope.stdout | from_json }}'
+      assert:
+        that:
+          - package_state.stat.exists
+          - '"{{ package }}" in {{ scope.stdout | from_json }}'
+          - "'use {{ package }}.nu * # added automatically by nupac' in {{ nupkgs['content'] | b64decode | split('\n') }}"
 
     - name: Uninstall package
-      raw: "nupac uninstall make"
+      raw: "nupac remove make"
       args:
         executable: "{{ nu }}"
 
-    - name: Assert package file was removed and command was removed from scope
-      block:
+    - name: Stat {{ package }}.nu again
+      stat:
+        path: "{{ nushell_dir }}/scripts/{{ package }}.nu"
+      register: package_state
 
-        - name: Stat make.nu
-          stat:
-            path: "{{ nushell_dir }}/scripts/make.nu"
-          register: package
+    - name: Check nu-pkgs.nu content again
+      slurp:
+        src: "{{ nushell_dir }}/scripts/nu-pkgs.nu"
+      register: nupkgs
 
-        - name: Get nushell scope
-          raw: "$nu.scope.commands|get command|to json"
-          args:
-            executable: "{{ nu }}"
-          register: scope
+    - name: Get nushell scope again
+      raw: "$nu.scope.commands|get command|to json"
+      args:
+        executable: "{{ nu }}"
+      register: scope
 
-        - name: Run assertions
-          assert:
-            that:
-              - not package.stat.exists
-              - '"make" not in {{ scope.stdout | from_json }}'
+    - name: Assert package was deleted and removed from scope
+      assert:
+        that:
+          - not package_state.stat.exists
+          - '"{{ package }}" not in {{ scope.stdout | from_json }}'
+          - "'use {{ package }}.nu * # added automatically by nupac' not in {{ nupkgs['content'] | b64decode | split('\n') }}"
 
 
 
