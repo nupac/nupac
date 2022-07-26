@@ -301,7 +301,6 @@ export def "nupac install" [
 # Lists installed packages
 export def "nupac list" [] {
     user-readable-pkg-info (get-packages --all)
-    |move short-desc long-desc --after name
 }
 
 # Refreshes the repo cache
