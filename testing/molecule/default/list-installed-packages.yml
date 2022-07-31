@@ -1,0 +1,38 @@
+---
+- name: List installed packages
+  hosts: all
+  become: false
+  vars:
+    package: make
+
+  tasks:
+    - name: List installed packages
+      raw: "nupac list|to json"
+      args:
+        executable: "{{ nu }}"
+      register: package_list
+
+    - name: Assert that package list contains only nupac package itself
+      assert:
+        that:
+          - "package_list.stdout | from_json | length == 1"
+          - "package_list.stdout | from_json | map(attribute='name') == ['nupac']"
+          - "( package_list.stdout | from_json )[0].keys() | list == {{ fields }}"
+
+    - name: Install {{ package }}.nu
+      raw: "nupac install {{ package }} -a"
+      args:
+        executable: "{{ nu }}"
+
+    - name: List installed packages again
+      raw: "nupac list|to json"
+      args:
+        executable: "{{ nu }}"
+      register: package_list2
+
+    - name: Assert package list contains nupac package itself and {{ package }}
+      assert:
+        that:
+          - "( package_list2.stdout | from_json )[0].keys() | list == {{ fields }}"
+          - "package_list2.stdout | from_json | length == 2"
+          - "package_list2.stdout | from_json | map(attribute='name') == ['{{ package }}', 'nupac']"

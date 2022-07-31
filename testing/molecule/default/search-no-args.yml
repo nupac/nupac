@@ -1,0 +1,16 @@
+---
+- name: Search without providing argument
+  hosts: all
+  become: false
+
+  tasks:
+    - name: Search for an existing package
+      raw: "nupac search"
+      args:
+        executable: "{{ nu }}"
+      register: search
+      failed_when: false
+
+    - name: Assert error was thrown
+      assert:
+        that: 'search.rc == 1'

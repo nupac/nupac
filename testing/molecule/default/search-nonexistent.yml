@@ -1,0 +1,18 @@
+---
+- name: Search for an existing package
+  hosts: all
+  become: false
+  vars:
+    package: lookup('community.general.random_string')
+
+  tasks:
+    - name: Search for a nonexisting package
+      raw: "nupac search {{ package }} | to json"
+      args:
+        executable: "{{ nu }}"
+      register: search
+
+    - name: Assert empty list was returned
+      assert:
+        that:
+          - "search.stdout | from_json | length == 0"

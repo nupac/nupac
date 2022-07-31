@@ -1,0 +1,19 @@
+---
+- name: Throws error on rerun
+  hosts: all
+  become: false
+
+  tasks:
+    - name: Run the installer script again
+      raw: "nu -c {{ ansible_env.HOME }}/installer.nu"
+      args:
+        executable: "{{ nu }}"
+      register: installer
+      failed_when: false
+
+    - name: Assert error was thrown
+      assert:
+        that:
+          - 'installer.rc == 1'
+          - '"Error: " in installer.stderr_lines'
+          - '"nu-pkgs already exists." in installer.stderr'
