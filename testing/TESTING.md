@@ -16,7 +16,10 @@ By default Vagrant will install the latest available version of nushell. If you 
 Automated tests are written using Ansible and Molecule framework. Ansible was chosen because of its system-level automation capabilities as well as ease of use and readability of the resulting playbooks.
 
 #### __Quickstart__
-* Make sure you have following packages installed: python3 docker pip
+* Make sure you have following packages installed:
+    * python3
+    * docker
+    * pip
 * Make sure your user is able to run Docker containers without a password (i.e by adding your used to the `docker` group)
 * Install python dependencies by running 'pip install -r requirements.txt'
 * Run `molecule test` to run the default test case using the default distro
