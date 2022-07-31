@@ -21,7 +21,7 @@ Automated tests are written using Ansible and Molecule framework. Ansible was ch
     * docker
     * pip
 * Make sure your user is able to run Docker containers without a password (i.e by adding your used to the `docker` group)
-* Install python dependencies by running 'pip install -r requirements.txt'
+* Install python dependencies by running `pip install -r requirements.txt`
 * Run `molecule test` to run the default test case using the default distro
 
 #### __Framework design__
