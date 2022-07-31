@@ -9,7 +9,7 @@
 #?url: https://github.com/skelly37/nupac/blob/main/modules/nupac.nu
 #?raw-url: https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu
 #?keywords: [package, management]
-#?os: [windows, linux, macos, android]
+#?os: [android, linux, macos, windows]
 
 # get enviroment flag's value or return false
 def get-env-flag [
