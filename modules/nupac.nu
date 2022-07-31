@@ -107,7 +107,7 @@ def update-repo [] {
     |save (repo)
 
     if ($env.LAST_EXIT_CODE == 0) {
-        print "Repository cached updated successfully"
+        print "Repository cache updated successfully"
     } else {
         error make --unspanned {
             msg: "Could not update the repository cache"
