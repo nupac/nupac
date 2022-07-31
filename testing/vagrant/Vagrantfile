@@ -1,11 +1,25 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+require 'getoptlong'
+
 hostname = 'nupac'
 cpus = 4
 mem = 4096
 gui = false
 provider = 'virtualbox'
 box = 'generic/ubuntu2204'
+version = 'latest'
+
+opts = GetoptLong.new(
+    [ '--version', '-v', GetoptLong::OPTIONAL_ARGUMENT ]
+)
+opts.ordering=(GetoptLong::REQUIRE_ORDER)
+opts.each do |opt, arg|
+	case opt
+	when '--version'
+		version = arg
+    end
+end
 
 Vagrant.configure("2") do |config|
   if Vagrant::Util::Platform.darwin?
@@ -30,7 +44,7 @@ Vagrant.configure("2") do |config|
     ansible.galaxy_role_file = "testing/vagrant/requirements.yml"
     ansible.galaxy_roles_path = '/home/vagrant/.ansible/roles'
     ansible.extra_vars = {
-      nushell_version: "0.65.0"
+      nushell_version: version
     }
   end
 end

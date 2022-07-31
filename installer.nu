@@ -33,7 +33,7 @@ if not ($nu-pkgs|path exists) {
         print 'You will have to source the nu-pkgs file manually'
     }
 } else {
-    error make {
+    error make --unspanned {
         msg: 'nu-pkgs already exists.'
     }
 }

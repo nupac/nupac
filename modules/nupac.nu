@@ -92,7 +92,7 @@ def packages-to-process [
 
     if (not ($unsupported-pkgs|empty?)) {
         user-readable-pkg-info $unsupported-pkgs
-        error make {
+        error make --unspanned {
             msg: "The listed packages cannot be installed, because OS is not supported"
         }
         []
@@ -109,7 +109,7 @@ def update-repo [] {
     if ($env.LAST_EXIT_CODE == 0) {
         print "Repository cached updated successfully"
     } else {
-        error make {
+        error make --unspanned {
             msg: "Could not update the repository cache"
         }
     }
@@ -408,7 +408,7 @@ export def "nupac upgrade" [
             }
         }
     } else {
-        error make {
+        error make --unspanned {
           msg: "Either a list of packages or --all flag must be provided"
         }
     }
