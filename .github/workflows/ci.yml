@@ -21,7 +21,7 @@ jobs:
       - name: Setup Nu
         uses: hustcer/setup-nu@v2
         with:
-          version: '0.65.0'
+          version: '0.66.2'
 
       - name: Run linter on all modules
         run: ./testing/linter.nu
@@ -37,7 +37,7 @@ jobs:
       - name: Setup Nu
         uses: hustcer/setup-nu@v2
         with:
-          version: '0.65.0'
+          version: '0.66.2'
 
       - name: Generate test list
         id: generate-matrix

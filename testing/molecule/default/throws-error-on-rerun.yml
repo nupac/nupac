@@ -4,13 +4,8 @@
   become: false
 
   tasks:
-    - name: Create nu-pkgs file
-      file:
-        path: "{{ nushell_dir }}/scripts/nu-pkgs.nu"
-        state: touch
-
     - name: Run the installer script again
-      raw: "nu -c (fetch https://raw.githubusercontent.com/skelly37/nupac/{{ ansible_env.NUPAC_INSTALLER_BRANCH }}/installer.nu)"
+      raw: "nu -c {{ ansible_env.HOME }}/installer.nu"
       args:
         executable: "{{ nu }}"
       register: installer

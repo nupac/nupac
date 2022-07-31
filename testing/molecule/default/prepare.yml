@@ -20,8 +20,15 @@
         mode: 0700
         owner: "{{ ansible_user }}"
 
+    - name: Copy nupac.nuon into the container
+      copy:
+        src: '../../../nupac.nuon'
+        dest: "{{ nushell_dir }}/scripts/"
+        mode: 0700
+        owner: "{{ ansible_user }}"
+
     - name: Run the installer
-      raw: "nu -c {{ansible_env.HOME}}/installer.nu"
+      raw: "nu -c {{ ansible_env.HOME }}/installer.nu"
       args:
         executable: "{{ nu }}"
       register: installer
@@ -50,3 +57,4 @@
               - '"nupac has been successfully installed" in installer.stdout'
               - '{{ command_list }} is subset({{ scope.stdout | from_json }})'
               - "{{ files.results | map(attribute='stat.exists') }} is all"
+

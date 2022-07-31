@@ -12,15 +12,15 @@
         executable: "{{ nu }}"
       register: package_list
 
-    - debug:
-        msg: "{{ package_list }}"
-
-    - name: Assert that package list is empty
+    - name: Assert that package list contains only nupac package itself
       assert:
-        that: "package_list.stdout|from_json|length == 0"
+        that:
+          - "package_list.stdout | from_json | length == 1"
+          - "package_list.stdout | from_json | map(attribute='name') == ['nupac']"
+          - "( package_list.stdout | from_json )[0].keys() | list == {{ fields }}"
 
-    - name: Install {{package}}.nu
-      raw: "nupac install make -a"
+    - name: Install {{ package }}.nu
+      raw: "nupac install {{ package }} -a"
       args:
         executable: "{{ nu }}"
 
@@ -30,9 +30,9 @@
         executable: "{{ nu }}"
       register: package_list2
 
-    - debug:
-        msg: "{{ package_list2 }}"
-
-    - name: Assert package list contains a single package
+    - name: Assert package list contains nupac package itself and {{ package }}
       assert:
-        that: "package_list2.stdout|from_json|length == 1"
+        that:
+          - "( package_list2.stdout | from_json )[0].keys() | list == {{ fields }}"
+          - "package_list2.stdout | from_json | length == 2"
+          - "package_list2.stdout | from_json | map(attribute='name') == ['{{ package }}', 'nupac']"

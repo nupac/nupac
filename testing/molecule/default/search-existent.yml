@@ -1,0 +1,20 @@
+---
+- name: Search for an existing package
+  hosts: all
+  become: false
+  vars:
+    package: make
+
+  tasks:
+    - name: Search for an existing package
+      raw: "nupac search {{ package }} | to json"
+      args:
+        executable: "{{ nu }}"
+      register: search
+
+    - name: Assert package was listed
+      assert:
+        that:
+          - "( search.stdout | from_json )[0].keys() | list == {{ fields }}"
+          - "search.stdout | from_json | length == 1"
+          - "search.stdout | from_json | map(attribute='name') == ['{{ package }}']"
