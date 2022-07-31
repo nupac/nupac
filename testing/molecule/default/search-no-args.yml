@@ -13,7 +13,4 @@
 
     - name: Assert error was thrown
       assert:
-        that:
-          - 'search.rc == 1'
-          - '"Error: " in search.stderr_lines'
-          - '"Missing required positional argument." in installer.stderr'
+        that: 'search.rc == 1'

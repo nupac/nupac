@@ -4,21 +4,17 @@
   become: false
 
   tasks:
-    - name: Stat nupac cache
-      stat:
+    - name: Remove existing nupac cache
+      file:
         path: "{{ nushell_dir }}/scripts/nupac.nuon"
-      register: cache
-
-    - name: Assert cache file does not exist
-      assert:
-        that: 'not cache.stat.exists'
+        state: absent
 
     - name: Refresh nupac cache
       raw: "nupac refresh"
       args:
         executable: "{{ nu }}"
 
-    - name: Stat nupac cache again
+    - name: Stat nupac cache
       stat:
         path: "{{ nushell_dir }}/scripts/nupac.nuon"
       register: cache
