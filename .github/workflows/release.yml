@@ -23,4 +23,11 @@ jobs:
           version: '0.66.2'
       - name: Update nuon
         run: ./generate-repo-cache.nu
+      - name: Push updated cache file
+        run: |
+          git config --global user.name github[bot]
+          git config --global user.rmail username@users.noreply.github.com
+          git add nupac.nuon
+          git commit -m "Pushed automatically by GitHub Actions"
+          git push
 # action does not perform git push yet
