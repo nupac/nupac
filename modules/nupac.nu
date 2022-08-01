@@ -203,7 +203,7 @@ def print-hook-msg [
     --pre: bool
     --post: bool
 ] {
-    if not ($text|empty?){
+    if not ($text|empty?) {
         if $pre {
             print "Pre-install message:"
         } else if $post {
@@ -219,7 +219,7 @@ def install-package [
     package: record
     add-to-config: bool
 ] {
-    print-hook-msg $package.pre-install-msg --pre
+    print-hook-msg ($package.pre-install-msg | into string) --pre
 
     print $"Installing ($package.name)"
     fetch ($package.raw-url | into string)
@@ -230,7 +230,7 @@ def install-package [
         add-to-config (config-entry ($package.url|path basename))
     }
 
-    print-hook-msg $package.post-install-msg --post
+    print-hook-msg ($package.post-install-msg | into string) --post
 }
 # actual package removal happens here
 def remove-package [
