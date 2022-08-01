@@ -64,9 +64,6 @@ jobs:
           python-version: '3.x'
           cache: 'pip'
 
-      - name: Set up Docker caching
-        uses: satackey/action-docker-layer-caching@v0.0.11
-
       - name: Install dependencies
         run: |
           pip3 install wheel setuptools
