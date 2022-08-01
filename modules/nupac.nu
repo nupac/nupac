@@ -203,6 +203,11 @@ def install-package [
     package: record
     add-to-config: bool
 ] {
+    if not ($package.pre-install-msg | empty?) {
+        print "Pre-install message:"
+        print ($package.pre-install-msg | into string)
+    }
+
     print $"Installing ($package.name)"
     fetch ($package.raw-url | into string)
     |save (get-package-location $package | into string)
@@ -210,6 +215,11 @@ def install-package [
     # TODO replace with nupac's own file
     if $add-to-config {
         add-to-config (config-entry ($package.url|path basename))
+    }
+
+    if not ($package.post-install-msg | empty?) {
+        print "Post-install message:"
+        print ($package.post-install-msg | into string)
     }
 }
 # actual package removal happens here
@@ -257,7 +267,6 @@ def display-action-data [
 
     print (user-readable-pkg-info $pkgs)
     print ($"The listed packages will be ($action)d")
-
 }
 
 # Installs provided set of packages and optionally adds them to the global scope
