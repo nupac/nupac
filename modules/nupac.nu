@@ -198,11 +198,29 @@ def get-package-location [
     |path join ($package.url|path basename)
 }
 
+def print-hook-msg [
+    text: string
+    --pre: bool
+    --post: bool
+] {
+    if not ($text|empty?){
+        if $pre {
+            print "Pre-install message:"
+        } else if $post {
+            print "Post-install message:"
+        }
+
+        print $text
+    }
+}
+
 # actual package installation happens here
 def install-package [
     package: record
     add-to-config: bool
 ] {
+    print-hook-msg $package.pre-install-msg --pre
+
     print $"Installing ($package.name)"
     fetch ($package.raw-url | into string)
     |save (get-package-location $package | into string)
@@ -211,6 +229,8 @@ def install-package [
     if $add-to-config {
         add-to-config (config-entry ($package.url|path basename))
     }
+
+    print-hook-msg $package.post-install-msg --post
 }
 # actual package removal happens here
 def remove-package [
