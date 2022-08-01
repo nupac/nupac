@@ -257,7 +257,6 @@ def display-action-data [
 
     print (user-readable-pkg-info $pkgs)
     print ($"The listed packages will be ($action)d")
-
 }
 
 # Installs provided set of packages and optionally adds them to the global scope
