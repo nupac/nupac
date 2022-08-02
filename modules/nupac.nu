@@ -348,7 +348,7 @@ export def "nupac remove" [
 # Searches remote repository for packages matching query with name, descriptions or keywords
 export def "nupac search" [
     query: string
-    --all(-a): bool
+    --all(-a): bool # display also packages unsupported by your operating system
     #
     # Examples:
     #
