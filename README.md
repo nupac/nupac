@@ -8,10 +8,13 @@ Nu package manager written entirely in nu
 See [TODO.md](docs/TODO.md)
 
 ## Design Doc
-See [DESIGN.md](DESIGN.md)
+See [DESIGN.md](docs/DESIGN.md)
 
 ## Package Manifest Doc
 See [PACKAGE_MANIFEST.md](docs/PACKAGE_MANIFEST.md)
+
+## Testing Guide
+See [TESTING.md](testing/TESTING.md)
 
 ## Installation
 In order to install nupac on your machine run this short snippet in nushell: `nu -c (fetch https://raw.githubusercontent.com/skelly37/nupac/master/installer.nu)`
