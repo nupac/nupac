@@ -1,6 +1,8 @@
 # Nupac's team work & coding standards
 
-First of all: **read thoroughly the existing documentation** before opening an issue, PR or starting some discussion. It's short but should anwser most of your questions. If you cannot read a few markdown pages, you definitely won't fit here well.
+First of all: **read thoroughly the existing documentation** before opening an issue, PR or starting some discussion. It is short but should anwser most of your questions. If you cannot read a few markdown pages, you definitely will not fit here well.
+
+Some of them are forced on you (like squash before merge) by our design, some require your cooperation. Treat this document as both code of conducut for nupac contributors but also an explanation why we do some things the certain way (and why you should either obey them or come up with better ones). We believe that design limitations are not bad as long as users know why they are limited and why they should not think of some hacky ways to baypass the limitations.
 
 ## Git(hub)
 
@@ -10,19 +12,19 @@ We do not want to flood the main branch with each commit from each PR. This way 
 
 ## Open issues when you want to change something in the code
 
-Unless it's a critical hotfix, try to open issues with the desired change and proper tags, so your ideas can be discussed, contested and/or enhanced. Of course, you could also open a draft PR but you take a risk of wasting time on coding something unwanted.
+Unless it is a critical hotfix, try to open issues with the desired change and proper tags, so your ideas can be discussed, contested and/or enhanced. Of course, you could also open a draft PR but you take a risk of wasting time on coding something unwanted.
 
 ## Check open PRs and issue assignees before starting to work on something
 
-Rather self-explanatory, don't duplicate someone else's job
+Rather self-explanatory, do not duplicate someone else's job
 
 ## Do not even think of bypassing the main branch protections
 
-They exist for certain reasons. Don't merge without proper review & CI/CD flow. Otherwise you risk causing a disaster.
+They exist for certain reasons. Do not merge without proper review & CI/CD flow. Otherwise you risk causing a disaster.
 
 ## Do not ignore priority tags
 
-Again, they exist for a certain reason. Don't enhance docs with low priority, if there's a critical bugfix needed.
+Again, they exist for a certain reason. Do not enhance docs with low priority, if there's a critical bugfix needed.
 
 
 ## Coding
@@ -32,8 +34,15 @@ We try to stick to (only **try** because written rules must not replace your bra
 1) [KISS](https://en.wikipedia.org/wiki/KISS_principle)
 2) [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)
 3) [Functional programming paradigm](https://en.wikipedia.org/wiki/Functional_programming#Concepts) (e.g. unnecessary state is a source of potential disaster)
-4) [TDD](https://en.wikipedia.org/wiki/Test-driven_development)
-5) *Nushellization*, i.e. if something can be done in *more nu way*, it should be done this way (e.g. replace jsons with nuons whenever possible)
+4) [Code review](https://en.wikipedia.org/wiki/Code_review): We improve our code and talk about it as long as at least one person can find at least one line they disagree with
+5) [TDD](https://en.wikipedia.org/wiki/Test-driven_development)
+6) *Nushellization*, i.e. if something can be done in *more nu way*, it should be done this way (e.g. replace jsons with nuons whenever possible)
 
 ## Testing
-**TBD**
+### The whole interface must be tested
+
+Doesn't matter if you are adding a new command or just refactoring an old one, you have to prove by tests that it works correctly.
+
+### Run tests locally before push, if possible on your machine
+
+Github has strict ratelimits, while we have a decent [guide](https://github.com/skelly37/nupac/blob/main/testing/TESTING.md) about testing. Of course, Github Actions exists for some reason, but it would be nice of you to catch typos on your high-end machine :)
