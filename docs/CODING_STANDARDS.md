@@ -24,8 +24,15 @@ They exist for certain reasons. Do not merge without proper review & CI/CD flow.
 
 ## Do not ignore priority tags
 
-Again, they exist for a certain reason. Do not enhance docs with low priority, if there's a critical bugfix needed.
+Again, they exist for a certain reason. Do not enhance docs with low priority, if there is a critical bugfix needed.
 
+## Use the suggestion mechanism whenever possible
+
+Suggestions are more easily appliable, plus you can be credited in co-commit for a good suggestion.
+
+## Link branch to related issue(s) before starting a PR
+
+The issue(s) will be autoclosed on completion, so no one can pick up an already solved issue.
 
 ## Coding
 
