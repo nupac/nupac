@@ -8,7 +8,7 @@ Some of them are forced on you (like squash before merge) by our design, some re
 
 ### Always squash before merge on main branch
 
-We do not want to flood the main branch with each commit from each PR. This way the changes are better visible, one can simply launch commits and see diffs for the squashed PR commits. Also, PRs (especially draft ones) simply tend to contain trash. 
+We do not want to flood the main branch with each commit from each PR. This way the changes are better visible, one can simply launch commits and see diffs for the squashed PR commits. Also, PRs (especially draft ones) simply tend to contain trash.
 
 ## Open issues when you want to change something in the code
 
@@ -37,11 +37,12 @@ We try to stick to (only **try** because written rules must not replace your bra
 4) [Code review](https://en.wikipedia.org/wiki/Code_review): We improve our code and talk about it as long as at least one person can find at least one line they disagree with
 5) [TDD](https://en.wikipedia.org/wiki/Test-driven_development)
 6) *Nushellization*, i.e. if something can be done in *more nu way*, it should be done this way (e.g. replace jsons with nuons whenever possible)
+7) [Pre-commit](https://pre-commit.com/#install): You do not need to know pre-commit or configure it. Just run [setup-pre-commit.nu](https://github.com/skelly37/nupac/blob/main/setup-pre-commit.nu). It helps with keeping the code clean & consistent
 
 ## Testing
 ### The whole interface must be tested
 
-Doesn't matter if you are adding a new command or just refactoring an old one, you have to prove by tests that it works correctly.
+Does not matter if you are adding a new command or just refactoring an old one, you have to prove by tests that it works correctly.
 
 ### Run tests locally before push, if possible on your machine
 
