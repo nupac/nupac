@@ -10,6 +10,9 @@ See [TODO.md](docs/TODO.md)
 ## Design Doc
 See [DESIGN.md](docs/DESIGN.md)
 
+## Nupac's team work & coding standards
+See [CODING_STANDARDS.md](docs/CODING_STANDARDS.md)
+
 ## Package Manifest Doc
 See [PACKAGE_MANIFEST.md](docs/PACKAGE_MANIFEST.md)
 
