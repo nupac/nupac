@@ -33,10 +33,10 @@ We try to stick to (only **try** because written rules must not replace your bra
 
 1) [KISS](https://en.wikipedia.org/wiki/KISS_principle)
 2) [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)
-3) [Functional programming paradigm](https://en.wikipedia.org/wiki/Functional_programming#Concepts) (e.g. unnecessary state is a source of potential disaster)
+3) [Functional programming paradigm](https://en.wikipedia.org/wiki/Functional_programming#Concepts): (e.g. unnecessary state is a source of potential disaster)
 4) [Code review](https://en.wikipedia.org/wiki/Code_review): We improve our code and talk about it as long as at least one person can find at least one line they disagree with
 5) [TDD](https://en.wikipedia.org/wiki/Test-driven_development)
-6) *Nushellization*, i.e. if something can be done in *more nu way*, it should be done this way (e.g. replace jsons with nuons whenever possible)
+6) *Nushellization*: if something can be done in *more nu way*, it should be done this way (e.g. replace jsons with nuons whenever possible)
 7) [Pre-commit](https://pre-commit.com/#install): You do not need to know pre-commit or configure it. Just run [setup-pre-commit.nu](https://github.com/skelly37/nupac/blob/main/setup-pre-commit.nu). It helps with keeping the code clean & consistent
 
 ## Testing
