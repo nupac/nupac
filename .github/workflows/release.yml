@@ -29,10 +29,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Fix with pre-commit
+      - name: Setup Python 3
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          cache: 'pip'
+      - name: Install pre-commit
         run: |
-          apt -y install python3 python3-pip
-          python3 -m pip install pre-commit
+          pip3 install pre-commit
           pre-commit install
-          pre-commit run --all-files -v
+      - name: Run pre-commit
+        run: pre-commit run --all-files -v
     
