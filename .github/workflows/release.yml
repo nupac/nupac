@@ -24,3 +24,15 @@ jobs:
       - name: Update nuon
         run: ./generate-repo-cache.nu
 # action does not perform git push yet
+  pre-commit-fix:
+    name: Fix with pre-commit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Fix with pre-commit
+        run: |
+          apt -y install python3 python3-pip
+          python3 -m pip install pre-commit
+          pre-commit install
+          pre-commit run --all-files -v
+    
