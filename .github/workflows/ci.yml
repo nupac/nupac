@@ -42,12 +42,14 @@ jobs:
         continue-on-error: true
 
       - name: Setup git & commit changes
+        if: failure()
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git commit -am "RELEASE"
+          git commit -am "pre-commit"
 
       - name: Push changes
+        if: success()
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.RELEASE_ACTION_TOKEN }}
