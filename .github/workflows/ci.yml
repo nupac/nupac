@@ -49,7 +49,7 @@ jobs:
           git commit -am "pre-commit"
 
       - name: Push changes
-        if: success()
+        if: ${{ !cancelled() }}
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.RELEASE_ACTION_TOKEN }}
