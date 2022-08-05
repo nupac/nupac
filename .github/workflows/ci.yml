@@ -1,7 +1,6 @@
 ---
 name: CI
 'on':
-  workflow_dispatch:
   pull_request:
     branches:
       - main
@@ -22,6 +21,23 @@ jobs:
       - name: Run linter on all modules
         run: ./testing/linter.nu
         shell: nu {0}
+
+  pre-commit:
+    name: Run pre-commit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Python 3
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          cache: 'pip'
+
+      - name: Run pre-commit
+        uses: pre-commit/action@v3.0.0
+
 
   generate-test-list:
     name: Test setup
@@ -50,9 +66,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        distro:
-          - ubuntu:20.04
-          - alpine:3.16.0
         test: ${{ fromJson(needs.generate-test-list.outputs.matrix) }}
     steps:
       - name: Checkout code
@@ -74,5 +87,4 @@ jobs:
           cd testing
           molecule test
         env:
-          TEST: ${{ matrix.test }}
           DISTRO: ${{ matrix.distro }}

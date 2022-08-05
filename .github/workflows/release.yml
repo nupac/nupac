@@ -1,6 +1,5 @@
 name: Release
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
@@ -8,42 +7,34 @@ on:
 defaults:
   run:
     shell: nu {0}
-     
-permissions: write-all
+
+permissions:
+  contents: write
 
 jobs:
   pre-commit-generate-repo:
-    name: Run pre-commit & generate the repo index
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    name: Run pre-commit && generate the repo index
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-        with:
-          persist-credentials: false
-          fetch-depth: 0
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Setup Nu
         uses: hustcer/setup-nu@main
         with:
           version: '0.66.2'
-      - name: Prevent push-loop
-        run: nu -c "if 'github-actions[bot]' in (git log --name-status HEAD^..HEAD) {exit 1}"
-      - name: Setup Python 3
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-          cache: 'pip'
-      - name: Install pre-commit
-        run: |
-          pip3 install pre-commit
-          pre-commit install
+
       - name: Update nuon
         run: ./generate-repo-cache.nu
-      - name: Run pre-commit
-        run: nu -c "do -i {pre-commit run --show-diff-on-failure --color=always --all-files}; exit 0"
+
       - name: Setup git & commit changes
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git commit -am "RELEASE"
+
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:

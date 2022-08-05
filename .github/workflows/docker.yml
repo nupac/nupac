@@ -6,6 +6,10 @@ name: Push docker images to GitHub Container Registry
     branches:
       - master
 
+permissions:
+  contents: read
+  packages: write
+
 env:
   image_name: ${{ github.repository }}
 
@@ -13,9 +17,6 @@ jobs:
   build-and-push-image:
     name: Build and push Docker images to GitHub registry
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
 
     steps:
       - name: Checkout code
