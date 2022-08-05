@@ -1,7 +1,11 @@
 ---
 name: Push docker images to GitHub Container Registry
 'on':
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'testing/docker/Dockerfile'
 
 permissions:
   contents: read
