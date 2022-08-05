@@ -20,6 +20,7 @@ Can be modified in `nupac.nu/freshness` but it's advised to keep it this way (on
 
 - `nupac search`: *Searches remote repository for packages matching query with name, descriptions or keywords*
   - `query`: query to look for
+  - `--all(-a)`: display also packages unsupported by your operating system
 
 - `nupac upgrade`: *Upgrades all or selected packages*
   - `...packages`: packages you want to upgrade
