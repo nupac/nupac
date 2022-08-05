@@ -35,7 +35,7 @@ def nu-pkgs [] {
 
 # We store cache index locally to avoid redownloading it on every command invocation
 def repo [] {
-    (scripts-path|path join 'nupac.nuon')
+    (scripts-path|path join 'repo-cache.nuon')
 }
 
 # tweak this value if you want to change how often cache is refreshed
@@ -90,7 +90,7 @@ def packages-to-process [
 
 # downloads fresh repository cache
 def update-repo [] {
-    fetch https://raw.githubusercontent.com/skelly37/nupac/main/nupac.nuon
+    fetch https://raw.githubusercontent.com/skelly37/nupac/main/repo-cache.nuon
     |save (repo)
 
     if ($env.LAST_EXIT_CODE == 0) {
