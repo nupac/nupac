@@ -54,7 +54,7 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.RELEASE_ACTION_TOKEN }}
-          branch: ${{ github.ref }}
+          branch: ${{ github.head_ref }}
 
 
   generate-test-list:
