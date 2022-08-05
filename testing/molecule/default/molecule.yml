@@ -6,15 +6,13 @@ driver:
   name: docker
 platforms:
   - name: instance
-    image: ${DISTRO:-ubuntu:20.04}
-    dockerfile: Dockerfile.j2
+    image: nupac:latest
+    pre_build_image: true
+    command: ""
     tmpfs:
       - /run
       - /tmp
-    pre_build_image: false
     env:
-      NUSHELL_INSTALL_DIR: /usr/bin
-      NUSHELL_INSTALL_VERSION: 0.66.2
       NUPAC_INSTALLER_BRANCH: ${GITHUB_HEAD_REF:-main}
       NUPAC_DEFAULT_BRANCH: ${GITHUB_HEAD_REF:-main}
       NUPAC_NO_CONFIRM: 'true'
@@ -27,9 +25,8 @@ provisioner:
   inventory:
     host_vars:
       instance:
-        ansible_user: ansible
         nushell_dir: "{{ ansible_env.HOME }}/.config/nushell"
-        nu: "{{ ansible_env.NUSHELL_INSTALL_DIR }}/nu --config {{ nushell_dir }}/config.nu --env-config {{ nushell_dir }}/env.nu"
+        nu: "/usr/bin/nu --config {{ nushell_dir }}/config.nu --env-config {{ nushell_dir }}/env.nu"
         fields:
           - 'name'
           - 'version'

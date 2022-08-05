@@ -23,6 +23,19 @@ jobs:
         run: ./testing/linter.nu
         shell: nu {0}
 
+  pre-commit:
+    name: Pre-Commit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Python 3
+        uses: actions/setup-python@v3
+
+      - name: Run pre-commit
+        uses: pre-commit/action@v3.0.0
+
   generate-test-list:
     name: Test setup
     runs-on: ubuntu-latest
