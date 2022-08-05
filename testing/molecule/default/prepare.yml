@@ -58,4 +58,3 @@
               - '"nupac has been successfully installed" in installer.stdout'
               - '{{ command_list }} is subset({{ scope.stdout | from_json }})'
               - "{{ files.results | map(attribute='stat.exists') }} is all"
-
