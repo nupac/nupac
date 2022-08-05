@@ -42,6 +42,7 @@ jobs:
         continue-on-error: true
 
       - name: Setup git & commit changes
+        id: commit
         if: failure()
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -49,7 +50,7 @@ jobs:
           git commit -am "pre-commit"
 
       - name: Push changes
-        if: ${{ !cancelled() }}
+        if: ${{ steps.commit.conclusion != 'cancelled' }}
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.RELEASE_ACTION_TOKEN }}
