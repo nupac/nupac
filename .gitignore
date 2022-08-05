@@ -1,4 +1,2 @@
 testing/vagrant/.vagrant
 testing/vagrant/roles
-
-.pre-commit-config.yaml
