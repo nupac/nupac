@@ -13,12 +13,7 @@ let DEFAULT_ATTRIBUTES = {"pre-install-msg": "",
 def get-metadata [
     script: path
 ] {
-    open $script
-    |lines -s
-    |where $it starts-with '#?'
-    |str replace -a -s '#?' ''
-    |str collect (char nl)
-    |from yaml
+    open ($script + "on") |from nuon
 }
 
 def check-required-attributes [
@@ -37,7 +32,6 @@ def check-required-attributes [
         |each { |entry|
             if ($entry|get $attribute|empty?) {
                 error make {msg: $"($entry) lacks required attribute: ($attribute)"}
-                exit 1
             }
         }
     }
@@ -52,9 +46,15 @@ def add-optional-attributes [
 
 
 ls modules
-|each {|module|
-    let metadata = (add-optional-attributes (get-metadata $module.name))
-    check-required-attributes $metadata
-    echo $metadata
+|where type == dir
+|get name
+|each {|it|
+    ls $it
+    |each {|module|
+        let metadata = (add-optional-attributes (get-metadata $module.name))
+        check-required-attributes $metadata
+        echo $metadata
+    }
 }
-|save repo-cache.nuon
+| get 0
+# |save repo-cache.nuon
