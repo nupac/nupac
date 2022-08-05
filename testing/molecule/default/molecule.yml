@@ -6,7 +6,7 @@ driver:
   name: docker
 platforms:
   - name: instance
-    image: nupac:latest
+    image: ghcr.io/skelly37/nupac:latest
     pre_build_image: true
     command: ""
     tmpfs:
