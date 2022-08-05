@@ -37,20 +37,20 @@ jobs:
 
       - name: Run pre-commit
         uses: pre-commit/action@v3.0.0
+        id: pre-commit
         with:
           extra_args: --all-files --show-diff-on-failure --color=always
         continue-on-error: true
 
       - name: Setup git & commit changes
-        id: commit
-        if: failure()
+        if: ${{ steps.pre-commit.outcome == 'failure' }}
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git commit -am "pre-commit"
 
       - name: Push changes
-        if: ${{ steps.commit.conclusion != 'cancelled' }}
+        if: ${{ steps.pre-commit.outcome == 'failure' }}
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.RELEASE_ACTION_TOKEN }}
