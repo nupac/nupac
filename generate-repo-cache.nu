@@ -46,18 +46,15 @@ def add-optional-attributes [
     |merge {$metadata}
 }
 
-do -i {rm repo-cache.nuon}
-
 ls modules
 |where type == dir
 |get name
 |each {|it|
     ls $it
     |get name
-    |where $it =~ "*.nuon"
+    |where ($it | str contains ".nuon")
     |each {|module|
-        check-required-attributes (add-optional-attributes (get-metadata $module))
-        |to nuon
-        |save repo-cache.nuon --append
+        (check-required-attributes (add-optional-attributes (get-metadata $module)))        
     }
 }
+| save repo-cache.nuon
