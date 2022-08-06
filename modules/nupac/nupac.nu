@@ -56,7 +56,7 @@ def get-ignored [] {
 def get-metadata [
     script: path
 ] {
-    open ($script + "on") |from nuon
+    open ($script + "on")
 }
 
 # returns all packages if os-supported, else raises errors and returns empty table (temp workaround for error errors)

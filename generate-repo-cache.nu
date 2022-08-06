@@ -11,9 +11,9 @@ let DEFAULT_ATTRIBUTES = {"pre-install-msg": "",
 
 # returns record containing script metadata
 def get-metadata [
-    script: path
+    metadata_nuon: path
 ] {
-    open ($script + "on") |from nuon
+    open $metadata_nuon
 }
 
 def check-required-attributes [
@@ -35,6 +35,8 @@ def check-required-attributes [
             }
         }
     }
+
+    echo $metadata
 }
 
 def add-optional-attributes [
@@ -44,17 +46,18 @@ def add-optional-attributes [
     |merge {$metadata}
 }
 
+do -i {rm repo-cache.nuon}
 
 ls modules
 |where type == dir
 |get name
 |each {|it|
     ls $it
+    |get name
+    |where $it =~ "*.nuon"
     |each {|module|
-        let metadata = (add-optional-attributes (get-metadata $module.name))
-        check-required-attributes $metadata
-        echo $metadata
+        check-required-attributes (add-optional-attributes (get-metadata $module))
+        |to nuon
+        |save repo-cache.nuon --append
     }
 }
-| get 0
-# |save repo-cache.nuon
