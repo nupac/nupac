@@ -54,7 +54,7 @@ ls modules
     |get name
     |where ($it | str contains ".nuon")
     |each {|module|
-        (check-required-attributes (add-optional-attributes (get-metadata $module)))        
+        (check-required-attributes (add-optional-attributes (get-metadata $module)))
     }
 }
 | save repo-cache.nuon
