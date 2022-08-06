@@ -47,6 +47,7 @@ jobs:
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
+          git checkout ${{ github.head_ref }}
           git commit -am "pre-commit"
 
       - name: Push changes
@@ -54,7 +55,7 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.RELEASE_ACTION_TOKEN }}
-          branch: ${{ github.ref }}
+          branch: ${{ github.head_ref }}
 
 
   generate-test-list:
