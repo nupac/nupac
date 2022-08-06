@@ -169,7 +169,7 @@ def config-entry [
 }
 
 # adds use statement to config so the package is available in global scope
-def add-to-config [
+def add-to-scope [
     content: string
 ] {
     open (nu-pkgs)
@@ -201,7 +201,7 @@ def get-package-location [
 # actual package installation happens here
 def install-package [
     package: record
-    add-to-config: bool
+    add-to-scope: bool
 ] {
     if not ($package.pre-install-msg | empty?) {
         print "Pre-install message:"
@@ -212,9 +212,8 @@ def install-package [
     fetch ($package.raw-url | into string)
     |save (get-package-location $package | into string)
 
-    # TODO replace with nupac's own file
-    if $add-to-config {
-        add-to-config (config-entry ($package.url|path basename))
+    if $add-to-scope {
+        add-to-scope (config-entry ($package.url|path basename))
     }
 
     if not ($package.post-install-msg | empty?) {
@@ -228,7 +227,6 @@ def remove-package [
 ] {
     print $"Uninstalling ($package.name)"
     rm -r (get-package-location $package | into string)
-    # TODO replace with nupac's own file
     remove-from-config (config-entry ($package.url|path basename))
 }
 
@@ -272,7 +270,7 @@ def display-action-data [
 # Installs provided set of packages and optionally adds them to the global scope
 export def "nupac install" [
     ...packages: string # packages you want to install
-    --add-to-config(-a): bool # add packages to config
+    --add-to-scope(-a): bool # add packages to config
     #
     # Examples:
     #
@@ -285,7 +283,7 @@ export def "nupac install" [
     # Installs package named example and adds it to global scope
     #> nupac install example -a
 ] {
-    let add-to-config = (get-flag-value $add-to-config "NUPAC_ADD_TO_SCRIPTS_LIST")
+    let add-to-scope = (get-flag-value $add-to-scope "NUPAC_ADD_TO_SCRIPTS_LIST")
 
     let to-ins = (
         packages-to-process (
@@ -301,7 +299,7 @@ export def "nupac install" [
         if (user-approves) {
             $to-ins
             |each {|package|
-                install-package $package $add-to-config
+                install-package $package $add-to-scope
             }
         }
     }

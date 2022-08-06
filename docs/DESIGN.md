@@ -9,7 +9,7 @@ Can be modified in `nupac.nu/freshness` but it's advised to keep it this way (on
 ## Commands
 - `nupac install`: *Installs provided set of packages and optionally adds them to the global scope*
   - `...packages`: packages you want to install
-  - `--add-to-config(-a)`: add packages to config, *optional*
+  - `--add-to-scope(-a)`: add packages to global scope, *optional*
 
 - `nupac list`: *Lists installed nu packages*
 
