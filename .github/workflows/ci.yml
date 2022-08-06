@@ -28,6 +28,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
 
       - name: Setup Python 3
         uses: actions/setup-python@v4
@@ -47,7 +50,6 @@ jobs:
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git checkout HEAD -B ${{ github.head_ref }}
           git commit -am "pre-commit"
 
       - name: Push changes
@@ -56,6 +58,7 @@ jobs:
         with:
           github_token: ${{ secrets.RELEASE_ACTION_TOKEN }}
           branch: ${{ github.head_ref }}
+          force_with_lease: true
 
 
   generate-test-list:
