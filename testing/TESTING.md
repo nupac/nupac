@@ -29,9 +29,7 @@ Because our use case differs greatly from what is usually achieved using either 
 
 Test case to run is selected by setting `TEST` environment variable corresponding to the name of the playbook containing our test. This allows us to easily parallelize test runs on CI
 
-Distro to run tests on is selected by setting `DISTRO` environment variable corresponding to the name and tag of a base Docker container we want to use. Just like with test case selection the purpose of this decision is ease of parallelization
-
-Each test runs in a Docker container built from a Jinja template. We decided not to use pre-built containers due to our need to cover both glibc and musl based distros (Most Ansible Docker maintainers such as Jeff Geerling only provide glibc based containers since that's what's being commonly used for servers). This might change in the future if we decide that the effort necessary to maintain this design outwieghs the benefits of covering Alpine Linux.
+Each test runs in a Docker container built from a Dockerfile stored in `docker` directory.
 
 Windows and MacOS systems are not currently tested but we hope to change that in the future
 
@@ -47,4 +45,3 @@ Purpose of scripts included in this directory is as follows:
 * linter.nu - This script runs linter on all .nu files in repository
 * run-all-tests.nu - This script is used to run all tests in the repository sequentially
 * shell.nu - This script is used to connect to Docker container created by Molecule for debugging. Run this after running either create or converge stages (but not full test as full tests destroy the test container afterwards)
-* template.nu - This script is used to render the Dockerfile using jinja cli. Run this when making changes to Dockerfile.j2 to check rendered file for syntax issues
