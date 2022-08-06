@@ -1,7 +1,6 @@
 ---
 name: CI
 'on':
-  workflow_dispatch:
   pull_request:
     branches:
       - main
@@ -23,9 +22,49 @@ jobs:
         run: ./testing/linter.nu
         shell: nu {0}
 
+  pre-commit:
+    name: Run pre-commit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Setup Python 3
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          cache: 'pip'
+
+      - name: Run pre-commit
+        uses: pre-commit/action@v3.0.0
+        id: pre-commit
+        with:
+          extra_args: --all-files --show-diff-on-failure --color=always
+        continue-on-error: true
+
+      - name: Setup git & commit changes
+        if: ${{ steps.pre-commit.outcome == 'failure' }}
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -am "pre-commit"
+
+      - name: Push changes
+        if: ${{ steps.pre-commit.outcome == 'failure' }}
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.RELEASE_ACTION_TOKEN }}
+          branch: ${{ github.head_ref }}
+          force_with_lease: true
+
+
   generate-test-list:
     name: Test setup
     runs-on: ubuntu-latest
+    needs: pre-commit
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -50,9 +89,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        distro:
-          - ubuntu:20.04
-          - alpine:3.16.0
         test: ${{ fromJson(needs.generate-test-list.outputs.matrix) }}
     steps:
       - name: Checkout code
@@ -74,5 +110,4 @@ jobs:
           cd testing
           molecule test
         env:
-          TEST: ${{ matrix.test }}
           DISTRO: ${{ matrix.distro }}
