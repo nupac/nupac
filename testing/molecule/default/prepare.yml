@@ -2,6 +2,7 @@
 - name: Smoke Test
   hosts: all
   no_log: true
+  gather_facts: true
   become: false
   vars:
     command_list:
@@ -18,14 +19,14 @@
         src: '../../../installer.nu'
         dest: "{{ ansible_env.HOME }}"
         mode: 0700
-        owner: "{{ ansible_user }}"
+        owner: "{{ ansible_user_id }}"
 
     - name: Copy repo-cache.nuon into the container
       copy:
         src: '../../../repo-cache.nuon'
         dest: "{{ nushell_dir }}/scripts/"
         mode: 0700
-        owner: "{{ ansible_user }}"
+        owner: "{{ ansible_user_id }}"
 
     - name: Run the installer
       raw: "nu -c {{ ansible_env.HOME }}/installer.nu"

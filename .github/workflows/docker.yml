@@ -1,0 +1,41 @@
+---
+name: Push docker images to GitHub Container Registry
+'on':
+  push:
+    branches:
+      - main
+    paths:
+      - 'testing/docker/Dockerfile'
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  image_name: ${{ github.repository }}
+
+jobs:
+  build-and-push-image:
+    name: Build and push Docker images to GitHub registry
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to Container registry
+        uses: docker/login-action@v2.0.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.RELEASE_ACTION_TOKEN }}
+
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3.1.0
+        with:
+          registry: ghcr.io
+          context: ./testing/docker
+          push: true
+          tags: ghcr.io/${{ github.repository }}:latest
+
