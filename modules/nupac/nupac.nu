@@ -85,7 +85,7 @@ def packages-to-process [
 
 # downloads fresh repository cache
 def update-repo [] {
-    fetch https://raw.githubusercontent.com/skelly37/nupac/main/repo-cache.nuon
+    fetch https://raw.githubusercontent.com/skelly37/nupac/metadata-to-nuons/repo-cache.nuon
     |save (repo)
 
     if ($env.LAST_EXIT_CODE == 0) {
