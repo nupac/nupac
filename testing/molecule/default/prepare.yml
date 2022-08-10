@@ -21,9 +21,9 @@
         mode: 0700
         owner: "{{ ansible_user_id }}"
 
-    - name: Copy nupac.nuon into the container
+    - name: Copy nupac.json into the container
       copy:
-        src: '../../../nupac.nuon'
+        src: '../../../nupac.json'
         dest: "{{ nushell_dir }}/scripts/"
         mode: 0700
         owner: "{{ ansible_user_id }}"

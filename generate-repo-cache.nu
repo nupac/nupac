@@ -46,8 +46,17 @@ def check-required-attributes [
 def add-optional-attributes [
     metadata
 ] {
-    $DEFAULT_ATTRIBUTES
-    |merge {$metadata}
+    let attr = (
+        $DEFAULT_ATTRIBUTES
+        |merge {$metadata}
+    )
+
+    if "long-desc" not-in ($attr|columns) {
+        $attr
+        |insert "long-desc" $attr.short-desc
+    } else {
+        $attr
+    }
 }
 
 
@@ -57,4 +66,4 @@ ls modules
     check-required-attributes $metadata
     echo $metadata
 }
-|save nupac.nuon
+|save nupac.json

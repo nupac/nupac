@@ -1,0 +1,89 @@
+[
+  {
+    "pre-install-msg": "",
+    "post-install-msg": "",
+    "keywords":
+    [
+      "make",
+      "build",
+      "completions"
+    ],
+    "nu-dependencies": [],
+    "installer": "",
+    "os":
+    [
+      "windows",
+      "linux",
+      "macos",
+      "android"
+    ],
+    "url": "https://github.com/skelly37/nupac/blob/main/modules/make.nu",
+    "short-desc": "makefile completions for nu",
+    "long-desc": "This module contains completions for make build tool\n",
+    "author":
+    [
+      "Yethal"
+    ],
+    "version": "1.0.0",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/make.nu",
+    "name": "make"
+  },
+  {
+    "pre-install-msg": "",
+    "post-install-msg": "",
+    "keywords":
+    [
+      "package",
+      "management"
+    ],
+    "nu-dependencies": [],
+    "installer": "",
+    "os":
+    [
+      "android",
+      "linux",
+      "macos",
+      "windows"
+    ],
+    "url": "https://github.com/skelly37/nupac/blob/main/modules/nupac.nu",
+    "long-desc": "Very long description of nushell as package manager wow so many words\n",
+    "name": "nupac",
+    "author":
+    [
+      "skelly37",
+      "Yethal"
+    ],
+    "short-desc": "package manager for nushell",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu",
+    "version": "0.1.0"
+  },
+  {
+    "pre-install-msg": "",
+    "post-install-msg": "",
+    "keywords":
+    [
+      "ssh",
+      "remote",
+      "automation"
+    ],
+    "nu-dependencies": [],
+    "installer": "",
+    "os":
+    [
+      "android",
+      "linux",
+      "macos",
+      "windows"
+    ],
+    "author":
+    [
+      "Yethal"
+    ],
+    "version": "1.0.0",
+    "name": "remoting",
+    "short-desc": "Remoting module for nu",
+    "long-desc": "This module exports commands that simplify management of remote hosts over ssh before using you need to fill the config\n",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting.nu",
+    "url": "https://github.com/skelly37/nupac/blob/main/modules/remoting.nu"
+  }
+]
