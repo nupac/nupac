@@ -51,7 +51,7 @@ def add-optional-attributes [
         |merge {$metadata}
     )
 
-    if long-desc not-in ($attr|columns) {
+    if "long-desc" not-in ($attr|columns) {
         $attr
         |merge {[["long-desc"];[$attr.short-desc]]}
     } else {
@@ -66,4 +66,4 @@ ls modules
     check-required-attributes $metadata
     echo $metadata
 }
-|save nupac.nuon
+|save nupac.json
