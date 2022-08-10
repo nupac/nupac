@@ -10,13 +10,11 @@
       raw: "nupac search {{ package }} --long | to json"
       args:
         executable: "{{ nu }}"
-      register: search-l
+      register: searchl
 
     - name: Assert that long-desc was used
       assert:
-        that:
-          - "search-l.stdout | from_json | json_query('description') == 'This module contains completions for make build tool
-          '"
+        that: "'This module contains completions for make build tool' in searchl.stdout | from_json | first | json_query('description')"
 
     - name: Search without -l
       raw: "nupac search {{ package }} | to json"
@@ -26,5 +24,4 @@
 
     - name: Assert that short-desc was used
       assert:
-        that:
-          - "search.stdout | from_json | json_query('description') == 'makefile completions for nu'"
+        that: "'makefile completions for nu' in search.stdout | from_json | first | json_query('description')"
