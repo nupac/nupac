@@ -53,7 +53,7 @@ def add-optional-attributes [
 
     if "long-desc" not-in ($attr|columns) {
         $attr
-        |merge {[["long-desc"];[$attr.short-desc]]}
+        |insert "long-desc" $attr.short-desc
     } else {
         $attr
     }
