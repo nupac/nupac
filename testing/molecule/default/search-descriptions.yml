@@ -15,7 +15,7 @@
     - name: Assert that long-desc was used
       assert:
         that:
-          - "(search-l.stdout | from_json | json_query('description')) == 'This module contains completions for make build tool
+          - "search-l.stdout | from_json | json_query('description') == 'This module contains completions for make build tool
           '"
 
     - name: Search without -l
@@ -27,4 +27,4 @@
     - name: Assert that short-desc was used
       assert:
         that:
-          - "(search.stdout | from_json | json_query('description')) == 'makefile completions for nu'"
+          - "search.stdout | from_json | json_query('description') == 'makefile completions for nu'"
