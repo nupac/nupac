@@ -110,4 +110,4 @@ jobs:
           cd testing
           molecule test
         env:
-          DISTRO: ${{ matrix.distro }}
+          TEST: ${{ matrix.test }}
