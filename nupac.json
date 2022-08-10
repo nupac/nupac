@@ -17,16 +17,16 @@
       "macos",
       "android"
     ],
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/make.nu",
-    "long-desc": "This module contains completions for make build tool\n",
-    "version": "1.0.0",
-    "short-desc": "makefile completions for nu",
     "url": "https://github.com/skelly37/nupac/blob/main/modules/make.nu",
-    "name": "make",
+    "short-desc": "makefile completions for nu",
+    "long-desc": "This module contains completions for make build tool\n",
     "author":
     [
       "Yethal"
-    ]
+    ],
+    "version": "1.0.0",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/make.nu",
+    "name": "make"
   },
   {
     "pre-install-msg": "",
@@ -45,17 +45,17 @@
       "macos",
       "windows"
     ],
-    "name": "nupac",
     "url": "https://github.com/skelly37/nupac/blob/main/modules/nupac.nu",
     "long-desc": "Very long description of nushell as package manager wow so many words\n",
-    "short-desc": "package manager for nushell",
-    "version": "0.1.0",
+    "name": "nupac",
     "author":
     [
       "skelly37",
       "Yethal"
     ],
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu"
+    "short-desc": "package manager for nushell",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu",
+    "version": "0.1.0"
   },
   {
     "pre-install-msg": "",
@@ -79,11 +79,11 @@
     [
       "Yethal"
     ],
-    "short-desc": "Remoting module for nu",
     "version": "1.0.0",
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting.nu",
     "name": "remoting",
+    "short-desc": "Remoting module for nu",
     "long-desc": "This module exports commands that simplify management of remote hosts over ssh before using you need to fill the config\n",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting.nu",
     "url": "https://github.com/skelly37/nupac/blob/main/modules/remoting.nu"
   }
 ]
