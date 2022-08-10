@@ -104,7 +104,7 @@ def packages-to-process [
 
 # downloads fresh repository cache
 def update-repo [] {
-    fetch https://raw.githubusercontent.com/skelly37/nupac/main/nupac.json
+    fetch https://raw.githubusercontent.com/skelly37/nupac/long-desc/nupac.json
     |save (repo)
 
     if ($env.LAST_EXIT_CODE == 0) {
