@@ -46,8 +46,17 @@ def check-required-attributes [
 def add-optional-attributes [
     metadata
 ] {
-    $DEFAULT_ATTRIBUTES
-    |merge {$metadata}
+    let attr = (
+        $DEFAULT_ATTRIBUTES
+        |merge {$metadata}
+    )
+
+    if long-desc not-in ($attr|columns){
+        $attr
+        |merge {[["long-desc"];[$attr.short-desc]]}
+    } else {
+        $attr
+    }
 }
 
 

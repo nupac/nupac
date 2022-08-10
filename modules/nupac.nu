@@ -80,6 +80,7 @@ def get-metadata [
 # returns all packages if os-supported, else raises errors and returns empty table (temp workaround for error errors)
 def packages-to-process [
     packages: table
+    long: bool
 ] {
     let unsupported-pkgs = ($packages
         |where $nu.os-info.name not-in $it.os
@@ -91,7 +92,7 @@ def packages-to-process [
     )
 
     if (not ($unsupported-pkgs|empty?)) {
-        user-readable-pkg-info $unsupported-pkgs
+        user-readable-pkg-info $unsupported-pkgs $long
         error make --unspanned {
             msg: "The listed packages cannot be installed, because OS is not supported"
         }
@@ -245,9 +246,16 @@ def upgrade-package [
 # display info about the package for the user
 def user-readable-pkg-info [
     pkgs: table
+    long: bool
 ] {
+    let desc = (if $long {
+            "long-desc"
+        } else {
+            "short-desc"}
+    )
+
     $pkgs
-    |select name version author os short-desc
+    |select name version author os $desc
     |update cells -c ["author" "os"] {|x| $x|str collect ', '}
     |rename name version "author(s)" "supported OS" description
 }
@@ -256,6 +264,7 @@ def user-readable-pkg-info [
 def display-action-data [
     pkgs: table
     action: string
+    long: bool
 ] {
     let action = if ($action|str ends-with "e") {
         $action
@@ -263,14 +272,15 @@ def display-action-data [
         $action + "e"
     }
 
-    print (user-readable-pkg-info $pkgs)
+    print (user-readable-pkg-info $pkgs $long)
     print ($"The listed packages will be ($action)d")
 }
 
 # Installs provided set of packages and optionally adds them to the global scope
 export def "nupac install" [
-    ...packages: string # packages you want to install
+    ...packages: string # packages to install
     --add-to-scope(-a): bool # add packages to config
+    --long(-l): bool # display long package descriptions instead of short ones
     #
     # Examples:
     #
@@ -280,22 +290,23 @@ export def "nupac install" [
     # Install packages example, second-example and third-example
     #> nupac install example second-example third-example
     #
-    # Installs package named example and adds it to global scope
+    # Install package named example and add it to global scope
     #> nupac install example -a
 ] {
     let add-to-scope = (get-flag-value $add-to-scope "NUPAC_ADD_TO_SCRIPTS_LIST")
+    let long = (get-flag-value $long "NUPAC_USE_LONG_DESC")
 
-    let to-ins = (
+    let to-ins = ((
         packages-to-process (
             get-repo-contents
             |where name in $packages
             |where name not-in (get-ignored)
-        )
-    )
+        ) $long
+    ))
     if ($to-ins|empty?) {
         print "No packages to install"
     } else {
-        display-action-data $to-ins "install"
+        display-action-data $to-ins "install" $long
         if (user-approves) {
             $to-ins
             |each {|package|
@@ -306,8 +317,10 @@ export def "nupac install" [
 }
 
 # Lists installed packages
-export def "nupac list" [] {
-    user-readable-pkg-info (get-packages --all)
+export def "nupac list" [
+    --long(-l): bool # display long package descriptions instead of short ones
+] {
+    user-readable-pkg-info (get-packages --all) (get-flag-value $long "NUPAC_USE_LONG_DESC")
 }
 
 # Refreshes the repo cache
@@ -317,7 +330,8 @@ export def "nupac refresh" [] {
 
 # Removes provided set of packages and removes use statement from nu-pkgs.nu
 export def "nupac remove" [
-    ...packages: string
+    ...packages: string # packages to remove
+    --long(-l): bool # display long package descriptions instead of short ones
     #
     # Examples:
     #
@@ -327,12 +341,14 @@ export def "nupac remove" [
     # Remove packages example, second-example and third-example
     #> nupac remove example second-example third-example
 ] {
+    let long = (get-flag-value $long "NUPAC_USE_LONG_DESC")
+
     let to-del = (get-repo-contents | where name in $packages)
 
     if ($to-del|empty?) {
         print "No packages to remove"
     } else {
-        display-action-data $to-del "remove"
+        display-action-data $to-del "remove" $long
 
         if (user-approves) {
             $to-del
@@ -347,6 +363,7 @@ export def "nupac remove" [
 export def "nupac search" [
     query: string
     --all(-a): bool # display also packages unsupported by your operating system
+    --long(-l): bool # display long package descriptions instead of short ones
     #
     # Examples:
     #
@@ -356,27 +373,30 @@ export def "nupac search" [
     # Search for package named example and display also packages unsupported by your OS
     #> nupac search example --all
 ] {
+    let long = (get-flag-value $long "NUPAC_USE_LONG_DESC")
+
     let found = (
         get-repo-contents
         |where name =~ $query or short-desc =~ $query or long-desc =~ $query or $query in keywords or $query in author
     )
 
     if $all {
-        user-readable-pkg-info $found
-    } else {
+        user-readable-pkg-info $found $long
+    } else {(
         user-readable-pkg-info (
             $found
             |where $nu.os-info.name in $it.os
-        )
-    }
+        ) $long
+    )}
 }
 
 
 # Upgrades all or selected packages
 export def "nupac upgrade" [
-    ...packages: string
-    --all(-a): bool
-    --ignore-self(-i): bool
+    ...packages: string # packages to upgrade
+    --all(-a): bool # upgrade all upgradeable packages
+    --ignore-self(-i): bool # do not upgrade nupac
+    --long(-l): bool # display long package descriptions instead of short ones
     #
     # Examples:
     #
@@ -393,6 +413,7 @@ export def "nupac upgrade" [
     #> nupac upgrade --all --ignore-self
 ] {
     let ignore-self = (get-flag-value $ignore-self "NUPAC_IGNORE_SELF")
+    let long = (get-flag-value $long "NUPAC_USE_LONG_DESC")
 
     if (($packages|length) > 0 or $all) {
         let to-upgrade = ( package-to-process (
@@ -405,7 +426,7 @@ export def "nupac upgrade" [
         if ($to-upgrade|empty?) {
             print "No upgrades found"
         } else {
-            display-action-data $to-upgrade "upgrade"
+            display-action-data $to-upgrade "upgrade" $long
 
             if (user-approves) {
                 $to-upgrade
