@@ -104,7 +104,10 @@ def packages-to-process [
 
 # downloads fresh repository cache
 def update-repo [] {
-    fetch https://raw.githubusercontent.com/skelly37/nupac/long-desc/nupac.json
+
+let branch = ($env|get -i "NUPAC_DEFAULT_BRANCH"|default 'main')
+
+fetch $"https://raw.githubusercontent.com/skelly37/nupac/($branch)/nupac.json"
     |save (repo)
 
     if ($env.LAST_EXIT_CODE == 0) {
@@ -213,6 +216,13 @@ def install-package [
     fetch ($package.raw-url | into string)
     |save (get-package-location $package | into string)
 
+    if not (verify-checksum $package) {
+        rm (get-package-location $package|into string)
+        error make --unspanned {
+          msg: "File checksum is incorrect, aborting"
+        }
+    }
+
     if $add-to-scope {
         add-to-scope (config-entry ($package.url|path basename))
     }
@@ -222,6 +232,22 @@ def install-package [
         print ($package.post-install-msg | into string)
     }
 }
+# verifies whether sha checksum of the downloaded file matches the checksum in the repo cache
+def verify-checksum [
+    package: record
+] {
+    let file-checksum = (
+        open (get-package-location $package | into string)
+        |hash sha256
+    )
+    let cache-checksum = (
+        open (repo)
+        |where name == $package.name && short-desc == $package.short-desc
+        |get -i 0.checksum
+    )
+    $cache-checksum == $file-checksum
+}
+
 # actual package removal happens here
 def remove-package [
     package: record

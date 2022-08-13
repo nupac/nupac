@@ -1,0 +1,27 @@
+---
+- name: Throws error on checksum mismatch
+  hosts: all
+  become: false
+  vars:
+    package: make
+
+  tasks:
+    - name: Read the existing repo cache
+      slurp:
+        src: "{{ nushell_dir }}/scripts/nupac.json"
+      register: cache
+
+    - name: Modify repo cache and set it as fact
+      set_fact:
+        new_cache: "{{ cache.content | b64decode | from_json | map('combine', {'checksum': 'aaaaaaaaaaaaaaa'}) | to_nice_json }}"
+
+    - name: Write modified repo cache
+      copy:
+        content: "{{ new_cache }}"
+        dest: "{{ nushell_dir }}/scripts/nupac.json"
+        remote_src: yes
+
+    - name: Install package
+      raw: "nupac install {{ package }}"
+      args:
+        executable: "{{ nu }}"

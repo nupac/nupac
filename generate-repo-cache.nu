@@ -62,7 +62,10 @@ def add-optional-attributes [
 
 ls modules
 |each {|module|
-    let metadata = (add-optional-attributes (get-metadata $module.name))
+    let metadata = (
+        add-optional-attributes (get-metadata $module.name)
+        |upsert checksum {open $module.name|hash sha256}
+    )
     check-required-attributes $metadata
     echo $metadata
 }
