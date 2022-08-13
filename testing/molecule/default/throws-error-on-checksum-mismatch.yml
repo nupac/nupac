@@ -21,7 +21,15 @@
         dest: "{{ nushell_dir }}/scripts/nupac.json"
         remote_src: yes
 
-    - name: Install package
+    - name: Try installing a package
       raw: "nupac install {{ package }}"
       args:
         executable: "{{ nu }}"
+      register: installer
+      failed_when: false
+
+    - name: Assert error was thrown
+      assert:
+        that:
+          - installer.rc == 1
+          - "'File checksum is incorrect, aborting' in installer.stderr"
