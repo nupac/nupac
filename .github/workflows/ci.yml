@@ -43,8 +43,9 @@ jobs:
         with:
           version: '0.66.2'
 
-      - name: Update nuon
+      - name: Generate repository cache
         run: ./generate-repo-cache.nu
+        shell: nu {0}
 
       - name: Run pre-commit
         uses: pre-commit/action@v3.0.0
