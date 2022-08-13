@@ -35,7 +35,7 @@ body:
     validations:
       required: false
   - type: textarea
-    id: nu-cfg
+    id: nucfg
     attributes:
       label: Nu configuration
       description: "Please run `version | transpose key value | to md --pretty` and paste the output to show OS, features, etc."
@@ -56,7 +56,7 @@ body:
       required: true
 
    - type: textarea
-    id: nupac-cfg
+    id: nupaccfg
     attributes:
       label: Nupac onfiguration
       description: "Please run `nupac --version` and paste the output to show what you are actually using."
