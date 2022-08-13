@@ -6,7 +6,7 @@
 ## General
 - [ ] Newer functionality got documented (if needed, e.g. a new nupac enviroment variable)
 - [ ] Existing documentation is not outdated (e.g. changed inteface)
-- [ ] New code is tested 
+- [ ] New code is tested
 - [ ] All files have up to data metadata
 - [ ] Pull request is not a draft (we have to know that you are ready for review)
 ## If submitting a module
@@ -18,5 +18,3 @@
 ## If submitting a stand-alone script
 - [ ] The script has a proper shebang at the top (`/usr/bin/env nu` should work in most circumstances)
 - [ ] The script has proper file permissions (Run `chmod +x` on the file before push)
-
-
