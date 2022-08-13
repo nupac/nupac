@@ -123,6 +123,9 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
 
       - name: Setup Nu
         uses: hustcer/setup-nu@v2
@@ -137,7 +140,7 @@ jobs:
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git commit -am "repo cache"
+          git commit -am "repo cache" --allow-empty
 
       - name: Push changes
         uses: ad-m/github-push-action@master
