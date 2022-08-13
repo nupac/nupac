@@ -17,16 +17,16 @@
       "macos",
       "android"
     ],
-    "short-desc": "makefile completions for nu",
     "version": "1.0.0",
     "long-desc": "This module contains completions for make build tool\n",
+    "url": "https://github.com/skelly37/nupac/blob/main/modules/make.nu",
     "author":
     [
       "Yethal"
     ],
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/make.nu",
-    "url": "https://github.com/skelly37/nupac/blob/main/modules/make.nu",
     "name": "make",
+    "short-desc": "makefile completions for nu",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/make.nu",
     "checksum": "ad48b4749cb658e245edb49a6ddcceabbeb0e5e6a69256d7ba4a25be662948a5"
   },
   {
@@ -46,17 +46,17 @@
       "macos",
       "windows"
     ],
-    "name": "nupac",
-    "short-desc": "package manager for nushell",
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu",
-    "version": "0.1.0",
     "long-desc": "Very long description of nushell as package manager wow so many words\n",
-    "url": "https://github.com/skelly37/nupac/blob/main/modules/nupac.nu",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu",
     "author":
     [
       "skelly37",
       "Yethal"
     ],
+    "short-desc": "package manager for nushell",
+    "version": "0.1.0",
+    "url": "https://github.com/skelly37/nupac/blob/main/modules/nupac.nu",
+    "name": "nupac",
     "checksum": "80caee679c40528eef574f4304c04d3d48b68bc16f6c74d0bd5fdc6363f2e3be"
   },
   {
@@ -79,14 +79,14 @@
     ],
     "long-desc": "This module exports commands that simplify management of remote hosts over ssh before using you need to fill the config\n",
     "url": "https://github.com/skelly37/nupac/blob/main/modules/remoting.nu",
+    "version": "1.0.0",
     "author":
     [
       "Yethal"
     ],
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting.nu",
-    "version": "1.0.0",
-    "short-desc": "Remoting module for nu",
     "name": "remoting",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting.nu",
+    "short-desc": "Remoting module for nu",
     "checksum": "32c6244aaa15af7a741f38a84b03923f4204d1b77720e9513cbe98e12227c940"
   }
 ]

@@ -27,8 +27,9 @@ def check-required-attributes [
     let missing-columns = ($REQUIRED_ATTRIBUTES|where $it not-in ($metadata|columns)|str collect ", ")
 
     if (not ($missing-columns|empty?)) {
-        error make {msg: $"Required columns: ($missing-columns) not present in metadata"}
-        exit 1
+        error make --unspanned {
+            msg: $"Required columns: ($missing-columns) not present in metadata"
+        }
     }
 
     $REQUIRED_ATTRIBUTES
@@ -58,7 +59,6 @@ def add-optional-attributes [
         $attr
     }
 }
-
 
 ls modules
 |each {|module|

@@ -22,9 +22,14 @@ jobs:
         run: ./testing/linter.nu
         shell: nu {0}
 
+      - name: Verify repo cache can be generated
+        run: ./generate-repo-cache.nu
+        shell: nu {0}
+
   pre-commit:
     name: Run pre-commit
     runs-on: ubuntu-latest
+    needs: lint
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -38,15 +43,6 @@ jobs:
           python-version: '3.x'
           cache: 'pip'
 
-      - name: Setup Nu
-        uses: hustcer/setup-nu@main
-        with:
-          version: '0.66.2'
-
-      - name: Generate repository cache
-        run: ./generate-repo-cache.nu
-        shell: nu {0}
-
       - name: Run pre-commit
         uses: pre-commit/action@v3.0.0
         id: pre-commit
@@ -55,15 +51,16 @@ jobs:
         continue-on-error: true
 
       - name: Setup git & commit changes
+        if: ${{ steps.pre-commit.outcome == 'failure' }}
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git commit -am "pre-commit"
 
       - name: Push changes
+        if: ${{ steps.pre-commit.outcome == 'failure' }}
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.RELEASE_ACTION_TOKEN }}
           branch: ${{ github.head_ref }}
           force_with_lease: true
 
@@ -118,3 +115,33 @@ jobs:
           molecule test
         env:
           TEST: ${{ matrix.test }}
+
+  push-cache:
+    name: Push updated repo cache
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Nu
+        uses: hustcer/setup-nu@v2
+        with:
+          version: '0.66.2'
+
+      - name: Generate repo cache
+        run: ./generate-repo-cache.nu
+        shell: nu {0}
+
+      - name: Setup git & commit changes
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -am "repo cache"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: ${{ github.head_ref }}
+          force_with_lease: true
