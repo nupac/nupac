@@ -17,16 +17,16 @@
       "macos",
       "android"
     ],
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/make.nu",
-    "short-desc": "makefile completions for nu",
-    "url": "https://github.com/skelly37/nupac/blob/main/modules/make.nu",
-    "name": "make",
-    "version": "1.0.0",
     "author":
     [
       "Yethal"
     ],
     "long-desc": "This module contains completions for make build tool\n",
+    "name": "make",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/make.nu",
+    "short-desc": "makefile completions for nu",
+    "url": "https://github.com/skelly37/nupac/blob/main/modules/make.nu",
+    "version": "1.0.0",
     "checksum": "ad48b4749cb658e245edb49a6ddcceabbeb0e5e6a69256d7ba4a25be662948a5"
   },
   {
@@ -46,17 +46,17 @@
       "macos",
       "windows"
     ],
-    "version": "0.1.0",
-    "short-desc": "package manager for nushell",
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu",
     "author":
     [
       "skelly37",
       "Yethal"
     ],
     "long-desc": "Very long description of nushell as package manager wow so many words\n",
-    "url": "https://github.com/skelly37/nupac/blob/main/modules/nupac.nu",
     "name": "nupac",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu",
+    "short-desc": "package manager for nushell",
+    "url": "https://github.com/skelly37/nupac/blob/main/modules/nupac.nu",
+    "version": "0.1.0",
     "checksum": "d387a94df750ba522fe3bead76da1ad838b2f1730a1904ce83450106ddb526b2"
   },
   {
@@ -81,13 +81,12 @@
     [
       "Yethal"
     ],
-    "version": "1.0.0",
-    "url": "https://github.com/skelly37/nupac/blob/main/modules/remoting.nu",
+    "long-desc": "This module exports commands that simplify management of remote hosts over ssh before using you need to fill the config\n",
     "name": "remoting",
     "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting.nu",
     "short-desc": "Remoting module for nu",
-    "long-desc": "This module exports commands that simplify management of remote hosts over ssh before using you need to fill the config\n",
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting.nu",
+    "url": "https://github.com/skelly37/nupac/blob/main/modules/remoting.nu",
+    "version": "1.0.0",
     "checksum": "32c6244aaa15af7a741f38a84b03923f4204d1b77720e9513cbe98e12227c940"
   }
 ]
