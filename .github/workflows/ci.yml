@@ -48,17 +48,20 @@ jobs:
         continue-on-error: true
 
       - name: Push changes back
+        id: commit
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: pre-commit fixes and new cache
 
     outputs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
+      commit: ${{ steps.commit.outputs.changes_detected }}
 
   test:
     name: Tests
+    needs: setup
     runs-on: ubuntu-latest
-    if: steps.auto-commit-action.outputs.changes_detected == 'false'
+    if: ${{ needs.setup.outputs.commit == 'false' }}
     strategy:
       fail-fast: false
       matrix:
