@@ -27,8 +27,9 @@ def check-required-attributes [
     let missing-columns = ($REQUIRED_ATTRIBUTES|where $it not-in ($metadata|columns)|str collect ", ")
 
     if (not ($missing-columns|empty?)) {
-        error make {msg: $"Required columns: ($missing-columns) not present in metadata"}
-        exit 1
+        error make --unspanned {
+            msg: $"Required columns: ($missing-columns) not present in metadata"
+        }
     }
 
     $REQUIRED_ATTRIBUTES
@@ -59,11 +60,13 @@ def add-optional-attributes [
     }
 }
 
-
 ls modules
 |each {|module|
-    let metadata = (add-optional-attributes (get-metadata $module.name))
+    let metadata = (
+        add-optional-attributes (get-metadata $module.name)
+        |upsert checksum {open $module.name|hash sha256}
+    )
     check-required-attributes $metadata
     echo $metadata
 }
-|save nupac.json
+|save repo-cache.json

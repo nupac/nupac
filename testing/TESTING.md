@@ -39,6 +39,8 @@ Each test case sets necessary state (if applicable) and performs assertions usin
 #### __Local development__
 In order to run any of the tests locally set the environment variable `TEST` to the name of the test and then run `molecule test`. In nushell this can be easily achieved using `with-env` command, i.e: `with-env [TEST refresh-cache.yml] {molecule test}`
 
+In order to test locally changes to the nupac module push your changes to a branch and set the environment variable GITHUB_HEAD_REF to the name of your branch. In nushell this can be easily achieved using `with-env` command, i.e: `with-env [TEST refresh-cache.yml, GITHUB_HEAD_REF branchname] {molecule test}`
+
 ### __Scripts__
 Purpose of scripts included in this directory is as follows:
 * get-testcases.nu - This script is used by CI to generate list of test cases to execute on Pull Request
