@@ -60,9 +60,7 @@ body:
      attributes:
        label: Nupac onfiguration
        description: "Please run `nupac --version` and paste the output to show what you are actually using."
-       placeholder: |
-         > nupac --version
-         0.1.0
+       placeholder: 0.1.0
      validations:
        required: true
   - type: textarea
