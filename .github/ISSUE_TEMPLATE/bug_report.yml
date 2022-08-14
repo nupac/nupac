@@ -1,7 +1,6 @@
 name: Bug Report
 description: Create a report to help us improve
-labels: "bug"
-body:
+body: 
   - type: textarea
     id: description
     attributes:
@@ -25,7 +24,7 @@ body:
     attributes:
       label: Expected behavior
       description: A clear and concise description of what you expected to happen.
-      placeholder: I expected nupac to...
+      placeholder: I expected nu to...
     validations:
       required: true
   - type: textarea
@@ -36,9 +35,9 @@ body:
     validations:
       required: false
   - type: textarea
-    id: nucfg
+    id: config
     attributes:
-      label: Nu configuration
+      label: Configuration
       description: "Please run `version | transpose key value | to md --pretty` and paste the output to show OS, features, etc."
       placeholder: |
         > version | transpose key value | to md --pretty
@@ -54,15 +53,7 @@ body:
         | features           | clipboard-cli, ctrlc, dataframe, default, rustyline, term, trash, uuid, which, zip                                                                                      |
         | installed_plugins  | binaryview, chart bar, chart line, fetch, from bson, from sqlite, inc, match, post, ps, query json, s3, selector, start, sys, textview, to bson, to sqlite, tree, xpath |
     validations:
-      required: true
-   - type: input
-     id: nupaccfg
-     attributes:
-       label: Nupac onfiguration
-       description: "Please run `nupac --version` and paste the output to show what you are actually using."
-       placeholder: 0.1.0
-     validations:
-       required: true
+      required: false
   - type: textarea
     id: context
     attributes:
