@@ -32,7 +32,7 @@ jobs:
         run: ./testing/linter.nu
         shell: nu {0}
 
-      - name: Verify repo cache can be generated
+      - name: Generate new repo cache
         run: ./generate-repo-cache.nu
         shell: nu {0}
 
@@ -48,7 +48,7 @@ jobs:
           extra_args: --all-files --show-diff-on-failure --color=always
         continue-on-error: true
 
-      - name: Push changes back
+      - name: Push changes back if present
         id: commit
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
