@@ -48,7 +48,7 @@ def nu-pkgs [] {
 
 # We store cache index locally to avoid redownloading it on every command invocation
 def repo [] {
-    (scripts-path|path join 'nupac.json')
+    (scripts-path|path join 'repo-cache.json')
 }
 
 # tweak this value if you want to change how often cache is refreshed
@@ -107,7 +107,7 @@ def update-repo [] {
 
 let branch = ($env|get -i "NUPAC_DEFAULT_BRANCH"|default 'main')
 
-fetch $"https://raw.githubusercontent.com/skelly37/nupac/($branch)/nupac.json"
+fetch $"https://raw.githubusercontent.com/skelly37/nupac/($branch)/repo-cache.json"
     |save (repo)
 
     if ($env.LAST_EXIT_CODE == 0) {

@@ -69,4 +69,4 @@ ls modules
     check-required-attributes $metadata
     echo $metadata
 }
-|save nupac.json
+|save repo-cache.json
