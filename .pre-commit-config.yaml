@@ -1,4 +1,4 @@
-exclude: "(.github/workflows/)|(nupac.nuon)|(nupac.json)"
+exclude: "(.github/workflows/)|(nupac.nuon)|(repo-cache.json)"
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.2.0
