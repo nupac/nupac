@@ -15,6 +15,7 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
+          token: ${{ secrets.RELEASE_ACTION_TOKEN}}
 
       - name: Setup Nu
         uses: hustcer/setup-nu@v2
@@ -52,7 +53,6 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: pre-commit fixes and new cache
-          token: ${{ secrets.RELEASE_ACTION_TOKEN}}
 
     outputs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
@@ -62,7 +62,7 @@ jobs:
     name: Tests
     needs: setup
     runs-on: ubuntu-latest
-    if: ${{ needs.setup.outputs.commit == 'true' }}
+    if: ${{ needs.setup.outputs.commit == 'false' }}
     strategy:
       fail-fast: false
       matrix:
