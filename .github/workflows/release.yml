@@ -1,0 +1,38 @@
+name: Release
+'on':
+  push:
+    branches:
+      - main
+
+jobs:
+  push-updated-repo-cache:
+    name: Push updated repo cache to main branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Setup Nu
+        uses: hustcer/setup-nu@v2
+        with:
+          version: '0.66.2'
+
+      - name: Generate repo cache
+        run: ./generate-repo-cache.nu
+        shell: nu {0}
+
+      - name: Setup git & commit changes
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -am "repo cache" --allow-empty
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: ${{ github.head_ref }}
+          force_with_lease: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
