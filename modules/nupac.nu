@@ -314,25 +314,7 @@ export def "nupac" [
     if $version {
         VERSION
     } else {
-        print -n "Nushell package manager
-
-Usage:
-  > nupac {flags}
-
-Subcommands:
-  nupac install - Installs provided set of packages and optionally adds them to the global scope
-  nupac list - Lists installed packages
-  nupac refresh - Refreshes the repository cache
-  nupac remove - Removes provided set of packages and removes use statement from nu-pkgs.nu
-  nupac search - Searches remote repository for packages matching query with name, descriptions or keywords
-  nupac upgrade - Upgrades all or selected packages
-
-Flags:
-  -v, --version
-      nupac's version
-  -h, --help
-      Display this help message
-        "
+        print -n "Use nupac -h to get help."
     }
 }
 
