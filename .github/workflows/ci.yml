@@ -55,13 +55,13 @@ jobs:
 
     outputs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
-      commit: ${{ steps.commit.outputs.changes_detected }}
+      commit: ${{ steps.commit.outputs }}
 
   test:
     name: Tests
     needs: setup
     runs-on: ubuntu-latest
-    if: ${{ needs.setup.outputs.commit == 'false' }}
+    if: ${{ needs.setup.outputs.commit.changes_detected == 'false' }}
     strategy:
       fail-fast: false
       matrix:
