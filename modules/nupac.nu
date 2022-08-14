@@ -11,6 +11,11 @@
 #?keywords: [package, management]
 #?os: [android, linux, macos, windows]
 
+# nupac's version
+def VERSION [] {
+    "0.1.0"
+}
+
 # get enviroment flag's value or return false
 def get-env-flag [
     name: string
@@ -302,6 +307,35 @@ def display-action-data [
     print ($"The listed packages will be ($action)d")
 }
 
+# Nushell package manager
+export def "nupac" [
+    --version(-v): bool # nupac's version
+] {
+    if $version {
+        VERSION
+    } else {
+        print -n "Nushell package manager
+
+Usage:
+  > nupac {flags}
+
+Subcommands:
+  nupac install - Installs provided set of packages and optionally adds them to the global scope
+  nupac list - Lists installed packages
+  nupac refresh - Refreshes the repository cache
+  nupac remove - Removes provided set of packages and removes use statement from nu-pkgs.nu
+  nupac search - Searches remote repository for packages matching query with name, descriptions or keywords
+  nupac upgrade - Upgrades all or selected packages
+
+Flags:
+  -v, --version
+      nupac's version
+  -h, --help
+      Display this help message
+        "
+    }
+}
+
 # Installs provided set of packages and optionally adds them to the global scope
 export def "nupac install" [
     ...packages: string # packages to install
@@ -349,7 +383,7 @@ export def "nupac list" [
     user-readable-pkg-info (get-packages --all) (get-flag-value $long "NUPAC_USE_LONG_DESC")
 }
 
-# Refreshes the repo cache
+# Refreshes the repository cache
 export def "nupac refresh" [] {
   update-repo
 }
