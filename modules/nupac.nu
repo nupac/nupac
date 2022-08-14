@@ -501,3 +501,8 @@ export def "nupac upgrade" [
         }
     }
 }
+
+# displays nupac's version
+export def "nupac version" [] {
+    VERSION
+}
