@@ -7,8 +7,13 @@ By default, the cache index refreshes after a day from previous download.
 Can be modified in `nupac.nu/freshness` but it's advised to keep it this way (one can simply use `nupac refresh` when needed).
 
 ## Commands
-- `nupac`: *Prompts to use `nupac -h` for help*
-  - `-v/--version`: Displays nupac's version
+Each command has its own help accessible with one of these standard, interchangeable ways:
+- `help <command>`
+- `<command> -h`
+- `<command> --help`
+
+- `nupac`: *Displays help (list of all commands)*
+  - `-v/--version`: Displays nupac's version instead of help
 - `nupac install`: *Installs provided set of packages and optionally adds them to the global scope*
   - `...packages`: packages you want to install
   - `--add-to-scope(-a)`: add packages to global scope, *optional*

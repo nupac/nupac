@@ -309,12 +309,13 @@ def display-action-data [
 
 # Nushell package manager
 export def "nupac" [
-    --version(-v): bool # nupac's version
+    --version(-v): bool # Display nupac version instead of help
+    --help(-h): bool # Display this help message
 ] {
     if $version {
-        VERSION
+        get-metadata (get-package-location (get-packages 'nupac'|get 0))
     } else {
-        print -n "Use nupac -h to get help."
+        nupac --help
     }
 }
 
