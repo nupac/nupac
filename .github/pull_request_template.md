@@ -1,8 +1,10 @@
 # Description
 
-(description of your pull request here)
+*description of your pull request here*
 
 # Contributor's checklist
+Please mark as done everything appliable to your current PR state
+
 ## General
 - [ ] Newer functionality got documented (if needed, e.g. a new nupac enviroment variable)
 - [ ] Existing documentation is not outdated (e.g. changed inteface)
@@ -18,3 +20,7 @@
 ## If submitting a stand-alone script
 - [ ] The script has a proper shebang at the top (`/usr/bin/env nu` should work in most circumstances)
 - [ ] The script has proper file permissions (Run `chmod +x` on the file before push)
+
+# Additional context
+
+*do you have some questions, need some help or anything else?*
