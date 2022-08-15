@@ -11,11 +11,6 @@
 #?keywords: [package, management]
 #?os: [android, linux, macos, windows]
 
-# nupac's version
-def VERSION [] {
-    "0.1.0"
-}
-
 # get enviroment flag's value or return false
 def get-env-flag [
     name: string
@@ -313,7 +308,7 @@ export def "nupac" [
     --help(-h): bool # Display this help message
 ] {
     if $version {
-        nupac version
+        nupac version|get version
     } else {
         nupac --help
     }
