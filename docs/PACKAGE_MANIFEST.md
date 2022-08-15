@@ -12,12 +12,13 @@ Metadata inserted at the beginning of your nu_scripts package that make the whol
 - **name**: Name of the package
 - **version**: Current version of the package
 - **author**: Who owns the package
-- **short-desc*: What does this package do?
+- **short-desc**: What does this package do?
 
 ### Just for the nupac
 - **url**: URL of the package
 - **raw-url**: download URL of the package
 - **os**: List of supported operating systems, available: `["android" "linux" "macos" "windows"]`
+- **checksum**: SHA256 checksum of the package file
 
 ## Optional attributes
 ### Displayed to the users
