@@ -62,18 +62,17 @@ body:
       description: "Please run `nupac verison | transpose key value | to md --pretty` and paste the output to show which nupac's version are you using"
       placeholder: |
         > nupac verison | transpose key value | to md --pretty
-        | key        | value                                                                  |
-        | ---------- | ---------------------------------------------------------------------- |
-        | long-desc  | Very long description of nushell as package manager wow so many words
-         |
-        | keywords   | [package|management]                                                   |
-        | author     | [skelly37|Yethal]                                                      |
-        | raw-url    | https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu |
-        | name       | nupac                                                                  |
-        | os         | [android|linux|macos|windows]                                          |
-        | url        | https://github.com/skelly37/nupac/blob/main/modules/nupac.nu           |
-        | short-desc | package manager for nushell                                            |
-        | version    | 0.1.0                                                                  |
+        | key        | value                                                                                             |
+        | ---------- | ----------------------------------------------------------------------                            |
+        | long-desc  | Nupac is a package manager written in nu and for nu. Source on https://github.com/skelly37/nupac  |
+        | keywords   | [package|management]                                                                              |
+        | author     | [skelly37|Yethal]                                                                                 |
+        | raw-url    | https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu                            |
+        | name       | nupac                                                                                             |
+        | os         | [android|linux|macos|windows]                                                                     |
+        | url        | https://github.com/skelly37/nupac/blob/main/modules/nupac.nu                                      |
+        | short-desc | package manager for nushell                                                                       |
+        | version    | 0.1.0                                                                                             |
     validations:
       required: true
   - type: textarea
