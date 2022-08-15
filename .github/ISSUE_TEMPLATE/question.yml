@@ -9,7 +9,7 @@ body:
       description: Leave your question here
       placeholder: |
         A clear and concise question
-        Example: Is there any equivalent of bash's $CDPATH in Nu?
+        Example: Will nupac support specifying a package version during installation?
     validations:
       required: true
   - type: textarea
