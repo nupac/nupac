@@ -63,17 +63,17 @@ body:
       placeholder: |
         > nupac verison | transpose key value | to md --pretty
         | key        | value                                                                  |
-| ---------- | ---------------------------------------------------------------------- |
-| long-desc  | Very long description of nushell as package manager wow so many words
- |
-| keywords   | [package|management]                                                   |
-| author     | [skelly37|Yethal]                                                      |
-| raw-url    | https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu |
-| name       | nupac                                                                  |
-| os         | [android|linux|macos|windows]                                          |
-| url        | https://github.com/skelly37/nupac/blob/main/modules/nupac.nu           |
-| short-desc | package manager for nushell                                            |
-| version    | 0.1.0                                                                  |
+        | ---------- | ---------------------------------------------------------------------- |
+        | long-desc  | Very long description of nushell as package manager wow so many words
+         |
+        | keywords   | [package|management]                                                   |
+        | author     | [skelly37|Yethal]                                                      |
+        | raw-url    | https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu |
+        | name       | nupac                                                                  |
+        | os         | [android|linux|macos|windows]                                          |
+        | url        | https://github.com/skelly37/nupac/blob/main/modules/nupac.nu           |
+        | short-desc | package manager for nushell                                            |
+        | version    | 0.1.0                                                                  |
     validations:
       required: true
   - type: textarea
