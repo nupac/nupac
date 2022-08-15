@@ -1,0 +1,39 @@
+- name: Test nupac command
+  hosts: all
+  become: false
+
+  tasks:
+    - name: Get nupac output
+      raw: "nupac"
+      args:
+        executable: "{{ nu }}"
+      register: nupac
+    
+    - name: Get nupac -h output
+      raw: "nupac -h"
+      args:
+        executable: "{{ nu }}"
+      register: nupac-h
+      
+    - name: Assert nupac without any flags displays help
+      assert:
+        that:
+          - "nupac.stdout == nupac-h.stdout"
+          
+    - name: Get nupac -v output
+      raw: "nupac -v"
+      args:
+        executable: "{{ nu }}"
+      register: nupac-v
+    
+    - name: Get nupac version output
+      raw: "nupac version | get version"
+      args:
+        executable: "{{ nu }}"
+      register: nupac-version
+    
+    - name: Assert nupac version outputs the same version as nupac -v
+      assert:
+        that:
+          - "nupac-v.stdout == nupac-version.stdout"
+    
