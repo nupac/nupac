@@ -57,7 +57,7 @@
     "short-desc": "package manager for nushell",
     "url": "https://github.com/skelly37/nupac/blob/main/modules/nupac.nu",
     "version": "0.1.0",
-    "checksum": "a5b59bdd8700a42e3943f7d27295ccad8b5f87316696b262b08e571c137eea2b"
+    "checksum": "0e3a9d126a753a7fd732bc2d7c0b25273955e2a2dc50fffd8508f33b480ba885"
   },
   {
     "pre-install-msg": "",
