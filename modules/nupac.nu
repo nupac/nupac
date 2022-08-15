@@ -313,7 +313,7 @@ export def "nupac" [
     --help(-h): bool # Display this help message
 ] {
     if $version {
-        get-metadata (get-package-location (get-packages 'nupac'|get 0))
+        nupac version
     } else {
         nupac --help
     }
@@ -487,5 +487,10 @@ export def "nupac upgrade" [
 
 # displays nupac's version
 export def "nupac version" [] {
-    VERSION
+    get-metadata (
+        get-package-location (
+            get-packages 'nupac'
+            |get 0
+        )
+    )
 }
