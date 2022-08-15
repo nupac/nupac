@@ -1,5 +1,6 @@
 name: Feature Request
 description: "When you want a new feature for something that doesn't already exist"
+labels: "feature-request"
 body:
   - type: textarea
     id: problem
@@ -10,7 +11,7 @@ body:
         A clear and concise description of what the problem is.
         Example: I am trying to do [...] but [...]
     validations:
-      required: false
+      required: true
   - type: textarea
     id: desired
     attributes:
