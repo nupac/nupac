@@ -19,6 +19,7 @@ def get-metadata [
     |str replace -a -s '#?' ''
     |str collect (char nl)
     |from yaml
+    |sort
 }
 
 def check-required-attributes [
