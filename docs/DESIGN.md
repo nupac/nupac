@@ -7,6 +7,13 @@ By default, the cache index refreshes after a day from previous download.
 Can be modified in `nupac.nu/freshness` but it's advised to keep it this way (one can simply use `nupac refresh` when needed).
 
 ## Commands
+Each command has its own help accessible with one of these standard, interchangeable ways:
+- `help <command>`
+- `<command> -h`
+- `<command> --help`
+
+- `nupac`: *Displays help (list of all commands)*
+  - `-v/--version`: Displays nupac's version instead of help
 - `nupac install`: *Installs provided set of packages and optionally adds them to the global scope*
   - `...packages`: packages you want to install
   - `--add-to-scope(-a)`: add packages to global scope, *optional*
@@ -30,6 +37,7 @@ Can be modified in `nupac.nu/freshness` but it's advised to keep it this way (on
   - `--all(-a)`: apply all available upgrades, *optional*
   - `--ignore-self(-i)`: do not upgrade nupac, *optional*
   - `--long(-l):`: display long package descriptions instead of short ones *optional*
+- `nupac version`: *Displays verbose nupac version with all its metadata*
 ## Enviromental variables
 Simple nupac config, just declare the specific variable in your env, if you want to override the default value.
 

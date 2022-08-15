@@ -1,10 +1,11 @@
 ---
 - name: Smoke Test
   hosts: all
-  no_log: true
+  no_log: false
   gather_facts: true
   become: false
   vars:
+    version_regex: '^([1-9]\d*|0)(\.(([1-9]\d*)|0)){2}$'
     command_list:
       - nupac install
       - nupac list
@@ -12,6 +13,7 @@
       - nupac remove
       - nupac search
       - nupac upgrade
+      - nupac version
 
   tasks:
     - name: Copy the installer into the container
@@ -51,6 +53,12 @@
             executable: "{{ nu }}"
           register: scope
 
+        - name: Get nupac version
+          raw: "nupac -v"
+          args:
+            executable: "{{ nu }}"
+          register: version
+
         - name: Run assertions
           assert:
             quiet: true
@@ -58,3 +66,4 @@
               - '"nupac has been successfully installed" in installer.stdout'
               - '{{ command_list }} is subset({{ scope.stdout | from_json }})'
               - "{{ files.results | map(attribute='stat.exists') }} is all"
+              - "'{{ version.stdout | trim }}' is regex(version_regex)"

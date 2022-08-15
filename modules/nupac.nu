@@ -2,13 +2,10 @@
 #?author: [skelly37, Yethal]
 #?version: 0.1.0
 #?short-desc: package manager for nushell
-#?long-desc: >
-#?    Very long description
-#?    of nushell as package manager
-#?    wow so many words
+#?long-desc: Nupac is a package manager written in nu and for nu. Source on https://github.com/skelly37/nupac
 #?url: https://github.com/skelly37/nupac/blob/main/modules/nupac.nu
 #?raw-url: https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu
-#?keywords: [package, management]
+#?keywords: [package, management, manager, packages]
 #?os: [android, linux, macos, windows]
 
 # get enviroment flag's value or return false
@@ -302,6 +299,18 @@ def display-action-data [
     print ($"The listed packages will be ($action)d")
 }
 
+# Nushell package manager
+export def "nupac" [
+    --version(-v): bool # Display nupac version instead of help
+    --help(-h): bool # Display this help message
+] {
+    if $version {
+        nupac version|get version
+    } else {
+        nupac --help
+    }
+}
+
 # Installs provided set of packages and optionally adds them to the global scope
 export def "nupac install" [
     ...packages: string # packages to install
@@ -349,7 +358,7 @@ export def "nupac list" [
     user-readable-pkg-info (get-packages --all) (get-flag-value $long "NUPAC_USE_LONG_DESC")
 }
 
-# Refreshes the repo cache
+# Refreshes the repository cache
 export def "nupac refresh" [] {
   update-repo
 }
@@ -466,4 +475,14 @@ export def "nupac upgrade" [
           msg: "Either a list of packages or --all flag must be provided"
         }
     }
+}
+
+# displays nupac's version
+export def "nupac version" [] {
+    get-metadata (
+        get-package-location (
+            get-packages 'nupac'
+            |get 0
+        )
+    )
 }
