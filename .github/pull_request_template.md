@@ -3,7 +3,7 @@
 *description of your pull request here*
 
 # Contributor's checklist
-Please mark as done everything appliable to your current PR state
+Please mark as done everything appliable to the current state of your PR
 
 ## General
 - [ ] Newer functionality got documented (if needed, e.g. a new nupac enviroment variable)
