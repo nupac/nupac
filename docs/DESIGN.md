@@ -37,7 +37,7 @@ Each command has its own help accessible with one of these standard, interchange
   - `--all(-a)`: apply all available upgrades, *optional*
   - `--ignore-self(-i)`: do not upgrade nupac, *optional*
   - `--long(-l):`: display long package descriptions instead of short ones *optional*
-- `nupac version`: *Displays nupac's version*
+- `nupac version`: *Displays verbose nupac version with all its metadata*
 ## Enviromental variables
 Simple nupac config, just declare the specific variable in your env, if you want to override the default value.
 
