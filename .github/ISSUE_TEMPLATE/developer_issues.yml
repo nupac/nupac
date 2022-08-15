@@ -1,0 +1,31 @@
+name: Developer issues
+description: Refactorings, technical debts and other developer stuff
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the issue
+      description: Thank you for your contributing.
+    validations:
+      required: true
+  - type: textarea
+    id: argumentation
+    attributes:
+      label: Argumentation
+      description: Why is the current solution wrong or why yours is better?
+    validations:
+      required: true
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots and other helpful media
+      description: Please add any relevant screenshots or other helpful media here, if any
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add any other context about the problem here.
+    validations:
+      required: false

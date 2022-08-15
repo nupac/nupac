@@ -454,11 +454,11 @@ export def "nupac upgrade" [
     let long = (get-flag-value $long "NUPAC_USE_LONG_DESC")
 
     if (($packages|length) > 0 or $all) {
-        let to-upgrade = ( package-to-process (
+        let to-upgrade = ( packages-to-process (
                 (get-packages $packages $all)
                 |where name not-in (get-ignored)
                 |where name != (if $ignore-self {"nupac"} else {""})
-            )
+            ) $long
         )
 
         if ($to-upgrade|empty?) {
