@@ -1,7 +1,7 @@
 ---
 - name: Smoke Test
   hosts: all
-  no_log: true
+  no_log: false
   gather_facts: true
   become: false
   vars:
@@ -66,4 +66,4 @@
               - '"nupac has been successfully installed" in installer.stdout'
               - '{{ command_list }} is subset({{ scope.stdout | from_json }})'
               - "{{ files.results | map(attribute='stat.exists') }} is all"
-              - "version is match(version_regex)"
+              - "'{{ version.stdout | trim }}' is regex(version_regex)"
