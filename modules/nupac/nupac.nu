@@ -55,7 +55,6 @@ def get-metadata [
     json: path
 ] {
     open $json
-    |sort
 }
 
 # returns all packages if os-supported, else raises errors and returns empty table (temp workaround for error errors)
