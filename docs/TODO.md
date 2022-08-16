@@ -2,9 +2,9 @@
 - [ ] Test thoroughly including edge cases
 - [ ] Compatibility tests on Windows and MacOS
 - [x] Write automated tests for nupac itself
-- [ ] **Replace in-script metadata with <package>.nuon (dev-created file), then build nupac's repo cache based on all the package nuons**
+- [ ] **Replace in-script metadata with <package>.json (dev-created file), then build nupac's repo cache based on all the package jsons**
 - [ ] Write automated tests for package submission/update (e.g. template check)
-- [x] Actually push updated nupac.nuon to repo on push to main
+- [x] Actually push updated nupac.json to repo on push to main
 - [x] Expand metadata generation to include authors, links to repo etc
 - [x] Add proper ci/cd flow (Run tests on PRs, add linting)
 - [x] Write our own bug and issue templates (current ones are taken from nushell repo)
