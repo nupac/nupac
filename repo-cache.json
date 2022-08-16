@@ -21,7 +21,7 @@
     [
       "Yethal"
     ],
-    "checksum": "34a68ccffd271042b8d881d59793dce47c3690ec496235b6d431883675014438",
+    "checksum": "b95a6b3c2989f429f0b672560d516490ee875e1ea154ab8b6f6e84e3346ca89a",
     "long-desc": "This module contains completions for make build tool\n",
     "name": "make",
     "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/make.nu",
@@ -53,7 +53,7 @@
       "skelly37",
       "Yethal"
     ],
-    "checksum": "47e2c02ee0a92fc654deac541b2b5cbcaeb98f245c74d7e21ece2dcac3d58781",
+    "checksum": "8a7f6a669d68c3a58c38f6c261eca381305f13d157d1e3833c37cfb39d032f7f",
     "long-desc": "Nupac is a package manager written in nu and for nu. Source on https://github.com/skelly37/nupac",
     "name": "nupac",
     "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu",
@@ -83,7 +83,7 @@
     [
       "Yethal"
     ],
-    "checksum": "ac6fd58e6b5871f346105f917b7ec009bf1639ac89878fe9dfe544f1154a744b",
+    "checksum": "7ea21e7bf1f69f0b8a0f3857e3cbe1cfb787ccc155ab3f9b1222f6726468b150",
     "long-desc": "This module exports commands that simplify management of remote hosts over ssh before using you need to fill the config\n",
     "name": "remoting",
     "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting.nu",
