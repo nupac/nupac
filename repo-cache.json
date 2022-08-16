@@ -4,36 +4,6 @@
     [
       "Yethal"
     ],
-    "checksum": "c71dc4cb15f79c11cb008dae7d627aca1aacc2f2e04139abc9847066b5d1db49",
-    "installer": "",
-    "keywords":
-    [
-      "ssh",
-      "remote",
-      "automation"
-    ],
-    "long-desc": "This module exports commands that simplify management of remote hosts over ssh before using you need to fill the config\n",
-    "name": "remoting",
-    "nu-dependencies": [],
-    "os":
-    [
-      "android",
-      "linux",
-      "macos",
-      "windows"
-    ],
-    "post-install-msg": "",
-    "pre-install-msg": "",
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting/remoting.nu",
-    "short-desc": "Remoting module for nu",
-    "url": "https://github.com/skelly37/nupac/blob/main/modules/remoting/remoting.nu",
-    "version": "1.0.0"
-  },
-  {
-    "author":
-    [
-      "Yethal"
-    ],
     "checksum": "d61a834d0d9a26630c6ef72875053338a9937d2365c6d63e528c52c4e1fdad70",
     "installer": "",
     "keywords":
@@ -62,17 +32,47 @@
   {
     "author":
     [
+      "Yethal"
+    ],
+    "checksum": "f3ff8222058216ca96b7990684a5f09de3a0a35e494df5b8643d2e3c324a5d93",
+    "installer": "",
+    "keywords":
+    [
+      "ssh",
+      "remote",
+      "automation"
+    ],
+    "long-desc": "This module exports commands that simplify management of remote hosts over ssh before using you need to fill the config\n",
+    "name": "remoting",
+    "nu-dependencies": [],
+    "os":
+    [
+      "android",
+      "linux",
+      "macos",
+      "windows"
+    ],
+    "post-install-msg": "",
+    "pre-install-msg": "",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting/remoting.nu",
+    "short-desc": "Remoting module for nu",
+    "url": "https://github.com/skelly37/nupac/blob/main/modules/remoting/remoting.nu",
+    "version": "1.0.0"
+  },
+  {
+    "author":
+    [
       "skelly37",
       "Yethal"
     ],
-    "checksum": "94e3816dd7cdc8731ca646ff76f2f35fc3446b4b48b58b694ba17cc9a900a5d5",
+    "checksum": "c3d32dc30d157ee470f87b6ad2489810d21dae1e1340341a4902cd3c8e774fad",
     "installer": "",
     "keywords":
     [
       "package",
+      "packages",
       "management",
-      "manager",
-      "packages"
+      "manager"
     ],
     "long-desc": "Nupac is a package manager written in nu and for nu. Source on https://github.com/skelly37/nupac",
     "name": "nupac",
