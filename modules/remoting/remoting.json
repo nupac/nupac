@@ -23,8 +23,8 @@
   ],
   "post-install-msg": "",
   "pre-install-msg": "",
-  "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting.nu",
+  "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting/remoting.nu",
   "short-desc": "Remoting module for nu",
-  "url": "https://github.com/skelly37/nupac/blob/main/modules/remoting.nu",
+  "url": "https://github.com/skelly37/nupac/blob/main/modules/remoting/remoting.nu",
   "version": "1.0.0"
 }
