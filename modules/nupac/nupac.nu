@@ -3,7 +3,7 @@ def get-env-flag [
     name: string
 ] {
     $env
-    |get -i $name
+    |get --ignore-errors $name
     |default false
 }
 
@@ -22,7 +22,7 @@ def get-flag-value [
 # Path where packages will be installed, can be changed to any other directory provided it is added to NU_LIB_DIRS variable
 def scripts-path [] {
     $env
-    |get -i "NUPAC_DEFAULT_LIB_DIR"
+    |get --ignore-errors "NUPAC_DEFAULT_LIB_DIR"
     |default (
         $nu.config-path
         |path dirname
@@ -46,7 +46,7 @@ def freshness [] {
 
 # checks if $env.NUPAC_IGNOREPKG has been declared (ignores installing and upgrading packages in the list)
 def get-ignored [] {
-    get -i "NUPAC_IGNOREPKG"
+    get --ignore-errors "NUPAC_IGNOREPKG"
     |default []
 }
 
@@ -86,7 +86,7 @@ def packages-to-process [
 
 # downloads fresh repository cache
 def update-repo [] {
-    let branch = ($env|get -i "NUPAC_DEFAULT_BRANCH"|default 'main')
+    let branch = ($env|get --ignore-errors "NUPAC_DEFAULT_BRANCH"|default 'main')
 
     fetch $"https://raw.githubusercontent.com/skelly37/nupac/($branch)/repo-cache.json"
     |save (repo)
@@ -105,7 +105,7 @@ def get-repo-contents [] {
     if not (repo|path exists) {
         print "Repo cache does not exist, fetching"
         update-repo
-    } else if (ls -l (repo)|get 0.modified) < ((date now) - (freshness|into duration)) {
+    } else if (ls --long (repo)|get 0.modified) < ((date now) - (freshness|into duration)) {
         print $"Repo cache older than (freshness), refreshing"
         update-repo
     } else {
@@ -230,7 +230,7 @@ def verify-checksum [
     let cache-checksum = (
         open (repo)
         |where name == $package.name && short-desc == $package.short-desc
-        |get -i 0.checksum
+        |get --ignore-errors 0.checksum
     )
     $cache-checksum == $file-checksum
 }
@@ -240,7 +240,7 @@ def remove-package [
     package: record
 ] {
     print $"Uninstalling ($package.name)"
-    rm -r (get-package-location $package | into string)
+    rm --recursive (get-package-location $package | into string)
     remove-from-config (config-entry ($package.url|path basename))
 }
 
@@ -248,7 +248,7 @@ def remove-package [
 def upgrade-package [
     package: record
 ] {
-    if (get-repo-contents|where name == $package.name|get -i 0.version) > $package.version {
+    if (get-repo-contents|where name == $package.name|get --ignore-errors 0.version) > $package.version {
         print $"Upgrading package ($package.name)"
         install-package $package.name false
     } else {
@@ -270,7 +270,7 @@ def user-readable-pkg-info [
 
     $pkgs
     |select name version author os $desc
-    |update cells -c ["author" "os"] {|x| $x|str collect ', '}
+    |update cells --columns ["author" "os"] {|x| $x|str collect ', '}
     |rename name version "author(s)" "supported OS" description
 }
 

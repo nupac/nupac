@@ -9,9 +9,9 @@
   "keywords":
   [
     "package",
+    "packages",
     "management",
-    "manager",
-    "packages"
+    "manager"
   ],
   "long-desc": "Nupac is a package manager written in nu and for nu. Source on https://github.com/skelly37/nupac",
   "name": "nupac",

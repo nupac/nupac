@@ -27,7 +27,7 @@ def "nu-complete hosts" [] {
 def "nu-complete scripts" [] {
   $nu.scope.commands
   |where is_custom
-  |get -i command
+  |get --ignore-errors command
 }
 
 # Returns ssh connection as url to be consumed by original ssh command
@@ -53,7 +53,7 @@ export def ssh [
     #> ssh <server> 'df -h'
 ] {
     if $hostname in (hosts|get name) {
-        let host = (hosts|where name == $hostname|get -i 0)
+        let host = (hosts|where name == $hostname|get --ignore-errors 0)
         if ($host.nu) {
             if ($args|length) > 0 {
                 ^ssh (get-url $host) (build-string ($args|str collect ' ') '|to json -r')|from json
