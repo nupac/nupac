@@ -4,7 +4,7 @@
     [
       "Yethal"
     ],
-    "checksum": "a5b075b4402476799ce8020b5e7c01ba7d3f60ae6a51229a9b6be3e3b3f14d62",
+    "checksum": "c71dc4cb15f79c11cb008dae7d627aca1aacc2f2e04139abc9847066b5d1db49",
     "installer": "",
     "keywords":
     [
@@ -24,9 +24,9 @@
     ],
     "post-install-msg": "",
     "pre-install-msg": "",
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting.nu",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting/remoting.nu",
     "short-desc": "Remoting module for nu",
-    "url": "https://github.com/skelly37/nupac/blob/main/modules/remoting.nu",
+    "url": "https://github.com/skelly37/nupac/blob/main/modules/remoting/remoting.nu",
     "version": "1.0.0"
   },
   {
@@ -34,7 +34,7 @@
     [
       "Yethal"
     ],
-    "checksum": "f0a9277d2870192549db1cc1cb457bc6c3078fadd3404bd1b6f70f2a009ca309",
+    "checksum": "d61a834d0d9a26630c6ef72875053338a9937d2365c6d63e528c52c4e1fdad70",
     "installer": "",
     "keywords":
     [
@@ -54,9 +54,9 @@
     ],
     "post-install-msg": "",
     "pre-install-msg": "",
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/make.nu",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/make/make.nu",
     "short-desc": "makefile completions for nu",
-    "url": "https://github.com/skelly37/nupac/blob/main/modules/make.nu",
+    "url": "https://github.com/skelly37/nupac/blob/main/modules/make/make.nu",
     "version": "1.0.0"
   },
   {
@@ -65,7 +65,7 @@
       "skelly37",
       "Yethal"
     ],
-    "checksum": "d8712135d3ee593ce4d9863f7e137f8d597c26a265bf2201891d45a76a3ce351",
+    "checksum": "94e3816dd7cdc8731ca646ff76f2f35fc3446b4b48b58b694ba17cc9a900a5d5",
     "installer": "",
     "keywords":
     [
@@ -86,9 +86,9 @@
     ],
     "post-install-msg": "",
     "pre-install-msg": "",
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac/nupac.nu",
     "short-desc": "package manager for nushell",
-    "url": "https://github.com/skelly37/nupac/blob/main/modules/nupac.nu",
+    "url": "https://github.com/skelly37/nupac/blob/main/modules/nupac/nupac.nu",
     "version": "0.1.0"
   }
 ]
