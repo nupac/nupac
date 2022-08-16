@@ -1,0 +1,30 @@
+{
+    "pre-install-msg": "",
+    "post-install-msg": "",
+    "keywords":
+    [
+      "ssh",
+      "remote",
+      "automation"
+    ],
+    "nu-dependencies": [],
+    "installer": "",
+    "os":
+    [
+      "android",
+      "linux",
+      "macos",
+      "windows"
+    ],
+    "author":
+    [
+      "Yethal"
+    ],
+    "long-desc": "This module exports commands that simplify management of remote hosts over ssh before using you need to fill the config\n",
+    "name": "remoting",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting.nu",
+    "short-desc": "Remoting module for nu",
+    "url": "https://github.com/skelly37/nupac/blob/main/modules/remoting.nu",
+    "version": "1.0.0",
+    "checksum": "32c6244aaa15af7a741f38a84b03923f4204d1b77720e9513cbe98e12227c940"
+}

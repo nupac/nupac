@@ -1,13 +1,3 @@
-#?name: nupac
-#?author: [skelly37, Yethal]
-#?version: 0.1.0
-#?short-desc: package manager for nushell
-#?long-desc: Nupac is a package manager written in nu and for nu. Source on https://github.com/skelly37/nupac
-#?url: https://github.com/skelly37/nupac/blob/main/modules/nupac.nu
-#?raw-url: https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu
-#?keywords: [package, management, manager, packages]
-#?os: [android, linux, macos, windows]
-
 # get enviroment flag's value or return false
 def get-env-flag [
     name: string

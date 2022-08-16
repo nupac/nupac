@@ -21,13 +21,13 @@
     [
       "Yethal"
     ],
+    "checksum": "34a68ccffd271042b8d881d59793dce47c3690ec496235b6d431883675014438",
     "long-desc": "This module contains completions for make build tool\n",
     "name": "make",
     "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/make.nu",
     "short-desc": "makefile completions for nu",
     "url": "https://github.com/skelly37/nupac/blob/main/modules/make.nu",
-    "version": "1.0.0",
-    "checksum": "ad48b4749cb658e245edb49a6ddcceabbeb0e5e6a69256d7ba4a25be662948a5"
+    "version": "1.0.0"
   },
   {
     "pre-install-msg": "",
@@ -53,13 +53,13 @@
       "skelly37",
       "Yethal"
     ],
+    "checksum": "47e2c02ee0a92fc654deac541b2b5cbcaeb98f245c74d7e21ece2dcac3d58781",
     "long-desc": "Nupac is a package manager written in nu and for nu. Source on https://github.com/skelly37/nupac",
     "name": "nupac",
     "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu",
     "short-desc": "package manager for nushell",
     "url": "https://github.com/skelly37/nupac/blob/main/modules/nupac.nu",
-    "version": "0.1.0",
-    "checksum": "19ae8e7f02d56d034bf6f8baf17825b5a19e0a4a8c606e537443be1f8d6cb403"
+    "version": "0.1.0"
   },
   {
     "pre-install-msg": "",
@@ -83,12 +83,12 @@
     [
       "Yethal"
     ],
+    "checksum": "ac6fd58e6b5871f346105f917b7ec009bf1639ac89878fe9dfe544f1154a744b",
     "long-desc": "This module exports commands that simplify management of remote hosts over ssh before using you need to fill the config\n",
     "name": "remoting",
     "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting.nu",
     "short-desc": "Remoting module for nu",
     "url": "https://github.com/skelly37/nupac/blob/main/modules/remoting.nu",
-    "version": "1.0.0",
-    "checksum": "32c6244aaa15af7a741f38a84b03923f4204d1b77720e9513cbe98e12227c940"
+    "version": "1.0.0"
   }
 ]
