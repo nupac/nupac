@@ -57,14 +57,32 @@ def add-optional-attributes [
     }
 }
 
-for dir in (ls modules | where type == dir | get name | path basename) {
-    let json = (
+def get-metadata-jsons [] {
+    ls modules
+    |where type == dir
+    |get name
+    |path basename
+    |each {|dir|
         ["modules" $dir ([$dir ".json"] | str collect)]
         |path join
-        )
-    check-required-attributes (
-        add-optional-attributes (get-metadata $json)
-        |upsert checksum {open --raw $json | hash sha256}
-    )
+    }
 }
+
+get-metadata-jsons
+|each {|json|
+    let metadata = (check-required-attributes (add-optional-attributes (get-metadata $json)))
+
+    # otherwise the developer has to manually insert a checksum for their installer
+    if ($metadata.installer|empty?) {
+        $metadata
+        |upsert checksum {open --raw ($json | str replace "(.+).json$" "$1.nu") | hash sha256}
+        |sort
+        |save $json
+    }
+
+    $metadata
+    |sort
+    |upsert checksum {open --raw $json | hash sha256}
+}
+|sort
 |save repo-cache.json

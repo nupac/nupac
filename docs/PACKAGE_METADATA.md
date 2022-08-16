@@ -10,7 +10,7 @@ A json with attributes written below, bundlded with your nu_scripts package, tha
 - **version**: Current version of the package
 
 ### Just for the nupac
-- **checksum**: SHA256 checksum of the package file
+- **checksum**: SHA256 checksum of the installer or .nu file
 - **os**: List of supported operating systems, available: `["android" "linux" "macos" "windows"]`
 - **raw-url**: download URL of the package
 - **url**: URL of the package

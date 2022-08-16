@@ -1,5 +1,5 @@
 ## Default path
-`scripts` subdirectory in the Nushell's config folder. Type `$nu.config-path|path dirname` in your shell to find it.
+`nupac` subdirectory in the Nushell's config folder. Type `$nu.config-path|path dirname` in your shell to find it.
 
 ## Cache index
 By default, the cache index refreshes after a day from previous download.
