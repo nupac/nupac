@@ -25,11 +25,11 @@ def get-metadata [
 def check-required-attributes [
     metadata
 ] {
-    let missing-columns = ($REQUIRED_ATTRIBUTES|where $it not-in ($metadata|columns)|str collect ", ")
+    let missing_columns = ($REQUIRED_ATTRIBUTES|where $it not-in ($metadata|columns)|str collect ", ")
 
-    if (not ($missing-columns|empty?)) {
+    if (not ($missing_columns|empty?)) {
         error make --unspanned {
-            msg: $"Required columns: ($missing-columns) not present in metadata"
+            msg: $"Required columns: ($missing_columns) not present in metadata"
         }
     }
 

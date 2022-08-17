@@ -1,5 +1,5 @@
 FROM ubuntu:20.04
-ENV NUSHELL_INSTALL_VERSION=0.66.2
+ENV NUSHELL_INSTALL_VERSION=0.67.0
 ENV NUSHELL_INSTALL_DIR /usr/bin
 ENV ANSIBLE_USER=ansible SUDO_GROUP=sudo
 
@@ -12,6 +12,7 @@ RUN set -eu \
   && mkdir -p /home/${ANSIBLE_USER}/.config/nushell/ \
   && wget -q https://raw.githubusercontent.com/nushell/nushell/main/crates/nu-utils/src/sample_config/default_config.nu -O /home/${ANSIBLE_USER}/.config/nushell/config.nu \
   && wget -q https://raw.githubusercontent.com/nushell/nushell/main/crates/nu-utils/src/sample_config/default_env.nu -O /home/${ANSIBLE_USER}/.config/nushell/env.nu \
+  && wget -q https://raw.githubusercontent.com/nushell/nushell/main/crates/nu-utils/src/sample_config/sample_login.nu -O /home/${ANSIBLE_USER}/.config/nushell/login.nu \
   && cd /tmp \
   && wget -qO - https://api.github.com/repos/nushell/nushell/releases/tags/${NUSHELL_INSTALL_VERSION} \
   |grep browser_download_url \
