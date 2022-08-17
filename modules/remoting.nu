@@ -94,8 +94,8 @@ export def "ssh script" [
     if $hostname in ("nu-complete nu") {
         if $script in ($nu.scope.commands|where is_custom|get command) {
         let host = (hosts|where name == $hostname|get 0)
-        let full-command = (build-string (view-source $script) '; ' $script ' ' ($args|str collect ' ') '|to json -r')
-        ^ssh (get-url $host) ($full-command)|from json
+        let full_command = (build-string (view-source $script) '; ' $script ' ' ($args|str collect ' ') '|to json -r')
+        ^ssh (get-url $host) ($full_command)|from json
         } else {
             error make {
                 msg: $"($script) is not a custom command, use regular ssh command instead"
