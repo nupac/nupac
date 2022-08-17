@@ -13,8 +13,8 @@ platforms:
       - /run
       - /tmp
     env:
-      NUPAC_INSTALLER_BRANCH: ${GITHUB_HEAD_REF:-main}
-      NUPAC_DEFAULT_BRANCH: ${GITHUB_HEAD_REF:-main}
+      NUPAC_INSTALLER_BRANCH: ${GITHUB_REF:-main}
+      NUPAC_DEFAULT_BRANCH: ${GITHUB_REF:-main}
       NUPAC_NO_CONFIRM: 'true'
 provisioner:
   name: ansible
