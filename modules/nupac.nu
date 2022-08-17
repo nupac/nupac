@@ -20,12 +20,12 @@ def get-env-flag [
 # Specified value, env value or hardcoded value of the flag
 def get-flag-value [
     flag: bool
-    env-var: string
+    env_var: string
 ] {
     if ($flag) {
         true
     } else {
-        get-env-flag $env-var
+        get-env-flag $env_var
     }
 }
 
@@ -79,17 +79,17 @@ def packages-to-process [
     packages: table
     long: bool
 ] {
-    let unsupported-pkgs = ($packages
+    let unsupported_pkgs = ($packages
         |where $nu.os-info.name not-in $it.os
     )
 
     let packages = (
         $packages
-        |where $it not-in $unsupported-pkgs
+        |where $it not-in $unsupported_pkgs
     )
 
-    if (not ($unsupported-pkgs|empty?)) {
-        user-readable-pkg-info $unsupported-pkgs $long
+    if (not ($unsupported_pkgs|empty?)) {
+        user-readable-pkg-info $unsupported_pkgs $long
         error make --unspanned {
             msg: "The listed packages cannot be installed, because OS is not supported"
         }
@@ -102,9 +102,9 @@ def packages-to-process [
 # downloads fresh repository cache
 def update-repo [] {
 
-let branch = ($env|get -i "NUPAC_DEFAULT_BRANCH"|default 'main')
+    let branch = ($env|get -i "NUPAC_DEFAULT_BRANCH"|default 'main')
 
-fetch $"https://raw.githubusercontent.com/skelly37/nupac/($branch)/repo-cache.json"
+    fetch $"https://raw.githubusercontent.com/skelly37/nupac/($branch)/repo-cache.json"
     |save (repo)
 
     if ($env.LAST_EXIT_CODE == 0) {
@@ -135,7 +135,7 @@ def user-approves [] {
     if (get-env-flag "NUPAC_NO_CONFIRM"|into bool) {
         true
     } else {
-        input "Do you want to proceed? [Y/n]"
+        input "Do you want to proceed? [Y/n] "
         |$in in ['' 'y' 'Y']
     }
 }
@@ -147,7 +147,7 @@ def get-packages [
     --all: bool
 ] {
     ls (scripts-path)
-    |where ($it.name|path parse|get extension) == nu
+    |where ($it.name|path parse|get extension) == nu && ($it.name|path parse|get stem) != nu-pkgs
     |each {|package|
         get-metadata (scripts-path|path join $package.name)
     }
@@ -202,7 +202,7 @@ def get-package-location [
 # actual package installation happens here
 def install-package [
     package: record
-    add-to-scope: bool
+    add_to_scope: bool
 ] {
     if not ($package.pre-install-msg | empty?) {
         print "Pre-install message:"
@@ -220,7 +220,7 @@ def install-package [
         }
     }
 
-    if $add-to-scope {
+    if $add_to_scope {
         add-to-scope (config-entry ($package.url|path basename))
     }
 
@@ -233,16 +233,16 @@ def install-package [
 def verify-checksum [
     package: record
 ] {
-    let file-checksum = (
+    let file_checksum = (
         open (get-package-location $package | into string)
         |hash sha256
     )
-    let cache-checksum = (
+    let cache_checksum = (
         open (repo)
         |where name == $package.name && short-desc == $package.short-desc
         |get -i 0.checksum
     )
-    $cache-checksum == $file-checksum
+    $cache_checksum == $file_checksum
 }
 
 # actual package removal happens here
@@ -328,24 +328,24 @@ export def "nupac install" [
     # Install package named example and add it to global scope
     #> nupac install example -a
 ] {
-    let add-to-scope = (get-flag-value $add-to-scope "NUPAC_ADD_TO_SCRIPTS_LIST")
+    let add_to_scope = (get-flag-value $add_to_scope "NUPAC_ADD_TO_SCRIPTS_LIST")
     let long = (get-flag-value $long "NUPAC_USE_LONG_DESC")
 
-    let to-ins = ((
+    let to_ins = ((
         packages-to-process (
             get-repo-contents
             |where name in $packages
             |where name not-in (get-ignored)
         ) $long
     ))
-    if ($to-ins|empty?) {
+    if ($to_ins|empty?) {
         print "No packages to install"
     } else {
-        display-action-data $to-ins "install" $long
+        display-action-data $to_ins "install" $long
         if (user-approves) {
-            $to-ins
+            $to_ins
             |each {|package|
-                install-package $package $add-to-scope
+                install-package $package $add_to_scope
             }
         }
     }
@@ -378,15 +378,15 @@ export def "nupac remove" [
 ] {
     let long = (get-flag-value $long "NUPAC_USE_LONG_DESC")
 
-    let to-del = (get-repo-contents | where name in $packages)
+    let to_del = (get-repo-contents | where name in $packages)
 
-    if ($to-del|empty?) {
+    if ($to_del|empty?) {
         print "No packages to remove"
     } else {
-        display-action-data $to-del "remove" $long
+        display-action-data $to_del "remove" $long
 
         if (user-approves) {
-            $to-del
+            $to_del
             |each {|package|
                 remove-package $package
             }
@@ -447,24 +447,24 @@ export def "nupac upgrade" [
     # Upgrade all packages excluding nupac itself
     #> nupac upgrade --all --ignore-self
 ] {
-    let ignore-self = (get-flag-value $ignore-self "NUPAC_IGNORE_SELF")
+    let ignore_self = (get-flag-value $ignore_self "NUPAC_IGNORE_SELF")
     let long = (get-flag-value $long "NUPAC_USE_LONG_DESC")
 
     if (($packages|length) > 0 or $all) {
-        let to-upgrade = ( packages-to-process (
+        let to_upgrade = ( packages-to-process (
                 (get-packages $packages $all)
                 |where name not-in (get-ignored)
-                |where name != (if $ignore-self {"nupac"} else {""})
+                |where name != (if $ignore_self {"nupac"} else {""})
             ) $long
         )
 
-        if ($to-upgrade|empty?) {
+        if ($to_upgrade|empty?) {
             print "No upgrades found"
         } else {
-            display-action-data $to-upgrade "upgrade" $long
+            display-action-data $to_upgrade "upgrade" $long
 
             if (user-approves) {
-                $to-upgrade
+                $to_upgrade
                 |each {|package|
                     upgrade-package $package
                 }

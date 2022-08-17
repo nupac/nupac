@@ -12,6 +12,7 @@ RUN set -eu \
   && mkdir -p /home/${ANSIBLE_USER}/.config/nushell/ \
   && wget -q https://raw.githubusercontent.com/nushell/nushell/main/crates/nu-utils/src/sample_config/default_config.nu -O /home/${ANSIBLE_USER}/.config/nushell/config.nu \
   && wget -q https://raw.githubusercontent.com/nushell/nushell/main/crates/nu-utils/src/sample_config/default_env.nu -O /home/${ANSIBLE_USER}/.config/nushell/env.nu \
+  && wget -q https://raw.githubusercontent.com/nushell/nushell/main/crates/nu-utils/src/sample_config/sample_login.nu -O /home/${ANSIBLE_USER}/.config/nushell/login.nu \
   && cd /tmp \
   && wget -qO - https://api.github.com/repos/nushell/nushell/releases/tags/${NUSHELL_INSTALL_VERSION} \
   |grep browser_download_url \
