@@ -147,7 +147,7 @@ def get-packages [
     --all: bool
 ] {
     ls (scripts-path)
-    |where ($it.name|path parse|get extension) == nu
+    |where ($it.name|path parse|get extension) == nu && ($it.name|path parse|get stem) != nu-pkgs
     |each {|package|
         get-metadata (scripts-path|path join $package.name)
     }
