@@ -1,8 +1,7 @@
 #!/usr/bin/env nu
-cd ..
 ls **/*.nu
 |insert lint {|x|
-    if ($x.name|path dirname) == modules {
+    if 'modules' in ($x.name|path dirname) {
         nu-check --as-module $x.name
     } else {
         nu-check $x.name
