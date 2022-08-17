@@ -30,7 +30,7 @@ if not ($nu_pkgs|path exists) {
         |str collect (char nl)
         |save $nu.config-path
     } else {
-        print 'You will have to source the nu_pkgs file manually'
+        print 'You will have to source the nu-pkgs file manually'
     }
 } else {
     error make --unspanned {
