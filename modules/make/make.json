@@ -23,8 +23,8 @@
   ],
   "post-install-msg": "",
   "pre-install-msg": "",
-  "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/make/make.nu",
+  "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/metadata/modules/make/make.nu",
   "short-desc": "makefile completions for nu",
-  "url": "https://github.com/skelly37/nupac/blob/main/modules/make/make.nu",
+  "url": "https://github.com/skelly37/nupac/blob/metadata/modules/make/make.nu",
   "version": "1.0.0"
 }
