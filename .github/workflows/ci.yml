@@ -4,6 +4,9 @@ name: CI
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 
 jobs:
   setup:
