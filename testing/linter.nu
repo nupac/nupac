@@ -1,10 +1,10 @@
 #!/usr/bin/env nu
 ls **/*.nu
-|insert lint {|x|
-    if 'modules' in ($x.name|path dirname) {
-        nu-check --as-module $x.name
+|insert lint {|file|
+    if 'modules' in ($file.name|path dirname) {
+        nu-check --as-module $file.name
     } else {
-        nu-check $x.name
+        nu-check $file.name
     }
 }
 |if not ($in|all? lint) {
