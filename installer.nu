@@ -11,18 +11,18 @@ let nupac_module = $"https://raw.githubusercontent.com/skelly37/nupac/($default_
 let install_path = ($env|get -i NUPAC_DEFAULT_LIB_DIRS|default $env.NU_LIB_DIRS.0)
 
 # nupac index
-let nu_pkgs = ($install_path|path join 'nu_pkgs.nu')
+let nu_pkgs = ($install_path|path join 'nu-pkgs.nu')
 
 mkdir $install_path
 fetch $nupac_module|save ($install_path|path join ($nupac_module|path basename))
 
 if not ($nu_pkgs|path exists) {
-    print 'Creating default nu_pkgs file'
+    print 'Creating default nu-pkgs file'
 
     echo 'use nupac.nu *'
     |save --append $nu_pkgs
 
-    let add_source = ($noconfirm or (input "Do you want to add nu_pkgs to your config.nu file? [y/N] "|$in in ['y' 'Y']))
+    let add_source = ($noconfirm or (input "Do you want to add nu-pkgs to your config.nu file? [y/N] "|$in in ['y' 'Y']))
     if $add_source {
         open $nu.config-path
         |lines
@@ -34,7 +34,7 @@ if not ($nu_pkgs|path exists) {
     }
 } else {
     error make --unspanned {
-        msg: 'nu_pkgs already exists.'
+        msg: 'nu-pkgs already exists.'
     }
 }
 print 'nupac has been successfully installed'

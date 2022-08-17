@@ -135,7 +135,7 @@ def user-approves [] {
     if (get-env-flag "NUPAC_NO_CONFIRM"|into bool) {
         true
     } else {
-        input "Do you want to proceed? [Y/n]"
+        input "Do you want to proceed? [Y/n] "
         |$in in ['' 'y' 'Y']
     }
 }
