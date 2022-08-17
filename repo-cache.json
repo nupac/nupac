@@ -1,15 +1,20 @@
 [
   {
-    "pre-install-msg": "",
-    "post-install-msg": "",
+    "author":
+    [
+      "Yethal"
+    ],
+    "checksum": "d61a834d0d9a26630c6ef72875053338a9937d2365c6d63e528c52c4e1fdad70",
+    "installer": "",
     "keywords":
     [
       "make",
       "build",
       "completions"
     ],
+    "long-desc": "This module contains completions for make build tool\n",
+    "name": "make",
     "nu-dependencies": [],
-    "installer": "",
     "os":
     [
       "windows",
@@ -17,61 +22,29 @@
       "macos",
       "android"
     ],
-    "author":
-    [
-      "Yethal"
-    ],
-    "long-desc": "This module contains completions for make build tool\n",
-    "name": "make",
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/make.nu",
+    "post-install-msg": "",
+    "pre-install-msg": "",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/make/make.nu",
     "short-desc": "makefile completions for nu",
-    "url": "https://github.com/skelly37/nupac/blob/main/modules/make.nu",
-    "version": "1.0.0",
-    "checksum": "ad48b4749cb658e245edb49a6ddcceabbeb0e5e6a69256d7ba4a25be662948a5"
+    "url": "https://github.com/skelly37/nupac/blob/main/modules/make/make.nu",
+    "version": "1.0.0"
   },
   {
-    "pre-install-msg": "",
-    "post-install-msg": "",
-    "keywords":
-    [
-      "package",
-      "management",
-      "manager",
-      "packages"
-    ],
-    "nu-dependencies": [],
-    "installer": "",
-    "os":
-    [
-      "android",
-      "linux",
-      "macos",
-      "windows"
-    ],
     "author":
     [
-      "skelly37",
       "Yethal"
     ],
-    "long-desc": "Nupac is a package manager written in nu and for nu. Source on https://github.com/skelly37/nupac",
-    "name": "nupac",
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu",
-    "short-desc": "package manager for nushell",
-    "url": "https://github.com/skelly37/nupac/blob/main/modules/nupac.nu",
-    "version": "0.1.0",
-    "checksum": "9ec82fc07b1ed0d5a56d56fb32eb17a13dfec74a832343a2131dd744b8ea77fe"
-  },
-  {
-    "pre-install-msg": "",
-    "post-install-msg": "",
+    "checksum": "f3ff8222058216ca96b7990684a5f09de3a0a35e494df5b8643d2e3c324a5d93",
+    "installer": "",
     "keywords":
     [
       "ssh",
       "remote",
       "automation"
     ],
+    "long-desc": "This module exports commands that simplify management of remote hosts over ssh before using you need to fill the config\n",
+    "name": "remoting",
     "nu-dependencies": [],
-    "installer": "",
     "os":
     [
       "android",
@@ -79,16 +52,43 @@
       "macos",
       "windows"
     ],
+    "post-install-msg": "",
+    "pre-install-msg": "",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting/remoting.nu",
+    "short-desc": "Remoting module for nu",
+    "url": "https://github.com/skelly37/nupac/blob/main/modules/remoting/remoting.nu",
+    "version": "1.0.0"
+  },
+  {
     "author":
     [
+      "skelly37",
       "Yethal"
     ],
-    "long-desc": "This module exports commands that simplify management of remote hosts over ssh before using you need to fill the config\n",
-    "name": "remoting",
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting.nu",
-    "short-desc": "Remoting module for nu",
-    "url": "https://github.com/skelly37/nupac/blob/main/modules/remoting.nu",
-    "version": "1.0.0",
-    "checksum": "469020fdfd6ebcb9c9492d7a066f4c1cea7ad2e03b63995d8b2522360418ef84"
+    "checksum": "5e647416363f3a74c6f035a1480ac0311fc666e0e73f58ed59a91eaf69b6ab2b",
+    "installer": "",
+    "keywords":
+    [
+      "package",
+      "packages",
+      "management",
+      "manager"
+    ],
+    "long-desc": "Nupac is a package manager written in nu and for nu. Source on https://github.com/skelly37/nupac",
+    "name": "nupac",
+    "nu-dependencies": [],
+    "os":
+    [
+      "android",
+      "linux",
+      "macos",
+      "windows"
+    ],
+    "post-install-msg": "",
+    "pre-install-msg": "",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac/nupac.nu",
+    "short-desc": "package manager for nushell",
+    "url": "https://github.com/skelly37/nupac/blob/main/modules/nupac/nupac.nu",
+    "version": "0.1.0"
   }
 ]
