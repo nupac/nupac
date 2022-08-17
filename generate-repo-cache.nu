@@ -29,7 +29,7 @@ def check-required-attributes [
 
     if (not ($missing_columns|empty?)) {
         error make --unspanned {
-            msg: $"Required columns: ($missing-columns) not present in metadata"
+            msg: $"Required columns: ($missing_columns) not present in metadata"
         }
     }
 
