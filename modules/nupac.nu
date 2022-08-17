@@ -445,7 +445,7 @@ export def "nupac upgrade" [
     #> nupac upgrade --all
     #
     # Upgrade all packages excluding nupac itself
-    #> nupac upgrade --all --ignore_self
+    #> nupac upgrade --all --ignore-self
 ] {
     let ignore_self = (get-flag-value $ignore_self "NUPAC_IGNORE_SELF")
     let long = (get-flag-value $long "NUPAC_USE_LONG_DESC")
