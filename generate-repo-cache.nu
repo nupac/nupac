@@ -11,14 +11,19 @@ let DEFAULT_ATTRIBUTES = {"pre-install-msg": "",
 
 # returns record containing script metadata
 def get-metadata [
-    json: path
+    script: path
 ] {
-    open $json
+    open $script
+    |lines -s
+    |where $it starts-with '#?'
+    |str replace -a -s '#?' ''
+    |str collect (char nl)
+    |from yaml
     |sort
 }
 
 def check-required-attributes [
-    metadata: record
+    metadata
 ] {
     let missing_columns = ($REQUIRED_ATTRIBUTES|where $it not-in ($metadata|columns)|str collect ", ")
 
@@ -33,16 +38,15 @@ def check-required-attributes [
         $metadata
         |each { |entry|
             if ($entry|get $attribute|empty?) {
-                error make --unspanned {msg: $"($entry) lacks required attribute: ($attribute)"}
+                error make {msg: $"($entry) lacks required attribute: ($attribute)"}
+                exit 1
             }
         }
     }
-
-    echo $metadata
 }
 
 def add-optional-attributes [
-    metadata: record
+    metadata
 ] {
     let attr = (
         $DEFAULT_ATTRIBUTES
@@ -57,35 +61,13 @@ def add-optional-attributes [
     }
 }
 
-def get-metadata-jsons [] {
-    ls modules
-    |where type == dir
-    |get name
-    |path basename
-    |each {|dir|
-        ["modules" $dir ([$dir ".json"] | str collect)]
-        |path join
-    }
+ls modules
+|each {|module|
+    let metadata = (
+        add-optional-attributes (get-metadata $module.name)
+        |upsert checksum {open $module.name|hash sha256}
+    )
+    check-required-attributes $metadata
+    echo $metadata
 }
-
-get-metadata-jsons
-|each {|json|
-    let metadata = (check-required-attributes (add-optional-attributes (get-metadata $json)))
-
-    # otherwise the developer has to manually insert a checksum for their installer
-    if ($metadata.installer|empty?) {
-        $metadata
-        |upsert checksum {open --raw ($json | str replace "(.+).json$" "$1.nu") | hash sha256}
-        |sort
-        |save $json
-
-        char nl
-        |save $json --append --raw
-    }
-
-    $metadata
-    |sort
-    |upsert checksum {open --raw $json | hash sha256}
-}
-|sort
 |save repo-cache.json

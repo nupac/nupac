@@ -2,7 +2,7 @@
 Nu package manager written entirely in nu
 
 ## Current status:
-**Working on [0.1.0 pre-release](https://github.com/skelly37/nupac/milestone/1)**
+**Initial implementation done a lot of work to be done still**
 
 ## TODO
 See [TODO.md](docs/TODO.md)
@@ -14,7 +14,7 @@ See [DESIGN.md](docs/DESIGN.md)
 See [CODING_STANDARDS.md](docs/CODING_STANDARDS.md)
 
 ## Package Manifest Doc
-See [PACKAGE_MANIFEST.md](docs/PACKAGE_METADATA.md)
+See [PACKAGE_MANIFEST.md](docs/PACKAGE_MANIFEST.md)
 
 ## Testing Guide
 See [TESTING.md](testing/TESTING.md)

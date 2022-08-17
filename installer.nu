@@ -1,14 +1,14 @@
 #!/usr/bin/env nu
 
 # used to install nupac from PR branch on CI/CD
-let default-branch = ($env|get --ignore-errors NUPAC_DEFAULT_BRANCH|default 'main')
+let default_branch = ($env|get -i NUPAC_DEFAULT_BRANCH|default 'main')
 
-let noconfirm = ($env|get --ignore-errors NUPAC_NO_CONFIRM|default false|into bool)
+let noconfirm = ($env|get -i NUPAC_NO_CONFIRM|default false|into bool)
 
 let nupac_module = $"https://raw.githubusercontent.com/skelly37/nupac/($default_branch)/modules/nupac.nu"
 
 # Directory where nupac modules will be stored
-let install-path = ($env|get --ignore-errors NUPAC_DEFAULT_LIB_DIRS|default $env.NU_LIB_DIRS.0)
+let install_path = ($env|get -i NUPAC_DEFAULT_LIB_DIRS|default $env.NU_LIB_DIRS.0)
 
 # nupac index
 let nu_pkgs = ($install_path|path join 'nu-pkgs.nu')
