@@ -7,8 +7,19 @@ let noconfirm = ($env|get --ignore-errors NUPAC_NO_CONFIRM|default false|into bo
 
 let nupac_module = $"https://raw.githubusercontent.com/skelly37/nupac/($default_branch)/modules/nupac.nu"
 
+def scripts-path [] {
+    $env
+    |get --ignore-errors "NUPAC_DEFAULT_LIB_DIR"
+    |default (
+        $nu.config-path
+        |path dirname
+        |path join "nupac"
+    )
+}
+
 # Directory where nupac modules will be stored
-let install_path = ($env|get --ignore-errors NUPAC_DEFAULT_LIB_DIRS|default $env.NU_LIB_DIRS.0)
+let install_path = (scripts-path)
+mkdir $install_path
 
 # nupac index
 let nu_pkgs = ($install_path|path join 'nu-pkgs.nu')
