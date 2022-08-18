@@ -219,13 +219,19 @@ def install-package [
     mkdir (get-package-parent $package| into string)
     fetch ($package.raw-url | into string)
     |save (get-package-location $package | into string)
+    fetch ($package.raw-url | into string | str replace --string ".nu" ".json")
+    |save (get-package-location $package | into string)
 
-    if not (verify-checksum $package) {
-        rm (get-package-location $package|into string)
-        error make --unspanned {
-          msg: "File checksum is incorrect, aborting"
-        }
-    }
+# TODO:
+# 1) compare json sha256 with the one in repo
+# 2) compare nu sha256 with the one in json
+
+    #if not (verify-checksum $package) {
+    #    remove-package $package.name
+    #    error make --unspanned {
+    #      msg: "File checksum is incorrect, aborting"
+    #    }
+    #}
 
     if $add_to_scope {
         add-to-scope (config-entry ((get-package-location $package) | into string))
@@ -237,20 +243,20 @@ def install-package [
     }
 }
 # verifies whether sha checksum of the downloaded file matches the checksum in the repo cache
-def verify-checksum [
-    package: record
-] {
-    let file_checksum = (
-        open (get-package-location $package | into string)
-        |hash sha256
-    )
-    let cache_checksum = (
-        open (repo)
-        |where name == $package.name && short-desc == $package.short-desc
-        |get --ignore-errors 0.checksum
-    )
-    $cache_checksum == $file_checksum
-}
+#def verify-checksum [
+#    package: record
+#] {
+#    let file_checksum = (
+#        open (get-package-location $package | into string)
+#        |hash sha256
+#    )
+#    let cache_checksum = (
+#        open (repo)
+#        |where name == $package.name && short-desc == $package.short-desc
+#        |get --ignore-errors 0.checksum
+#    )
+#    $cache_checksum == $file_checksum
+#}
 
 # actual package removal happens here
 def remove-package [
