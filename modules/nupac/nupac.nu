@@ -54,7 +54,7 @@ def get-ignored [] {
 def get-metadata [
     json: path
 ] {
-    open $json
+    open ($json | str replace --string ".nu" ".json")
 }
 
 # returns all packages if os-supported, else raises errors and returns empty table (temp workaround for error errors)
@@ -132,14 +132,17 @@ def get-packages [
     ls (scripts-path)
     |where type == dir
     |get name
-    |path basename
     |each {|dir|
-        ["modules" $dir ([$dir ".json"] | str collect)]
-        |path join
-    }
-
-    |each {|package|
-        get-metadata $package
+        (
+            [
+                $dir
+                (($dir|path basename) + ".json")
+            ]
+            |path join
+        )
+        |each {|package|
+            open $package
+        }
     }
     |where {|it|
         if ($names|length) > 0 {
@@ -497,7 +500,6 @@ export def "nupac upgrade" [
 # displays nupac's version
 export def "nupac version" [] {
     mkdir (scripts-path)
-
     get-metadata (
         get-package-location (
             get-packages 'nupac'

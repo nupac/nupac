@@ -5,7 +5,8 @@ let default_branch = ($env|get --ignore-errors NUPAC_DEFAULT_BRANCH|default "mai
 
 let noconfirm = ($env|get --ignore-errors NUPAC_NO_CONFIRM|default false|into bool)
 
-let nupac_module = $"https://raw.githubusercontent.com/skelly37/nupac/($default_branch)/modules/nupac.nu"
+let nupac_module = $"https://raw.githubusercontent.com/skelly37/nupac/($default_branch)/modules/nupac/nupac.nu"
+let nupac_json = $"https://raw.githubusercontent.com/skelly37/nupac/($default_branch)/modules/nupac/nupac.json"
 
 def scripts-path [] {
     $env
@@ -34,6 +35,12 @@ let nupac_path = (
     |into string
 )
 
+let nupac_json_path = (
+    $install_path
+    |path join "nupac/nupac.json"
+    |into string
+)
+
 mkdir (
     $nupac_path
     |path dirname
@@ -41,6 +48,9 @@ mkdir (
 
 fetch $nupac_module
 |save $nupac_path
+
+fetch $nupac_json
+|save $nupac_json_path
 
 if not ($nu_pkgs|path exists) {
     print 'Creating default nu-pkgs file'
