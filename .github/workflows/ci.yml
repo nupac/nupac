@@ -4,6 +4,9 @@ name: CI
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 
 jobs:
   setup:
@@ -20,7 +23,7 @@ jobs:
       - name: Setup Nu
         uses: hustcer/setup-nu@v2
         with:
-          version: '0.66.2'
+          version: '0.67.0'
 
       - name: Setup Python 3
         uses: actions/setup-python@v4
