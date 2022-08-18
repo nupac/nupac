@@ -28,13 +28,19 @@ let nu_pkgs = (
 )
 
 mkdir $install_path
-
-fetch $nupac_module
-|save (
+let nupac_path = (
     $install_path
     |path join "nupac/nupac.nu"
     |into string
 )
+
+mkdir (
+    $nupac_path
+    |path dirname
+)
+
+fetch $nupac_module
+|save $nupac_path
 
 if not ($nu_pkgs|path exists) {
     print 'Creating default nu-pkgs file'

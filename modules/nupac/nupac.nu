@@ -309,6 +309,8 @@ export def "nupac" [
     --version(-v): bool # Display nupac version instead of help
     --help(-h): bool # Display this help message
 ] {
+    mkdir (scripts-path)
+
     if $version {
         nupac version|get version
     } else {
@@ -333,6 +335,8 @@ export def "nupac install" [
     # Install package named example and add it to global scope
     #> nupac install example -a
 ] {
+    mkdir (scripts-path)
+
     let add_to_scope = (get-flag-value $add_to_scope "NUPAC_ADD_TO_SCRIPTS_LIST")
     let long = (get-flag-value $long "NUPAC_USE_LONG_DESC")
 
@@ -360,11 +364,13 @@ export def "nupac install" [
 export def "nupac list" [
     --long(-l): bool # display long package descriptions instead of short ones
 ] {
+    mkdir (scripts-path)
     user-readable-pkg-info (get-packages --all) (get-flag-value $long "NUPAC_USE_LONG_DESC")
 }
 
 # Refreshes the repository cache
 export def "nupac refresh" [] {
+  mkdir (scripts-path)
   update-repo
 }
 
@@ -381,6 +387,8 @@ export def "nupac remove" [
     # Remove packages example, second-example and third-example
     #> nupac remove example second-example third-example
 ] {
+    mkdir (scripts-path)
+
     let long = (get-flag-value $long "NUPAC_USE_LONG_DESC")
 
     let to_del = (get-repo-contents | where name in $packages)
@@ -413,6 +421,8 @@ export def "nupac search" [
     # Search for package named example and display also packages unsupported by your OS
     #> nupac search example --all
 ] {
+    mkdir (scripts-path)
+
     let long = (get-flag-value $long "NUPAC_USE_LONG_DESC")
 
     let found = (
@@ -452,6 +462,8 @@ export def "nupac upgrade" [
     # Upgrade all packages excluding nupac itself
     #> nupac upgrade --all --ignore-self
 ] {
+    mkdir (scripts-path)
+
     let ignore_self = (get-flag-value $ignore_self "NUPAC_IGNORE_SELF")
     let long = (get-flag-value $long "NUPAC_USE_LONG_DESC")
 
@@ -484,6 +496,8 @@ export def "nupac upgrade" [
 
 # displays nupac's version
 export def "nupac version" [] {
+    mkdir (scripts-path)
+
     get-metadata (
         get-package-location (
             get-packages 'nupac'
