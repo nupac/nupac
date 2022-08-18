@@ -162,6 +162,9 @@ def config-entry [
 def add-to-scope [
     content: string
 ] {
+    if (not ((nu-pkgs) | path exists)) {
+        touch (nu-pkgs)
+    }
     open (nu-pkgs)
     |lines -s
     |append $content
@@ -173,11 +176,13 @@ def add-to-scope [
 def remove-from-config [
     content: string
 ] {
-    open (nu-pkgs)
-    |lines -s
-    |where $it != $content
-    |str collect (char nl)
-    |save (nu-pkgs)
+    if ((nu-pkgs) | path exists) {
+        open (nu-pkgs)
+        |lines -s
+        |where $it != $content
+        |str collect (char nl)
+        |save (nu-pkgs)
+    }
 }
 
 # parent folder of the package location
@@ -219,7 +224,7 @@ def install-package [
     }
 
     if $add_to_scope {
-        add-to-scope (config-entry ($package.url|path basename))
+        add-to-scope (config-entry ((get-package-location $package) | into string))
     }
 
     if not ($package.post-install-msg | empty?) {
@@ -248,8 +253,8 @@ def remove-package [
     package: record
 ] {
     print $"Uninstalling ($package.name)"
-    rm --recursive (get-package-location $package | into string)
-    remove-from-config (config-entry ($package.url|path basename))
+    rm --recursive (get-package-parent $package | into string)
+    remove-from-config (config-entry ((get-package-location $package) | into string))
 }
 
 # checks whether version in repo cache is newer than version in script metadata, installs newer version if yes
