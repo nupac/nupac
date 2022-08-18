@@ -1,7 +1,7 @@
 #!/usr/bin/env nu
 
 # used to install nupac from PR branch on CI/CD
-let default_branch = ($env|get --ignore-errors NUPAC_DEFAULT_BRANCH|default 'main')
+let default_branch = ($env|get --ignore-errors NUPAC_DEFAULT_BRANCH|default "main")
 
 let noconfirm = ($env|get --ignore-errors NUPAC_NO_CONFIRM|default false|into bool)
 
@@ -22,10 +22,19 @@ let install_path = (scripts-path)
 mkdir $install_path
 
 # nupac index
-let nu_pkgs = ($install_path|path join 'nu-pkgs.nu')
+let nu_pkgs = (
+    $install_path|
+    path join "nu-pkgs.nu"
+)
 
 mkdir $install_path
-fetch $nupac_module|save ($install_path|path join ($nupac_module|path basename))
+
+fetch $nupac_module
+|save (
+    $install_path
+    |path join "nupac/nupac.nu"
+    |into string
+)
 
 if not ($nu_pkgs|path exists) {
     print 'Creating default nu-pkgs file'
