@@ -180,11 +180,19 @@ def remove-from-config [
     |save (nu-pkgs)
 }
 
+# parent folder of the package location
+def get-package-parent [
+    package: record
+] {
+    [(scripts-path) $package.name]
+    |path join
+}
+
 # package location in the filesystem
 def get-package-location [
     package: record
 ] {
-    [scripts_path $package.name ($package.url|path basename)]
+    [(get-package-parent $package) ($package.url|path basename)]
     |path join
 }
 
@@ -199,6 +207,7 @@ def install-package [
     }
 
     print $"Installing ($package.name)"
+    mkdir (get-package-parent $package| into string)
     fetch ($package.raw-url | into string)
     |save (get-package-location $package | into string)
 
