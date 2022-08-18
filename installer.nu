@@ -19,7 +19,7 @@ fetch $nupac_module|save ($install_path|path join ($nupac_module|path basename))
 if not ($nu_pkgs|path exists) {
     print 'Creating default nu-pkgs file'
 
-    echo 'use nupac.nu *'
+    echo 'use nupac/nupac.nu *'
     |save --append $nu_pkgs
 
     let add_source = ($noconfirm or (input "Do you want to add nu-pkgs to your config.nu file? [y/N] "|$in in ['y' 'Y']))
