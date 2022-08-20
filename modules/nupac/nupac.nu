@@ -52,7 +52,7 @@ def get-ignored [] {
 
 # returns record containing script metadata
 def get-metadata [
-    package_name: path
+    package_name: string
 ] {
     open (
         [(scripts-path) $package_name ($package_name + ".json")]
@@ -501,8 +501,5 @@ export def "nupac upgrade" [
 # displays nupac's version
 export def "nupac version" [] {
     mkdir (scripts-path)
-    get-metadata (
-        [(scripts-path) "nupac" "nupac.json"]
-        |path join
-    )
+    get-metadata "nupac"
 }
