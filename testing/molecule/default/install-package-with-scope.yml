@@ -38,4 +38,4 @@
           - package_state.stat.exists
           - package_metadata_state.stat.exists
           - "'{{ package }}' in {{ scope.stdout | from_json }}"
-          - "'use {{ package }}.nu * # added automatically by nupac' in {{ nupkgs['content'] | b64decode | split('\n') }}"
+          - "'use packages/{{ package }}/{{ package }}.nu * # added automatically by nupac' in {{ nupkgs['content'] | b64decode | split('\n') }}"
