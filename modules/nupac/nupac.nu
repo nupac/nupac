@@ -52,9 +52,12 @@ def get-ignored [] {
 
 # returns record containing script metadata
 def get-metadata [
-    json: path
+    package_name: path
 ] {
-    open ($json | str replace --string ".nu" ".json")
+    open (
+        [(scripts-path) $package_name ($package_name + ".json")]
+        |path join
+    )
 }
 
 # returns all packages if os-supported, else raises errors and returns empty table (temp workaround for error errors)
@@ -77,7 +80,6 @@ def packages-to-process [
         error make --unspanned {
             msg: "The listed packages cannot be installed, because OS is not supported"
         }
-        []
     } else {
         $packages
     }
@@ -102,10 +104,10 @@ def update-repo [] {
 # returns cached contents of nupac repo
 def get-repo-contents [] {
     if not (repo|path exists) {
-        print "Repo cache does not exist, fetching"
+        print "Repository cache does not exist, fetching"
         update-repo
     } else if (ls --long (repo)|get 0.modified) < ((date now) - (freshness|into duration)) {
-        print $"Repo cache older than (freshness), refreshing"
+        print $"Repository cache older than (freshness), refreshing"
         update-repo
     } else {
         ignore
@@ -132,17 +134,9 @@ def get-packages [
     ls (scripts-path)
     |where type == dir
     |get name
-    |each {|dir|
-        (
-            [
-                $dir
-                (($dir|path basename) + ".json")
-            ]
-            |path join
-        )
-        |each {|package|
-            open $package
-        }
+    |path basename
+    |each {|package|
+        get-metadata $package
     }
     |where {|it|
         if ($names|length) > 0 {
@@ -220,7 +214,7 @@ def install-package [
     fetch ($package.raw-url | into string)
     |save (get-package-location $package | into string)
     fetch ($package.raw-url | into string | str replace --string ".nu" ".json")
-    |save (get-package-location $package | into string)
+    |save (get-package-location $package | into string | str replace --string ".nu" ".json")
 
 # TODO:
 # 1) compare json sha256 with the one in repo
