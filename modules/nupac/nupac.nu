@@ -200,12 +200,13 @@ def get-package-parent [
     |path join
 }
 
-# package location in the filesystem
+# package location in the filesystem relative to nupac base dir
 def get-package-location [
     package: record
 ] {
     [(get-package-parent $package) ($package.url|path basename)]
     |path join
+    |path relative-to (nupac-path)
 }
 
 # actual package installation happens here

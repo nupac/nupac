@@ -39,6 +39,7 @@
             - packages/nupac/nupac.nu
             - packages/nupac/nupac.json
             - nu-pkgs.nu
+            - repo-cache.json
           register: files
 
         - name: Get nushell scope
