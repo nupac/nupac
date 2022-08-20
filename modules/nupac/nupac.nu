@@ -321,7 +321,8 @@ export def "nupac" [
     mkdir (scripts-path)
 
     if $version {
-        nupac version|get version
+        nupac version
+        |get version
     } else {
         nupac --help
     }
@@ -507,9 +508,7 @@ export def "nupac upgrade" [
 export def "nupac version" [] {
     mkdir (scripts-path)
     get-metadata (
-        get-package-location (
-            get-packages 'nupac'
-            |get 0
-        )
+        [(scripts-path) "nupac" "nupac.json"]
+        |path join
     )
 }
