@@ -53,41 +53,39 @@ fetch $nupac_repo_cache
 fetch $nupac_json
 |save $nupac_json_path
 
-if (
-    (open $repo_cache_path
+let expected_json_hash = (open $repo_cache_path
     |where name == nupac
     |get checksum.0
-    ) != (
-        open --raw $nupac_json_path
-        |hash sha256
-    )
-) {
-    print (open $repo_cache_path
-    |where name == nupac
-    |get checksum.0
-    )
+)
 
-    print (
-        open --raw $nupac_json_path
-        |hash sha256
-    )
+let actual_json_hash = (
+    open --raw $nupac_json_path
+    |hash sha256
+)
 
-    rm -r (scripts-path)
-    error make --unspanned {msg: "nupac json checksum mismatch"}
-}
+#if ($expected_json_hash != $actual_json_hash) {
+#    print $"Expected: ($expected_json_hash)"
+#    print $"Actual:   ($actual_json_hash)"
+#    rm -r (scripts-path)
+#    error make --unspanned {msg: "nupac json checksum mismatch"}
+#}
 
 fetch $nupac_module
 |save $nupac_path
 
-if (
-    (
-        open $nupac_json_path
-        |get checksum
-    ) != (
-        open $nupac_path
-        |hash sha256
-    )
-) {
+let expected_nupac_hash = (
+    open $nupac_json_path
+    |get checksum
+)
+
+let actual_nupac_hash = (
+    open $nupac_path
+    |hash sha256
+)
+
+if ($expected_nupac_hash != $actual_nupac_hash) {
+    print $"Expected: ($expected_nupac_hash)"
+    print $"Actual:   ($actual_nupac_hash)"
     rm -r (scripts-path)
     error make --unspanned {msg: "nupac checksum mismatch"}
 }
