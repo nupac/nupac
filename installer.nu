@@ -97,7 +97,7 @@ fetch $nupac_json
 if not ($nu_pkgs|path exists) {
     print 'Creating default nu-pkgs file'
 
-    echo (["use " $nupac_script_path " * # added automatically by nupac"] | str collect)
+    echo (["use" ($nupac_script_path|path relative-to $nupac_base_path) "* # added automatically by nupac"] | str collect ' ')
     |save $nu_pkgs
 
     let add_source = ($noconfirm or (input "Do you want to add nu-pkgs to your config.nu file? [y/N] "|$in in ['y' 'Y']))
