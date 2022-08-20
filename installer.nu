@@ -63,12 +63,12 @@ let actual_json_hash = (
     |hash sha256
 )
 
-#if ($expected_json_hash != $actual_json_hash) {
-#    print $"Expected: ($expected_json_hash)"
-#    print $"Actual:   ($actual_json_hash)"
-#    rm -r (scripts-path)
-#    error make --unspanned {msg: "nupac json checksum mismatch"}
-#}
+if ($expected_json_hash != $actual_json_hash) {
+    print $"Expected: ($expected_json_hash)"
+    print $"Actual:   ($actual_json_hash)"
+    rm -r (scripts-path)
+    error make --unspanned {msg: "nupac json checksum mismatch"}
+}
 
 fetch $nupac_module
 |save $nupac_path
