@@ -23,47 +23,67 @@
         mode: 0700
         owner: "{{ ansible_user_id }}"
 
-    - name: Copy repo-cache.json into the container
-      copy:
-        src: '../../../repo-cache.json'
-        dest: "{{ nushell_dir }}/scripts/"
-        mode: 0700
-        owner: "{{ ansible_user_id }}"
+    # - name: Copy repo-cache.json into the container
+    #   copy:
+    #     src: '../../../repo-cache.json'
+    #     dest: "{{ nupac_dir }}/repo-cache.json"
+    #     mode: 0700
+    #     owner: "{{ ansible_user_id }}"
 
-    - name: Run the installer
-      raw: "nu -c {{ ansible_env.HOME }}/installer.nu"
-      args:
-        executable: "{{ nu }}"
-      register: installer
+    # - name: Run the installer
+    #   raw: "nu -c {{ ansible_env.HOME }}/installer.nu"
+    #   args:
+    #     executable: "{{ nu }}"
+    #   register: installer
 
-    - name: Verify the installer ran successfully
-      block:
+    # - name: Verify the installer ran successfully
+    #   block:
 
-        - name: Stat files
-          stat:
-            path: "{{ nushell_dir }}/scripts/{{ item }}"
-          loop:
-            - nupac.nu
-            - nu-pkgs.nu
-          register: files
+    #     - name: Stat files
+    #       stat:
+    #         path: "{{ nupac_dir }}/{{ item }}"
+    #       loop:
+    #         - packages/nupac/nupac.nu
+    #         - packages/nupac/nupac.json
+    #         - nu-pkgs.nu
+    #       register: files
 
-        - name: Get nushell scope
-          raw: "$nu.scope.commands|get command|to json"
-          args:
-            executable: "{{ nu }}"
-          register: scope
+    #     - name: Get nushell scope
+    #       raw: "$nu.scope.commands|get command|to json"
+    #       args:
+    #         executable: "{{ nu }}"
+    #       register: scope
 
-        - name: Get nupac version
-          raw: "nupac -v"
-          args:
-            executable: "{{ nu }}"
-          register: version
+    #     - name: Get nupac version
+    #       raw: "nupac -v"
+    #       args:
+    #         executable: "{{ nu }}"
+    #       register: version
 
-        - name: Run assertions
-          assert:
-            quiet: true
-            that:
-              - '"nupac has been successfully installed" in installer.stdout'
-              - '{{ command_list }} is subset({{ scope.stdout | from_json }})'
-              - "{{ files.results | map(attribute='stat.exists') }} is all"
-              - "'{{ version.stdout | trim }}' is regex(version_regex)"
+    #     - name: Run assertions
+    #       assert:
+    #         quiet: true
+    #         success_msg: "{{ item.success }}"
+    #         fail_msg: "{{ item.fail }}"
+    #         that: "{{ item.assertion }}"
+    #       with_items:
+    #         - {
+    #           assertion: '"nupac has been successfully installed" in installer.stdout',
+    #           success: 'Stdout contains expected message',
+    #           fail: 'Stdout does not contain expected message',
+    #         }
+    #         - {
+    #           assertion: '{{ command_list }} is subset({{ scope.stdout | from_json }})',
+    #           success: 'Global scope contains all nupac commands',
+    #           fail: 'Nupac commands missing from global scope',
+    #         }
+    #         - {
+    #           assertion: "{{ files.results | map(attribute='stat.exists') }} is all",
+    #           success: 'All expected files have been created',
+    #           fail: 'Some expected files are missing',
+    #         }
+    #         - {
+    #           assertion: "'{{ version.stdout | trim }}' is regex(version_regex)",
+    #           success: 'Version number matches the validation regex',
+    #           fail: 'Version number does not match the validation regex',
+    #         }

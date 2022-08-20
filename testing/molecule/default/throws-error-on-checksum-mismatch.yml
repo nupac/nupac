@@ -8,7 +8,7 @@
   tasks:
     - name: Read the existing repo cache
       slurp:
-        src: "{{ nushell_dir }}/scripts/repo-cache.json"
+        src: "{{ nupac_dir }}/repo-cache.json"
       register: cache
 
     - name: Modify repo cache and set it as fact
@@ -18,7 +18,7 @@
     - name: Write modified repo cache
       copy:
         content: "{{ new_cache }}"
-        dest: "{{ nushell_dir }}/scripts/repo-cache.json"
+        dest: "{{ nupac_dir }}/repo-cache.json"
         remote_src: yes
 
     - name: Try installing a package

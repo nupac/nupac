@@ -13,12 +13,12 @@
 
     - name: Stat {{ package }}.nu
       stat:
-        path: "{{ nushell_dir }}/scripts/{{ package }}.nu"
+        path: "{{ nupac_dir }}/{{ package }}.nu"
       register: package_state
 
     - name: Check nu-pkgs.nu content
       slurp:
-        src: "{{ nushell_dir }}/scripts/nu-pkgs.nu"
+        src: "{{ nupac_dir }}/nu-pkgs.nu"
       register: nupkgs
 
     - name: Get nushell scope
@@ -41,12 +41,12 @@
 
     - name: Stat {{ package }}.nu again
       stat:
-        path: "{{ nushell_dir }}/scripts/{{ package }}.nu"
+        path: "{{ nupac_dir }}/{{ package }}.nu"
       register: package_state
 
     - name: Check nu-pkgs.nu content again
       slurp:
-        src: "{{ nushell_dir }}/scripts/nu-pkgs.nu"
+        src: "{{ nupac_dir }}/nu-pkgs.nu"
       register: nupkgs
 
     - name: Get nushell scope again
