@@ -5,6 +5,7 @@ let default_branch = ($env|get --ignore-errors NUPAC_DEFAULT_BRANCH|default "mai
 
 let noconfirm = ($env|get --ignore-errors NUPAC_NO_CONFIRM|default false|into bool)
 
+let nupac_repo_cache = $"https://raw.githubusercontent.com/skelly37/nupac/($default_branch)/repo-cache.json"
 let nupac_module = $"https://raw.githubusercontent.com/skelly37/nupac/($default_branch)/modules/nupac/nupac.nu"
 let nupac_json = $"https://raw.githubusercontent.com/skelly37/nupac/($default_branch)/modules/nupac/nupac.json"
 
@@ -18,39 +19,79 @@ def scripts-path [] {
     )
 }
 
-# Directory where nupac modules will be stored
-let install_path = (scripts-path)
-mkdir $install_path
+mkdir (
+    (scripts-path)
+    |path join "nupac"
+)
 
 # nupac index
 let nu_pkgs = (
-    $install_path|
+    (scripts-path)|
     path join "nu-pkgs.nu"
 )
 
-mkdir $install_path
+let repo_cache_path = (
+    (scripts-path)|
+    path join "repo-cache.json"
+)
+
 let nupac_path = (
-    $install_path
+    (scripts-path)
     |path join "nupac/nupac.nu"
     |into string
 )
 
 let nupac_json_path = (
-    $install_path
+    (scripts-path)
     |path join "nupac/nupac.json"
     |into string
 )
 
-mkdir (
-    $nupac_path
-    |path dirname
-)
+fetch $nupac_repo_cache
+|save $repo_cache_path
+
+fetch $nupac_json
+|save $nupac_json_path
+
+if (
+    (open $repo_cache_path
+    |where name == nupac
+    |get checksum.0
+    ) != (
+        open --raw $nupac_json_path
+        |hash sha256
+    )
+) {
+    print (open $repo_cache_path
+    |where name == nupac
+    |get checksum.0
+    )
+
+    print (
+        open --raw $nupac_json_path
+        |hash sha256
+    )
+
+    rm -r (scripts-path)
+    error make --unspanned {msg: "nupac json checksum mismatch"}
+}
 
 fetch $nupac_module
 |save $nupac_path
 
-fetch $nupac_json
-|save $nupac_json_path
+if (
+    (
+        open $nupac_json_path
+        |get checksum
+    ) != (
+        open $nupac_path
+        |hash sha256
+    )
+) {
+    rm -r (scripts-path)
+    error make --unspanned {msg: "nupac checksum mismatch"}
+}
+
 
 if not ($nu_pkgs|path exists) {
     print 'Creating default nu-pkgs file'
