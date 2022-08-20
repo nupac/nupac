@@ -196,7 +196,7 @@ def remove-from-config [
 def get-package-parent [
     package: record
 ] {
-    [(nupac-path) $package.name]
+    [(packages-path) $package.name]
     |path join
 }
 
