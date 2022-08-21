@@ -23,7 +23,7 @@ let packages_path = (
     |path join 'packages'
 )
 
-# # nupac index
+# nupac index
 let nu_pkgs = (
     $nupac_base_path
     |path join "nu-pkgs.nu"
