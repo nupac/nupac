@@ -47,7 +47,7 @@ let nupac_json_path = (
     |path join 'nupac.json'
 )
 $nu.scope.vars|select name value|sort-by value
-mkdir $nupac_base_path $packages_path $nupac_module_path
+mkdir $nupac_module_path
 
 fetch $nupac_repo_cache
 |save $repo_cache_path
