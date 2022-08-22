@@ -1,35 +1,36 @@
----
-- name: Throws error on checksum mismatch
-  hosts: all
-  become: false
-  vars:
-    package: make
+# TO BE REIMPLEMENTED
+#---
+# - name: Throws error on checksum mismatch
+#   hosts: all
+#   become: false
+#   vars:
+#     package: make
 
-  tasks:
-    - name: Read the existing repo cache
-      slurp:
-        src: "{{ nupac_dir }}/repo-cache.json"
-      register: cache
+#   tasks:
+#     - name: Read the existing repo cache
+#       slurp:
+#         src: "{{ nupac_dir }}/repo-cache.json"
+#       register: cache
 
-    - name: Modify repo cache and set it as fact
-      set_fact:
-        new_cache: "{{ cache.content | b64decode | from_json | map('combine', {'checksum': 'aaaaaaaaaaaaaaa'}) | to_nice_json }}"
+#     - name: Modify repo cache and set it as fact
+#       set_fact:
+#         new_cache: "{{ cache.content | b64decode | from_json | map('combine', {'checksum': 'aaaaaaaaaaaaaaa'}) | to_nice_json }}"
 
-    - name: Write modified repo cache
-      copy:
-        content: "{{ new_cache }}"
-        dest: "{{ nupac_dir }}/repo-cache.json"
-        remote_src: yes
+#     - name: Write modified repo cache
+#       copy:
+#         content: "{{ new_cache }}"
+#         dest: "{{ nupac_dir }}/repo-cache.json"
+#         remote_src: yes
 
-    - name: Try installing a package
-      raw: "nupac install {{ package }}"
-      args:
-        executable: "{{ nu }}"
-      register: installer
-      failed_when: false
+#     - name: Try installing a package
+#       raw: "nupac install {{ package }}"
+#       args:
+#         executable: "{{ nu }}"
+#       register: installer
+#       failed_when: false
 
-    - name: Assert error was thrown
-      assert:
-        that:
-          - installer.rc == 1
-          - "'File checksum is incorrect, aborting' in installer.stderr"
+#     - name: Assert error was thrown
+#       assert:
+#         that:
+#           - installer.rc == 1
+#           - "'File checksum is incorrect, aborting' in installer.stderr"
