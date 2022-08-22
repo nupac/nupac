@@ -206,7 +206,6 @@ def get-package-location [
 ] {
     [(get-package-parent $package) ($package.url|path basename)]
     |path join
-    |path relative-to (nupac-path)
 }
 
 # actual package installation happens here
@@ -220,6 +219,7 @@ def install-package [
     }
 
     print $"Installing ($package.name)"
+    (get-package-location $package | into string)
     mkdir (get-package-parent $package| into string)
     fetch ($package.raw-url | into string)
     |save (get-package-location $package | into string)
