@@ -26,6 +26,7 @@ provisioner:
     host_vars:
       instance:
         nushell_dir: "{{ ansible_env.HOME }}/.config/nushell"
+        nupac_dir: "{{ ansible_env.HOME }}/.config/nushell/nupac"
         nu: "/usr/bin/nu --config {{ nushell_dir }}/config.nu --env-config {{ nushell_dir }}/env.nu"
         fields:
           - 'name'

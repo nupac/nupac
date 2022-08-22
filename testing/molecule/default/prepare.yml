@@ -23,13 +23,6 @@
         mode: 0700
         owner: "{{ ansible_user_id }}"
 
-    - name: Copy repo-cache.json into the container
-      copy:
-        src: '../../../repo-cache.json'
-        dest: "{{ nushell_dir }}/scripts/"
-        mode: 0700
-        owner: "{{ ansible_user_id }}"
-
     - name: Run the installer
       raw: "nu -c {{ ansible_env.HOME }}/installer.nu"
       args:
@@ -41,10 +34,12 @@
 
         - name: Stat files
           stat:
-            path: "{{ nushell_dir }}/scripts/{{ item }}"
+            path: "{{ nupac_dir }}/{{ item }}"
           loop:
-            - nupac.nu
+            - packages/nupac/nupac.nu
+            - packages/nupac/nupac.json
             - nu-pkgs.nu
+            - repo-cache.json
           register: files
 
         - name: Get nushell scope
@@ -62,8 +57,27 @@
         - name: Run assertions
           assert:
             quiet: true
-            that:
-              - '"nupac has been successfully installed" in installer.stdout'
-              - '{{ command_list }} is subset({{ scope.stdout | from_json }})'
-              - "{{ files.results | map(attribute='stat.exists') }} is all"
-              - "'{{ version.stdout | trim }}' is regex(version_regex)"
+            success_msg: "{{ item.success }}"
+            fail_msg: "{{ item.fail }}"
+            that: "{{ item.assertion }}"
+          with_items:
+            - {
+              assertion: '"nupac has been successfully installed" in installer.stdout',
+              success: 'Stdout contains expected message',
+              fail: 'Stdout does not contain expected message',
+            }
+            - {
+              assertion: '{{ command_list }} is subset({{ scope.stdout | from_json }})',
+              success: 'Global scope contains all nupac commands',
+              fail: 'Nupac commands missing from global scope',
+            }
+            - {
+              assertion: "{{ files.results | map(attribute='stat.exists') }} is all",
+              success: 'All expected files have been created',
+              fail: 'Some expected files are missing',
+            }
+            - {
+              assertion: "'{{ version.stdout | trim }}' is regex(version_regex)",
+              success: 'Version number matches the validation regex',
+              fail: 'Version number does not match the validation regex',
+            }

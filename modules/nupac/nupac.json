@@ -1,0 +1,32 @@
+{
+  "author":
+  [
+    "skelly37",
+    "Yethal"
+  ],
+  "checksum": "7b60d12ff75a19be4f354fd444f9f48efabd43f3844d78e1f2e38228b64a16b6",
+  "installer": "",
+  "keywords":
+  [
+    "package",
+    "packages",
+    "management",
+    "manager"
+  ],
+  "long-desc": "Nupac is a package manager written in nu and for nu. Source on https://github.com/skelly37/nupac",
+  "name": "nupac",
+  "nu-dependencies": [],
+  "os":
+  [
+    "android",
+    "linux",
+    "macos",
+    "windows"
+  ],
+  "post-install-msg": "",
+  "pre-install-msg": "",
+  "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/metadata/modules/nupac/nupac.nu",
+  "short-desc": "package manager for nushell",
+  "url": "https://github.com/skelly37/nupac/blob/metadata/modules/nupac/nupac.nu",
+  "version": "0.1.0"
+}

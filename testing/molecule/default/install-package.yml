@@ -13,12 +13,17 @@
 
     - name: Stat {{ package }}.nu
       stat:
-        path: "{{ nushell_dir }}/scripts/{{ package }}.nu"
+        path: "{{ nupac_dir }}/packages/{{ package }}/{{ package }}.nu"
       register: package_state
+
+    - name: Stat {{ package }}.json
+      stat:
+        path: "{{ nupac_dir }}/packages/{{ package }}/{{ package }}.json"
+      register: package_metadata_state
 
     - name: Check nu-pkgs.nu content
       slurp:
-        src: "{{ nushell_dir }}/scripts/nu-pkgs.nu"
+        src: "{{ nupac_dir }}/nu-pkgs.nu"
       register: nupkgs
 
     - name: Get nushell scope
@@ -31,5 +36,6 @@
       assert:
         that:
           - package_state.stat.exists
+          - package_metadata_state.stat.exists
           - "'{{ package }}' not in {{ scope.stdout | from_json }}"
-          - "'use {{ package }}.nu * # added automatically by nupac' not in {{ nupkgs['content'] | b64decode | split('\n') }}"
+          - "'use packages/{{ package }}/{{ package }}.nu * # added automatically by nupac' not in {{ nupkgs['content'] | b64decode | split('\n') }}"

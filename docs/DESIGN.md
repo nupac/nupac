@@ -1,5 +1,5 @@
 ## Default path
-`scripts` subdirectory in the Nushell's config folder. Type `$nu.config-path|path dirname` in your shell to find it.
+`nupac` subdirectory in the Nushell's config folder. Type `$nu.config-path|path dirname` in your shell to find it.
 
 ## Cache index
 By default, the cache index refreshes after a day from previous download.
@@ -53,3 +53,11 @@ Simple nupac config, just declare the specific variable in your env, if you want
   - If not declared, nupac will act as if it's false and it will prompt for a confirmation
 - `$env.NUPAC_USE_LONG_DESC`: *If true, nupac will display long package descriptions*
   - If not declared, nupac will use short package descriptions
+
+## Packages paths structure
+
+- each package must have a following directory: **/modules/<package_name>**
+- in each such directory there have to be:
+  - **<package_name>.nu**: the *main* source code
+  - **<package_name>.json**: the package metadata
+- furthermore, additional files are allowed (but they are not supported by nupac in any way)

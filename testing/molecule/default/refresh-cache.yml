@@ -6,7 +6,7 @@
   tasks:
     - name: Remove existing nupac cache
       file:
-        path: "{{ nushell_dir }}/scripts/repo-cache.json"
+        path: "{{ nupac_dir }}/repo-cache.json"
         state: absent
 
     - name: Refresh nupac cache
@@ -16,7 +16,7 @@
 
     - name: Stat nupac cache
       stat:
-        path: "{{ nushell_dir }}/scripts/repo-cache.json"
+        path: "{{ nupac_dir }}/repo-cache.json"
       register: cache
 
     - name: Assert cache file exists

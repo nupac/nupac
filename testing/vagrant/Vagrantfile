@@ -41,7 +41,6 @@ Vagrant.configure("2") do |config|
   config.ssh.extra_args = ["-t", "cd /vagrant; nu -l"]
   config.vm.provision "ansible_local" do |ansible|
     ansible.playbook = "testing/vagrant/playbook.yml"
-    ansible.galaxy_role_file = "testing/vagrant/requirements.yml"
     ansible.galaxy_roles_path = '/home/vagrant/.ansible/roles'
     ansible.extra_vars = {
       nushell_version: version
