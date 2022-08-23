@@ -24,9 +24,9 @@
     ],
     "post-install-msg": "",
     "pre-install-msg": "",
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/metadata/modules/make/make.nu",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/make/make.nu",
     "short-desc": "makefile completions for nu",
-    "url": "https://github.com/skelly37/nupac/blob/metadata/modules/make/make.nu",
+    "url": "https://github.com/skelly37/nupac/blob/main/modules/make/make.nu",
     "version": "1.0.0"
   },
   {
@@ -54,9 +54,9 @@
     ],
     "post-install-msg": "",
     "pre-install-msg": "",
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/metadata/modules/remoting/remoting.nu",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting/remoting.nu",
     "short-desc": "Remoting module for nu",
-    "url": "https://github.com/skelly37/nupac/blob/metadata/modules/remoting/remoting.nu",
+    "url": "https://github.com/skelly37/nupac/blob/main/modules/remoting/remoting.nu",
     "version": "1.0.0"
   },
   {
@@ -86,9 +86,9 @@
     ],
     "post-install-msg": "",
     "pre-install-msg": "",
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/metadata/modules/nupac/nupac.nu",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac/nupac.nu",
     "short-desc": "package manager for nushell",
-    "url": "https://github.com/skelly37/nupac/blob/metadata/modules/nupac/nupac.nu",
+    "url": "https://github.com/skelly37/nupac/blob/main/modules/nupac/nupac.nu",
     "version": "0.1.0"
   }
 ]
