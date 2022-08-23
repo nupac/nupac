@@ -59,9 +59,9 @@ body:
     id: nupacconfig
     attributes:
       label: Nupac configuration
-      description: "Please run `nupac verison | transpose key value | to md --pretty` and paste the output to show which nupac's version are you using"
+      description: "Please run `nupac version | transpose key value | to md --pretty` and paste the output to show which nupac's version are you using"
       placeholder: |
-        > nupac verison | transpose key value | to md --pretty
+        > nupac version | transpose key value | to md --pretty
         | key        | value                                                                                             |
         | ---------- | ----------------------------------------------------------------------                            |
         | long-desc  | Nupac is a package manager written in nu and for nu. Source on https://github.com/skelly37/nupac  |
