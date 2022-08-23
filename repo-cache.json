@@ -4,37 +4,7 @@
     [
       "Yethal"
     ],
-    "checksum": "50f41c8d47e10da8644c29db203ff25d9b0bebb8afab5ce339902f6cac3b5c2f",
-    "installer": "",
-    "keywords":
-    [
-      "make",
-      "build",
-      "completions"
-    ],
-    "long-desc": "This module contains completions for make build tool\n",
-    "name": "make",
-    "nu-dependencies": [],
-    "os":
-    [
-      "windows",
-      "linux",
-      "macos",
-      "android"
-    ],
-    "post-install-msg": "",
-    "pre-install-msg": "",
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/make/make.nu",
-    "short-desc": "makefile completions for nu",
-    "url": "https://github.com/skelly37/nupac/blob/main/modules/make/make.nu",
-    "version": "1.0.0"
-  },
-  {
-    "author":
-    [
-      "Yethal"
-    ],
-    "checksum": "7bd94b11e49df762fd19a17df3633a316cb074639ef344d1417d19bb78668ba2",
+    "checksum": "786a2ca32209b8b2b0d9d77cb70d49434a352ce0ce95fc323fc94660296b1db2",
     "installer": "",
     "keywords":
     [
@@ -62,10 +32,40 @@
   {
     "author":
     [
+      "Yethal"
+    ],
+    "checksum": "d61a834d0d9a26630c6ef72875053338a9937d2365c6d63e528c52c4e1fdad70",
+    "installer": "",
+    "keywords":
+    [
+      "make",
+      "build",
+      "completions"
+    ],
+    "long-desc": "This module contains completions for make build tool\n",
+    "name": "make",
+    "nu-dependencies": [],
+    "os":
+    [
+      "windows",
+      "linux",
+      "macos",
+      "android"
+    ],
+    "post-install-msg": "",
+    "pre-install-msg": "",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/make/make.nu",
+    "short-desc": "makefile completions for nu",
+    "url": "https://github.com/skelly37/nupac/blob/main/modules/make/make.nu",
+    "version": "1.0.0"
+  },
+  {
+    "author":
+    [
       "skelly37",
       "Yethal"
     ],
-    "checksum": "85b65be51ac945917d9afb8f10c428fe20e3b833c9555d6622842b6e63da204d",
+    "checksum": "3721e958957f9ca4d8bcb77a2453a542222cca1c6bcf2ef40460c7c75cd89c2b",
     "installer": "",
     "keywords":
     [
