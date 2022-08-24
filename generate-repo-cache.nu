@@ -78,9 +78,6 @@ get-metadata-jsons
         |upsert checksum {open --raw ($json | str replace "(.+).json$" "$1.nu") | hash sha256}
         |sort
         |save $json
-
-        char nl
-        |save $json --append --raw
     }
 
     $metadata

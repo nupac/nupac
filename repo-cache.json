@@ -4,37 +4,7 @@
     [
       "Yethal"
     ],
-    "checksum": "786a2ca32209b8b2b0d9d77cb70d49434a352ce0ce95fc323fc94660296b1db2",
-    "installer": "",
-    "keywords":
-    [
-      "ssh",
-      "remote",
-      "automation"
-    ],
-    "long-desc": "This module exports commands that simplify management of remote hosts over ssh before using you need to fill the config\n",
-    "name": "remoting",
-    "nu-dependencies": [],
-    "os":
-    [
-      "android",
-      "linux",
-      "macos",
-      "windows"
-    ],
-    "post-install-msg": "",
-    "pre-install-msg": "",
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting/remoting.nu",
-    "short-desc": "Remoting module for nu",
-    "url": "https://github.com/skelly37/nupac/blob/main/modules/remoting/remoting.nu",
-    "version": "1.0.0"
-  },
-  {
-    "author":
-    [
-      "Yethal"
-    ],
-    "checksum": "d61a834d0d9a26630c6ef72875053338a9937d2365c6d63e528c52c4e1fdad70",
+    "checksum": "403f52e4c698802974d39ec0bbe805942c55206566c2d3ed31d62fa52b41defe",
     "installer": "",
     "keywords":
     [
@@ -62,10 +32,40 @@
   {
     "author":
     [
+      "Yethal"
+    ],
+    "checksum": "9a413a37fbcc921e95cbb887e3d3c34c1c86054c57dce3faf551b8733ec2de6a",
+    "installer": "",
+    "keywords":
+    [
+      "ssh",
+      "remote",
+      "automation"
+    ],
+    "long-desc": "This module exports commands that simplify management of remote hosts over ssh before using you need to fill the config\n",
+    "name": "remoting",
+    "nu-dependencies": [],
+    "os":
+    [
+      "android",
+      "linux",
+      "macos",
+      "windows"
+    ],
+    "post-install-msg": "",
+    "pre-install-msg": "",
+    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting/remoting.nu",
+    "short-desc": "Remoting module for nu",
+    "url": "https://github.com/skelly37/nupac/blob/main/modules/remoting/remoting.nu",
+    "version": "1.0.0"
+  },
+  {
+    "author":
+    [
       "skelly37",
       "Yethal"
     ],
-    "checksum": "3721e958957f9ca4d8bcb77a2453a542222cca1c6bcf2ef40460c7c75cd89c2b",
+    "checksum": "36468a1f264be2d6ad7909a3006900a22626a14eaf5d5baa05bd5362d9b96bad",
     "installer": "",
     "keywords":
     [
