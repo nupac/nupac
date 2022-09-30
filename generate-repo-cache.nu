@@ -22,7 +22,7 @@ def check-required-attributes [
 ] {
     let missing_columns = ($REQUIRED_ATTRIBUTES|where $it not-in ($metadata|columns)|str collect ", ")
 
-    if (not ($missing_columns|empty?)) {
+    if (not ($missing_columns|is-empty)) {
         error make --unspanned {
             msg: $"Required columns: ($missing_columns) not present in metadata"
         }
@@ -32,7 +32,7 @@ def check-required-attributes [
     |each { |attribute|
         $metadata
         |each { |entry|
-            if ($entry|get $attribute|empty?) {
+            if ($entry|get $attribute|is-empty) {
                 error make --unspanned {msg: $"($entry) lacks required attribute: ($attribute)"}
             }
         }
@@ -73,7 +73,7 @@ get-metadata-jsons
     let metadata = (check-required-attributes (add-optional-attributes (get-metadata $json)))
 
     # otherwise the developer has to manually insert a checksum for their installer
-    if ($metadata.installer|empty?) {
+    if ($metadata.installer|is-empty) {
         $metadata
         |upsert checksum {open --raw ($json | str replace "(.+).json$" "$1.nu") | hash sha256}
         |sort
