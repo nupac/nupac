@@ -84,7 +84,7 @@ def packages-to-process [
         |where $it not-in $unsupported_pkgs
     )
 
-    if (not ($unsupported_pkgs|empty?)) {
+    if (not ($unsupported_pkgs|is-empty)) {
         user-readable-pkg-info $unsupported_pkgs $long
         error make --unspanned {
             msg: "The listed packages cannot be installed, because OS is not supported"
@@ -213,7 +213,7 @@ def install-package [
     package: record
     add_to_scope: bool
 ] {
-    if not ($package.pre-install-msg | empty?) {
+    if not ($package.pre-install-msg | is-empty) {
         print "Pre-install message:"
         print ($package.pre-install-msg | into string)
     }
@@ -241,7 +241,7 @@ def install-package [
         add-to-scope (config-entry ((get-package-location $package) | into string))
     }
 
-    if not ($package.post-install-msg | empty?) {
+    if not ($package.post-install-msg | is-empty) {
         print "Post-install message:"
         print ($package.post-install-msg | into string)
     }
@@ -361,7 +361,7 @@ export def "nupac install" [
             |where name not-in (get-ignored)
         ) $long
     ))
-    if ($to_ins|empty?) {
+    if ($to_ins|is-empty) {
         print "No packages to install"
     } else {
         display-action-data $to_ins "install" $long
@@ -407,7 +407,7 @@ export def "nupac remove" [
 
     let to_del = (get-repo-contents | where name in $packages)
 
-    if ($to_del|empty?) {
+    if ($to_del|is-empty) {
         print "No packages to remove"
     } else {
         display-action-data $to_del "remove" $long
@@ -489,7 +489,7 @@ export def "nupac upgrade" [
             ) $long
         )
 
-        if ($to_upgrade|empty?) {
+        if ($to_upgrade|is-empty) {
             print "No upgrades found"
         } else {
             display-action-data $to_upgrade "upgrade" $long
