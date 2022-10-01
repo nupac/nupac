@@ -6,12 +6,16 @@ driver:
   name: docker
 platforms:
   - name: instance
-    image: ghcr.io/skelly37/nupac:latest
+    image: "geerlingguy/docker-${MOLECULE_DISTRO:-ubuntu2004}-ansible:latest"
     pre_build_image: true
     command: ""
     tmpfs:
       - /run
       - /tmp
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    priviledged: true
     env:
       NUPAC_INSTALLER_BRANCH: ${GITHUB_HEAD_REF:-main}
       NUPAC_DEFAULT_BRANCH: ${GITHUB_HEAD_REF:-main}
@@ -27,7 +31,7 @@ provisioner:
       instance:
         nushell_dir: "{{ ansible_env.HOME }}/.config/nushell"
         nupac_dir: "{{ ansible_env.HOME }}/.config/nushell/nupac"
-        nu: "/usr/bin/nu --config {{ nushell_dir }}/config.nu --env-config {{ nushell_dir }}/env.nu"
+        nu: "/usr/local/bin/nu --config {{ nushell_dir }}/config.nu --env-config {{ nushell_dir }}/env.nu"
         fields:
           - 'name'
           - 'version'
@@ -36,17 +40,20 @@ provisioner:
           - 'description'
 scenario:
   test_sequence:
+    - dependency
     - destroy
     - create
     - prepare
     - converge
     - destroy
   converge_sequence:
+    - dependency
     - create
     - prepare
     - converge
   destroy_sequence:
     - destroy
   prepare_sequence:
+    - dependency
     - create
     - prepare

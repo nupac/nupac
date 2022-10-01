@@ -7,7 +7,7 @@ ls **/*.nu
         nu-check $file.name
     }
 }
-|if not ($in|all? lint) {
+|if not ($in|all lint) {
     error make --unspanned {
         msg: $"Following files failed linter check: ($in|where not lint|get name|str collect ', ')"
     }
