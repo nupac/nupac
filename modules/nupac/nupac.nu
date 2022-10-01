@@ -354,16 +354,46 @@ export def "nupac install" [
     let add_to_scope = (get-flag-value $add_to_scope "NUPAC_ADD_TO_SCRIPTS_LIST")
     let long = (get-flag-value $long "NUPAC_USE_LONG_DESC")
 
-    let to_ins = ((
+    let to_ins = (
         packages-to-process (
             get-repo-contents
             |where name in $packages
             |where name not-in (get-ignored)
         ) $long
-    ))
+    )
+
     if ($to_ins|is-empty) {
         print "No packages to install"
     } else {
+        let packages_list = (nupac list)
+
+        let new = (
+            $to_ins
+            |where name not-in $packages_list.name
+        )
+
+        let up_to_date = (
+            $to_ins
+            |where name in $packages_list.name
+            |each { |item|
+                if ($item.version == (nupac list | where name == $item.name | get version.0)) { $item }
+            }
+        )
+
+        let outdated = (
+            $to_ins
+            |where $it not-in $new
+            |where $it not-in $up_to_date
+            |each { |item|
+                $item
+                |upsert version (nupac list| where name == $item.name | get version.0)
+            }
+        )
+
+        print "Outdated package(s):"
+        print (user-readable-pkg-info $outdated false)
+        print "end"
+
         display-action-data $to_ins "install" $long
         if (user-approves) {
             $to_ins
