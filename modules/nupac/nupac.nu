@@ -334,7 +334,6 @@ export def "nupac" [
     }
 }
 
-#TODO flags for new modes, like --noupgrade --noreinstall
 # Installs provided set of packages and optionally adds them to the global scope
 export def "nupac install" [
     ...packages: string # packages to install
@@ -395,16 +394,17 @@ export def "nupac install" [
             (
                 $to_ins
                 |where $it not-in $new
-                |where $it not-in $up_to_date
                 |each { |item|
-                    let local_data = (nupac list| where name == $item.name )
+                    let local_data = (nupac list| where name == $item.name)
 
-                    $item
-                    |upsert version $local_data.version.0
-                    |upsert author ($local_data | get "author(s)" | get 0)
-                    |upsert os ($local_data | get "supported OS" | get 0)
-                    |upsert short-desc $local_data.description.0
-                    |upsert long-desc (nupac list --long | where name == $item.name | get description.0)
+                    if ($item.version != $local_data.version.0) {
+                        $item
+                        |upsert version $local_data.version.0
+                        |upsert author ($local_data | get "author(s)" | get 0)
+                        |upsert os ($local_data | get "supported OS" | get 0)
+                        |upsert short-desc $local_data.description.0
+                        |upsert long-desc (nupac list --long | where name == $item.name | get description.0)
+                    }
                 }
             )
         }
@@ -418,7 +418,7 @@ export def "nupac install" [
                 install-package $package $add_to_scope
             }
 
-            ($outdated | append $up_to_date)
+            ($outdated |append $up_to_date)
             |each {|package|
                 install-package $package false
             }
