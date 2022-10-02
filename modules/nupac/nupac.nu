@@ -413,14 +413,9 @@ export def "nupac install" [
         display-action-data $up_to_date "reinstall" $long
         display-action-data $new "install" $long
         if (user-approves) {
-            $new
+            ($new | append $outdated | append $up_to_date)
             |each {|package|
                 install-package $package $add_to_scope
-            }
-
-            ($outdated |append $up_to_date)
-            |each {|package|
-                install-package $package false
             }
         }
     }
