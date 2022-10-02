@@ -385,13 +385,20 @@ export def "nupac install" [
             |where $it not-in $new
             |where $it not-in $up_to_date
             |each { |item|
+                let local_data = (nupac list| where name == $item.name )
+
                 $item
-                |upsert version (nupac list| where name == $item.name | get version.0)
+                |upsert version $local_data.version.0
+                |upsert author ($local_data | get "author(s)" | get 0)
+                |upsert os ($local_data | get "supported OS" | get 0)
+                |upsert short-desc $local_data.description.0
+                |upsert long-desc (nupac list --long | where name == $item.name | get description.0)
             }
         )
 
         print "Outdated package(s):"
         print (user-readable-pkg-info $outdated false)
+        #TODO remove or replace me with some better prompt
         print "end"
 
         display-action-data $to_ins "install" $long
