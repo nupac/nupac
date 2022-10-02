@@ -307,14 +307,16 @@ def display-action-data [
     action: string
     long: bool
 ] {
-    let action = if ($action|str ends-with "e") {
+    if not ($pkgs|is-empty) {
+        let action = if ($action|str ends-with "e") {
         $action
-    } else {
-        $action + "e"
-    }
+        } else {
+            $action + "e"
+        }
 
-    print (user-readable-pkg-info $pkgs $long)
-    print ($"The listed packages will be ($action)d")
+        print (user-readable-pkg-info $pkgs $long)
+        print ($"The listed packages will be ($action)d")
+    }
 }
 
 # Nushell package manager
@@ -332,11 +334,14 @@ export def "nupac" [
     }
 }
 
+#TODO flags for new modes, like --noupgrade --noreinstall
 # Installs provided set of packages and optionally adds them to the global scope
 export def "nupac install" [
     ...packages: string # packages to install
     --add-to-scope(-a): bool # add packages to config
     --long(-l): bool # display long package descriptions instead of short ones
+    --noupgrade(-u): bool # skip installed & outdated packages
+    --noreinstall(-r): bool # skip installed packages that are up to date
     #
     # Examples:
     #
@@ -372,40 +377,50 @@ export def "nupac install" [
             |where name not-in $packages_list.name
         )
 
-        let up_to_date = (
-            $to_ins
-            |where name in $packages_list.name
-            |each { |item|
-                if ($item.version == (nupac list | where name == $item.name | get version.0)) { $item }
-            }
-        )
+        let up_to_date = if (get-flag-value $noreinstall "NUPAC_INSTALL_NOREINSTALL") {
+            []
+        } else {
+            (
+                $to_ins
+                |where name in $packages_list.name
+                |each { |item|
+                    if ($item.version == (nupac list | where name == $item.name | get version.0)) { $item }
+                }
+            )
+        }
 
-        let outdated = (
-            $to_ins
-            |where $it not-in $new
-            |where $it not-in $up_to_date
-            |each { |item|
-                let local_data = (nupac list| where name == $item.name )
+        let outdated = if (get-flag-value $noupgrade "NUPAC_INSTALL_NOUPGRADE") {
+            []
+        } else {
+            (
+                $to_ins
+                |where $it not-in $new
+                |where $it not-in $up_to_date
+                |each { |item|
+                    let local_data = (nupac list| where name == $item.name )
 
-                $item
-                |upsert version $local_data.version.0
-                |upsert author ($local_data | get "author(s)" | get 0)
-                |upsert os ($local_data | get "supported OS" | get 0)
-                |upsert short-desc $local_data.description.0
-                |upsert long-desc (nupac list --long | where name == $item.name | get description.0)
-            }
-        )
+                    $item
+                    |upsert version $local_data.version.0
+                    |upsert author ($local_data | get "author(s)" | get 0)
+                    |upsert os ($local_data | get "supported OS" | get 0)
+                    |upsert short-desc $local_data.description.0
+                    |upsert long-desc (nupac list --long | where name == $item.name | get description.0)
+                }
+            )
+        }
 
-        print "Outdated package(s):"
-        print (user-readable-pkg-info $outdated false)
-        #TODO remove or replace me with some better prompt
-        print "end"
-
-        display-action-data $to_ins "install" $long
+        display-action-data $outdated "upgrade" $long
+        display-action-data $up_to_date "reinstall" $long
+        display-action-data $new "install" $long
         if (user-approves) {
-            $to_ins
+            $new
             |each {|package|
                 install-package $package $add_to_scope
+            }
+
+            ($outdated | append $up_to_date)
+            |each {|package|
+                install-package $package false
             }
         }
     }

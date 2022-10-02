@@ -53,6 +53,10 @@ Simple nupac config, just declare the specific variable in your env, if you want
   - If not declared, nupac will act as if it's false and it will prompt for a confirmation
 - `$env.NUPAC_USE_LONG_DESC`: *If true, nupac will display long package descriptions*
   - If not declared, nupac will use short package descriptions
+- `$env.NUPAC_INSTALL_NOUPGRADE`: *If true, `nupac install` will skip installed & outdated packages*
+  - If not declared, `nupac install` will upgrade installed & outdated packages
+- `$env.NUPAC_INSTALL_NOREINSTALL`: *If true, `nupac install` will skip installed packages that are up to date*
+  - If not declared, `nupac install` will reinstall installed packages that are up to date
 
 ## Packages paths structure
 
