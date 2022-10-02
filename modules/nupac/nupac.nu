@@ -309,7 +309,7 @@ def display-action-data [
 ] {
     if not ($pkgs|is-empty) {
         let action = if ($action|str ends-with "e") {
-        $action
+            $action
         } else {
             $action + "e"
         }
