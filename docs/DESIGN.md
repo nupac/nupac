@@ -18,6 +18,8 @@ Each command has its own help accessible with one of these standard, interchange
   - `...packages`: packages you want to install
   - `--add-to-scope(-a)`: add packages to global scope, *optional*
   - `--long(-l):`: display long package descriptions instead of short ones *optional*
+  - `--noupgrade(-u)`: skip installed & outdated packages
+  - `--noreinstall(-r)`: skip installed packages that are up to date
 
 - `nupac list`: *Lists installed nu packages*
   - `--long(-l):`: display long package descriptions instead of short ones *optional*
