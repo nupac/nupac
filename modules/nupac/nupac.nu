@@ -339,8 +339,8 @@ export def "nupac install" [
     ...packages: string # packages to install
     --add-to-scope(-a): bool # add packages to config
     --long(-l): bool # display long package descriptions instead of short ones
-    --noupgrade(-u): bool # skip installed & outdated packages
     --noreinstall(-r): bool # skip installed packages that are up to date
+    --noupgrade(-u): bool # skip installed & outdated packages
     #
     # Examples:
     #
