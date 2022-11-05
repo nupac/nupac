@@ -6,7 +6,7 @@ Nu package manager written entirely in nu
 
 ## Installation
 ### Requirements
-- `nushell` 0.69.1 (behavior & keywords tend to vary between versions so using nupac on version that differs from ours might result in unexpected behavior)
+- `nushell` 0.70.0 (behavior & keywords tend to vary between versions so using nupac on version that differs from ours might result in unexpected behavior)
 
 In order to install nupac on your machine run this short snippet in nushell: `nu -c (fetch https://raw.githubusercontent.com/nupac/nupac/master/installer.nu)`
 Alternatively you can download the installer script and run it manually
