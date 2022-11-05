@@ -15,8 +15,8 @@ Each command has its own help accessible with one of these standard, interchange
 - `nupac`: *Displays help (list of all commands)*
   - `-v/--version`: Displays nupac's version instead of help
 - `nupac install`: *Installs provided set of packages and optionally adds them to the global scope*
-  - `...packages`: packages you want to install
-  - `--add-to-scope(-a)`: add packages to global scope, *optional*
+  - `...packages`: packages to install
+  - `--add-to-scope(-a)`: add packages to global scope *optional*
   - `--long(-l):`: display long package descriptions instead of short ones *optional*
 
 - `nupac list`: *Lists installed nu packages*
@@ -25,20 +25,27 @@ Each command has its own help accessible with one of these standard, interchange
 - `nupac refresh`: *Refreshes the repo cache*
 
 - `nupac remove`: *Removes provided set of packages and removes use statement from nu-pkgs.nu*
-  - `...packages`: packages you want to remove
+  - `...packages`: packages to remove
 
 - `nupac search`: *Searches remote repository for packages matching query with name, descriptions or keywords*
   - `query`: query to look for
-  - `--all(-a)`: display also packages unsupported by your operating system
+  - `--all(-a)`: display also packages unsupported by the operating system
   - `--long(-l):`: display long package descriptions instead of short ones *optional*
 
 - `nupac upgrade`: *Upgrades all or selected packages*
-  - `...packages`: packages you want to upgrade
-  - `--all(-a)`: apply all available upgrades, *optional*
-  - `--ignore-self(-i)`: do not upgrade nupac, *optional*
+  - `...packages`: packages to upgrade
+  - `--all(-a)`: apply all available upgrades
+  - `--ignore-self(-i)`: do not upgrade nupac *optional*
   - `--long(-l):`: display long package descriptions instead of short ones *optional*
 
+- `nuspac unuse`: *Removes provided set of packages or all of them from the nu-pkgs.nu file*
+  - `...packages`: packages to remove from nu-pkgs.nu
+  - `--all(-a)`: remove all installed packages from nu-pkgs.nu (except for nupac)
+  - `--self(-s)`: remove nupac from nu-pkgs.nu
+
 - `nupac use`: *Adds provided set of packages or all of them to nu-pkgs.nu*
+  - `...packages`: packages to use
+  -  `--all(-a)`: use all installed packages
 
 - `nupac version`: *Displays verbose nupac version with all its metadata*
 

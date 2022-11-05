@@ -402,7 +402,7 @@ export def "nupac remove" [
 # Searches remote repository for packages matching query with name, descriptions or keywords
 export def "nupac search" [
     query: string
-    --all(-a): bool # display also packages unsupported by your operating system
+    --all(-a): bool # display also packages unsupported by the operating system
     --long(-l): bool # display long package descriptions instead of short ones
     #
     # Examples:
@@ -410,7 +410,7 @@ export def "nupac search" [
     # Search for package named example
     #> nupac search example
     #
-    # Search for package named example and display also packages unsupported by your OS
+    # Search for package named example and display also packages unsupported by the OS
     #> nupac search example --all
 ] {
     mkdir (nupac-path)
@@ -486,6 +486,45 @@ export def "nupac upgrade" [
                 upgrade-package $package
             }
         }
+    }
+}
+
+# Removes provided set of packages or all of them from the nu-pkgs.nu file
+export def "nupac unuse" [
+    ...packages: string # packages to remove from nu-pkgs.nu
+    --all(-a): bool # remove all installed packages from nu-pkgs.nu (except for nupac)
+    --self(-s): bool # remove nupac from nu-pkgs.nu
+] {
+    let all_packages = ( if $self {
+            get-packages --all
+        } else {
+            (get-packages --all)
+            |where $it.name != "nupac"
+        }
+    )
+
+    let not_found = (
+        $packages
+        |where $it not-in ($all_packages|get name)
+    )
+
+    if not ($not_found|is-empty) {
+        print $not_found
+        error make --unspanned {
+            msg: "The listed packages are not installed by nupac"
+        }
+    }
+
+    let to_unuse = (if $all {
+            $all_packages
+        } else {
+            $all_packages
+            |where $it.name in $packages
+        }
+    )
+
+    for pkg in $to_unuse {
+        remove-from-config (config-entry ((get-package-location $pkg) | into string))
     }
 }
 
