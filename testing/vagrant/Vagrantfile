@@ -15,9 +15,9 @@ opts = GetoptLong.new(
 )
 opts.ordering=(GetoptLong::REQUIRE_ORDER)
 opts.each do |opt, arg|
-	case opt
-	when '--version'
-		version = arg
+    case opt
+    when '--version'
+        version = arg
     end
 end
 
