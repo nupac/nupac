@@ -172,9 +172,11 @@ def add-to-scope [
     if (not ((nu-pkgs) | path exists)) {
         touch (nu-pkgs)
     }
+
     open (nu-pkgs)
     |lines --skip-empty
     |append $content
+    |uniq
     |str collect (char nl)
     |save (nu-pkgs)
 }
