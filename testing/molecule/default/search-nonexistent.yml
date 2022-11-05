@@ -15,4 +15,4 @@
     - name: Assert empty list was returned
       assert:
         that:
-          - "search.stdout | from_json | length == 0"
+          - "search.stdout == 'No such package found'"
