@@ -4,7 +4,7 @@
     [
       "Yethal"
     ],
-    "checksum": "403f52e4c698802974d39ec0bbe805942c55206566c2d3ed31d62fa52b41defe",
+    "checksum": "16cf2ba54087acb22516501b25de3b139fca7f1d27b415293c1ac0a1298b4908",
     "installer": "",
     "keywords":
     [
@@ -34,7 +34,7 @@
     [
       "Yethal"
     ],
-    "checksum": "9a413a37fbcc921e95cbb887e3d3c34c1c86054c57dce3faf551b8733ec2de6a",
+    "checksum": "db521635c167b4825517717c79a3c1275bd2e9c6cf844c74f4153e891bcf4406",
     "installer": "",
     "keywords":
     [
@@ -62,10 +62,10 @@
   {
     "author":
     [
-      "nupac",
+      "skelly37",
       "Yethal"
     ],
-    "checksum": "ff1101afd127f9d7d800127938852e5a733198010707b1ba8aa10ed3b9bb086b",
+    "checksum": "3bb89e4bde63a66eebcaf9fa438aba528289eca3f44063e84b6767b2287e6188",
     "installer": "",
     "keywords":
     [

@@ -63,7 +63,7 @@ def get-metadata-jsons [] {
     |get name
     |path basename
     |each {|dir|
-        ["modules" $dir "metadata.json" | str collect)]
+        ["modules" $dir "metadata.json"]
         |path join
     }
 }
@@ -75,7 +75,7 @@ get-metadata-jsons
     # otherwise the developer has to manually insert a checksum for their installer
     if ($metadata.installer|is-empty) {
         $metadata
-        |upsert checksum {open --raw ($json | str replace "(.+).json$" "$1.nu") | hash sha256}
+        |upsert checksum {open --raw ($json | str replace "metadata.json" (($metadata.name | into string) + ".nu")) | hash sha256}
         |sort
         |save $json
     }
