@@ -24,7 +24,7 @@ Each command has its own help accessible with one of these standard, interchange
 
 - `nupac refresh`: *Refreshes the repo cache*
 
-- `nupac remove`: *Removes provided set of packages and removes use statement from config.nu*
+- `nupac remove`: *Removes provided set of packages and removes use statement from nu-pkgs.nu*
   - `...packages`: packages you want to remove
 
 - `nupac search`: *Searches remote repository for packages matching query with name, descriptions or keywords*
@@ -37,7 +37,11 @@ Each command has its own help accessible with one of these standard, interchange
   - `--all(-a)`: apply all available upgrades, *optional*
   - `--ignore-self(-i)`: do not upgrade nupac, *optional*
   - `--long(-l):`: display long package descriptions instead of short ones *optional*
+
+- `nupac use`: *Adds provided set of packages or all of them to nu-pkgs.nu*
+
 - `nupac version`: *Displays verbose nupac version with all its metadata*
+
 ## Enviromental variables
 Simple nupac config, just declare the specific variable in your env, if you want to override the default value.
 

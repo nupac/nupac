@@ -510,7 +510,15 @@ export def "nupac upgrade" [
     }
 }
 
-# displays nupac's version
+# Adds provided set of packages or all of them to the nu-pkgs.nu file
+export def "nupac use" [
+    ...packages: string # packages to use
+    --all(-a): bool # use all installed packages
+] {
+    print "WIP"
+}
+
+# Displays verbose nupac version with all its metadata
 export def "nupac version" [] {
     mkdir (nupac-path)
     get-metadata "nupac"
