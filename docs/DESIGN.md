@@ -50,8 +50,6 @@ Simple nupac config, just declare the specific variable in your env, if you want
   - If not declared, scripts directory in nushell's config directory will be used
 - `$env.NUPAC_IGNOREPKG`: *A list of scripts names excluded from the install/upgrade process*
   - If not declared, no script will be excluded from the install/upgrade process
-- `$env.NUPAC_IGNORE_SELF`: *If true, nupac won't upgrade itself*
-  - If not declared, nupac will act as if it's false and it will upgrade itself when needed
 - `$env.NUPAC_NO_CONFIRM`: *If true, the user won't be prompted whether they want to proceed with the action*
   - If not declared, nupac will act as if it's false and it will prompt for a confirmation
 - `$env.NUPAC_USE_LONG_DESC`: *If true, nupac will display long package descriptions*
