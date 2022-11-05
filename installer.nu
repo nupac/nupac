@@ -7,7 +7,7 @@ let noconfirm = ($env|get --ignore-errors NUPAC_NO_CONFIRM|default false|into bo
 
 let nupac_repo_cache = $"https://raw.githubusercontent.com/skelly37/nupac/($default_branch)/repo-cache.json"
 let nupac_module = $"https://raw.githubusercontent.com/skelly37/nupac/($default_branch)/modules/nupac/nupac.nu"
-let nupac_json = $"https://raw.githubusercontent.com/skelly37/nupac/($default_branch)/modules/nupac/nupac.json"
+let nupac_json = $"https://raw.githubusercontent.com/skelly37/nupac/($default_branch)/modules/nupac/metadata.json"
 
 let nupac_base_path = (
     $env
@@ -44,7 +44,7 @@ let nupac_script_path = (
 
 let nupac_json_path = (
     $nupac_module_path
-    |path join 'nupac.json'
+    |path join 'metadata.json'
 )
 
 mkdir $nupac_module_path

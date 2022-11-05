@@ -64,7 +64,7 @@ def get-metadata [
     package_name: string
 ] {
     open (
-        [(packages-path) $package_name ($package_name + ".json")]
+        [(packages-path) $package_name "metadata.json"]
         |path join
     )
 }
@@ -225,8 +225,8 @@ def install-package [
     mkdir (get-package-parent $package| into string)
     fetch ($package.raw-url | into string)
     |save (get-package-location $package | into string)
-    fetch ($package.raw-url | into string | str replace --string ".nu" ".json")
-    |save (get-package-location $package | into string | str replace --string ".nu" ".json")
+    fetch ($package.raw-url | into string | str replace --string ($package.name ".nu") "metadata.json")
+    |save (get-package-location $package | into string | str replace --string ($package.name ".nu") "metadata.json")
 
 # TODO:
 # 1) compare json sha256 with the one in repo
