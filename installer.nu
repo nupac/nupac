@@ -72,7 +72,7 @@ let actual_json_hash = (
 if ($expected_json_hash != $actual_json_hash) {
     print $"Expected: ($expected_json_hash)"
     print $"Actual:   ($actual_json_hash)"
-    rm -r (scripts_path)
+    rm -r $nupac_base_path
     error make --unspanned {msg: "nupac json checksum mismatch"}
 }
 
@@ -89,7 +89,7 @@ let actual_nupac_hash = (
 if ($expected_nupac_hash != $actual_nupac_hash) {
     print $"Expected: ($expected_nupac_hash)"
     print $"Actual:   ($actual_nupac_hash)"
-    rm -r (scripts_path)
+    rm -r $nupac_base_path
     error make --unspanned {msg: "nupac checksum mismatch"}
 }
 

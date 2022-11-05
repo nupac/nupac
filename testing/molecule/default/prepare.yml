@@ -38,7 +38,7 @@
             path: "{{ nupac_dir }}/{{ item }}"
           loop:
             - packages/nupac/nupac.nu
-            - packages/nupac/nupac.json
+            - packages/nupac/metadata.json
             - nu-pkgs.nu
             - repo-cache.json
           register: files
