@@ -12,7 +12,7 @@
         executable: "{{ nu }}"
       register: search
 
-    - name: Assert empty list was returned
+    - name: Assert user was prompted about lack of the package
       assert:
         that:
-          - "search.stdout == 'No such package found'"
+          - "'No such package found' in search.stdout"
