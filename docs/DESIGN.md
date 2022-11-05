@@ -32,10 +32,11 @@ Each command has its own help accessible with one of these standard, interchange
   - `--all(-a)`: display also packages unsupported by your operating system
   - `--long(-l):`: display long package descriptions instead of short ones *optional*
 
+- `nupac self-upgrade`: *Installs the latest version of nupac (either upgrade or re-install)*
+
 - `nupac upgrade`: *Upgrades all or selected packages*
   - `...packages`: packages you want to upgrade
   - `--all(-a)`: apply all available upgrades, *optional*
-  - `--ignore-self(-i)`: do not upgrade nupac, *optional*
   - `--long(-l):`: display long package descriptions instead of short ones *optional*
 - `nupac version`: *Displays verbose nupac version with all its metadata*
 ## Enviroment variables
@@ -43,6 +44,8 @@ Simple nupac config, just declare the specific variable in your env, if you want
 
 - `$env.NUPAC_ADD_TO_SCRIPTS_LIST`: *If true, the scripts will be added to the aggregated list of nu scripts*
   - If not declared, nupac will act as if it's false and it will not add them to the list of scripts to maintain
+- `$env.NUPAC_DEFAULT_BRANCH`: *Name of branch in the https://github.com/nupac/nupac repository to fetch nupac from*
+  - If not declared, nupac will use the `main` branch
 - `$env.NUPAC_DEFAULT_LIB_DIR`: *A directory where nupac installs files and looks for them*
   - If not declared, scripts directory in nushell's config directory will be used
 - `$env.NUPAC_IGNOREPKG`: *A list of scripts names excluded from the install/upgrade process*
