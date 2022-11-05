@@ -1,7 +1,7 @@
 #!/usr/bin/env nu
 
 # used to install nupac from PR branch on CI/CD
-let default_branch = ($env|get --ignore-errors NUPAC_DEFAULT_BRANCH|default "refactor/metadata-jsons")
+let default_branch = ($env|get --ignore-errors NUPAC_DEFAULT_BRANCH|default "main")
 
 let noconfirm = ($env|get --ignore-errors NUPAC_NO_CONFIRM|default false|into bool)
 
