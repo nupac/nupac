@@ -38,7 +38,7 @@ Each command has its own help accessible with one of these standard, interchange
   - `--ignore-self(-i)`: do not upgrade nupac, *optional*
   - `--long(-l):`: display long package descriptions instead of short ones *optional*
 - `nupac version`: *Displays verbose nupac version with all its metadata*
-## Enviromental variables
+## Enviroment variables
 Simple nupac config, just declare the specific variable in your env, if you want to override the default value.
 
 - `$env.NUPAC_ADD_TO_SCRIPTS_LIST`: *If true, the scripts will be added to the aggregated list of nu scripts*
@@ -59,5 +59,5 @@ Simple nupac config, just declare the specific variable in your env, if you want
 - each package must have a following directory: **/modules/<package_name>**
 - in each such directory there have to be:
   - **<package_name>.nu**: the *main* source code
-  - **<package_name>.json**: the package metadata
+  - **metadata.json**: the package metadata
 - furthermore, additional files are allowed (but they are not supported by nupac in any way)

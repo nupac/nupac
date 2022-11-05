@@ -24,9 +24,9 @@
     ],
     "post-install-msg": "",
     "pre-install-msg": "",
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/make/make.nu",
+    "raw-url": "https://raw.githubusercontent.com/nupac/nupac/main/modules/make/make.nu",
     "short-desc": "makefile completions for nu",
-    "url": "https://github.com/skelly37/nupac/blob/main/modules/make/make.nu",
+    "url": "https://github.com/nupac/nupac/blob/main/modules/make/make.nu",
     "version": "1.0.0"
   },
   {
@@ -54,15 +54,15 @@
     ],
     "post-install-msg": "",
     "pre-install-msg": "",
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/remoting/remoting.nu",
+    "raw-url": "https://raw.githubusercontent.com/nupac/nupac/main/modules/remoting/remoting.nu",
     "short-desc": "Remoting module for nu",
-    "url": "https://github.com/skelly37/nupac/blob/main/modules/remoting/remoting.nu",
+    "url": "https://github.com/nupac/nupac/blob/main/modules/remoting/remoting.nu",
     "version": "1.0.0"
   },
   {
     "author":
     [
-      "skelly37",
+      "nupac",
       "Yethal"
     ],
     "checksum": "ff1101afd127f9d7d800127938852e5a733198010707b1ba8aa10ed3b9bb086b",
@@ -74,7 +74,7 @@
       "management",
       "manager"
     ],
-    "long-desc": "Nupac is a package manager written in nu and for nu. Source on https://github.com/skelly37/nupac",
+    "long-desc": "Nupac is a package manager written in nu and for nu. Source on https://github.com/nupac/nupac",
     "name": "nupac",
     "nu-dependencies": [],
     "os":
@@ -86,9 +86,9 @@
     ],
     "post-install-msg": "",
     "pre-install-msg": "",
-    "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac/nupac.nu",
+    "raw-url": "https://raw.githubusercontent.com/nupac/nupac/main/modules/nupac/nupac.nu",
     "short-desc": "package manager for nushell",
-    "url": "https://github.com/skelly37/nupac/blob/main/modules/nupac/nupac.nu",
+    "url": "https://github.com/nupac/nupac/blob/main/modules/nupac/nupac.nu",
     "version": "0.1.0"
   }
 ]

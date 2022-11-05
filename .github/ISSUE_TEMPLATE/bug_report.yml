@@ -64,13 +64,13 @@ body:
         > nupac version | transpose key value | to md --pretty
         | key        | value                                                                                             |
         | ---------- | ----------------------------------------------------------------------                            |
-        | long-desc  | Nupac is a package manager written in nu and for nu. Source on https://github.com/skelly37/nupac  |
+        | long-desc  | Nupac is a package manager written in nu and for nu. Source on https://github.com/nupac/nupac  |
         | keywords   | [package|management]                                                                              |
         | author     | [skelly37|Yethal]                                                                                 |
-        | raw-url    | https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac.nu                            |
+        | raw-url    | https://raw.githubusercontent.com/nupac/nupac/main/modules/nupac.nu                            |
         | name       | nupac                                                                                             |
         | os         | [android|linux|macos|windows]                                                                     |
-        | url        | https://github.com/skelly37/nupac/blob/main/modules/nupac.nu                                      |
+        | url        | https://github.com/nupac/nupac/blob/main/modules/nupac.nu                                      |
         | short-desc | package manager for nushell                                                                       |
         | version    | 0.1.0                                                                                             |
     validations:

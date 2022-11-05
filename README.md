@@ -2,13 +2,13 @@
 Nu package manager written entirely in nu
 
 ## Current status:
-**Working on [0.1.0 pre-release](https://github.com/skelly37/nupac/milestone/1)**
+**Working on [0.1.0 pre-release](https://github.com/nupac/nupac/milestone/1)**
 
 ## Installation
 ### Requirements
 - `nushell` 0.69.1 (behavior & keywords tend to vary between versions so using nupac on version that differs from ours might result in unexpected behavior)
 
-In order to install nupac on your machine run this short snippet in nushell: `nu -c (fetch https://raw.githubusercontent.com/skelly37/nupac/master/installer.nu)`
+In order to install nupac on your machine run this short snippet in nushell: `nu -c (fetch https://raw.githubusercontent.com/nupac/nupac/master/installer.nu)`
 Alternatively you can download the installer script and run it manually
 
 ## Design Doc

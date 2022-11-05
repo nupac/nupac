@@ -13,7 +13,7 @@
     "management",
     "manager"
   ],
-  "long-desc": "Nupac is a package manager written in nu and for nu. Source on https://github.com/skelly37/nupac",
+  "long-desc": "Nupac is a package manager written in nu and for nu. Source on https://github.com/nupac/nupac",
   "name": "nupac",
   "nu-dependencies": [],
   "os":
@@ -25,8 +25,8 @@
   ],
   "post-install-msg": "",
   "pre-install-msg": "",
-  "raw-url": "https://raw.githubusercontent.com/skelly37/nupac/main/modules/nupac/nupac.nu",
+  "raw-url": "https://raw.githubusercontent.com/nupac/nupac/main/modules/nupac/nupac.nu",
   "short-desc": "package manager for nushell",
-  "url": "https://github.com/skelly37/nupac/blob/main/modules/nupac/nupac.nu",
+  "url": "https://github.com/nupac/nupac/blob/main/modules/nupac/nupac.nu",
   "version": "0.1.0"
 }

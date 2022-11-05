@@ -5,9 +5,9 @@ let default_branch = ($env|get --ignore-errors NUPAC_DEFAULT_BRANCH|default "mai
 
 let noconfirm = ($env|get --ignore-errors NUPAC_NO_CONFIRM|default false|into bool)
 
-let nupac_repo_cache = $"https://raw.githubusercontent.com/skelly37/nupac/($default_branch)/repo-cache.json"
-let nupac_module = $"https://raw.githubusercontent.com/skelly37/nupac/($default_branch)/modules/nupac/nupac.nu"
-let nupac_json = $"https://raw.githubusercontent.com/skelly37/nupac/($default_branch)/modules/nupac/metadata.json"
+let nupac_repo_cache = $"https://raw.githubusercontent.com/nupac/nupac/($default_branch)/repo-cache.json"
+let nupac_module = $"https://raw.githubusercontent.com/nupac/nupac/($default_branch)/modules/nupac/nupac.nu"
+let nupac_json = $"https://raw.githubusercontent.com/nupac/nupac/($default_branch)/modules/nupac/metadata.json"
 
 let nupac_base_path = (
     $env
