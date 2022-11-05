@@ -456,7 +456,7 @@ export def "nupac search" [
 
 # Installs the latest version of nupac (either upgrade or re-install)
 export def "nupac self-upgrade" [] {
-    let default_branch = ($env|get --ignore-errors NUPAC_DEFAULT_BRANCH|default "refactor/metadata-jsons")
+    let default_branch = ($env|get --ignore-errors NUPAC_DEFAULT_BRANCH|default "main")
     let nupac_module = $"https://raw.githubusercontent.com/nupac/nupac/($default_branch)/nupac.nu"
     let nupac_json = $"https://raw.githubusercontent.com/nupac/nupac/($default_branch)/metadata.json"
 
@@ -477,7 +477,7 @@ export def "nupac self-upgrade" [] {
     fetch $nupac_module
     |save ($install_path | path join "nupac.nu")
 
-    fetch $nupac_module
+    fetch $nupac_json
     |save ($install_path | path join "metadata.json")
 
     print ("Newly installed version: " + (nupac -v | into string))
