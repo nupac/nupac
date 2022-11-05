@@ -64,5 +64,5 @@ if ($metadata.installer|is-empty) {
     $metadata
     |upsert checksum {open --raw nupac.nu | hash sha256}
     |sort
-    |save $json
+    |save "metadata.json"
 }
