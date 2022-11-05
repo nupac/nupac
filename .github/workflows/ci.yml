@@ -35,6 +35,10 @@ jobs:
         run: ./testing/linter.nu
         shell: nu {0}
 
+      - name: Update nupac's checksum
+        run: ./update-checksum.nu
+        shell: nu {0}
+        
       - name: Generate test list
         id: generate-matrix
         run: ./testing/get-testcases.nu
