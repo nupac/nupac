@@ -89,9 +89,8 @@ def packages-to-process [
         error make --unspanned {
             msg: "The listed packages cannot be installed, because OS is not supported"
         }
-    } else {
-        $packages
     }
+    $packages
 }
 
 # downloads fresh repository cache
@@ -101,13 +100,13 @@ def update-repo [] {
     fetch $"https://raw.githubusercontent.com/skelly37/nupac/($branch)/repo-cache.json"
     |save (repo)
 
-    if ($env.LAST_EXIT_CODE == 0) {
-        print "Repository cache updated successfully"
-    } else {
+    if ($env.LAST_EXIT_CODE != 0) {
         error make --unspanned {
             msg: "Could not update the repository cache"
         }
     }
+
+    print "Repository cache updated successfully"
 }
 
 # returns cached contents of nupac repo
@@ -228,17 +227,6 @@ def install-package [
     fetch ($package.raw-url | into string | str replace --string ".nu" ".json")
     |save (get-package-location $package | into string | str replace --string ".nu" ".json")
 
-# TODO:
-# 1) compare json sha256 with the one in repo
-# 2) compare nu sha256 with the one in json
-
-    #if not (verify-checksum $package) {
-    #    remove-package $package.name
-    #    error make --unspanned {
-    #      msg: "File checksum is incorrect, aborting"
-    #    }
-    #}
-
     if $add_to_scope {
         add-to-scope (config-entry ((get-package-location $package) | into string))
     }
@@ -248,21 +236,6 @@ def install-package [
         print ($package.post-install-msg | into string)
     }
 }
-# verifies whether sha checksum of the downloaded file matches the checksum in the repo cache
-#def verify-checksum [
-#    package: record
-#] {
-#    let file_checksum = (
-#        open (get-package-location $package | into string)
-#        |hash sha256
-#    )
-#    let cache_checksum = (
-#        open (repo)
-#        |where name == $package.name && short-desc == $package.short-desc
-#        |get --ignore-errors 0.checksum
-#    )
-#    $cache_checksum == $file_checksum
-#}
 
 # actual package removal happens here
 def remove-package [
@@ -294,7 +267,8 @@ def user-readable-pkg-info [
         if $long {
             "long-desc"
         } else {
-            "short-desc"}
+            "short-desc"
+        }
     )
 
     $pkgs
@@ -364,14 +338,16 @@ export def "nupac install" [
         ) $long
     ))
     if ($to_ins|is-empty) {
-        print "No packages to install"
-    } else {
-        display-action-data $to_ins "install" $long
-        if (user-approves) {
-            $to_ins
-            |each {|package|
-                install-package $package $add_to_scope
-            }
+        error make --unspanned {
+            msg: "No packages to install"
+        }
+    }
+
+    display-action-data $to_ins "install" $long
+    if (user-approves) {
+        $to_ins
+        |each {|package|
+            install-package $package $add_to_scope
         }
     }
 }
@@ -408,17 +384,17 @@ export def "nupac remove" [
     let long = (get-flag-value $long "NUPAC_USE_LONG_DESC")
 
     let to_del = (get-repo-contents | where name in $packages)
-
     if ($to_del|is-empty) {
-        print "No packages to remove"
-    } else {
-        display-action-data $to_del "remove" $long
+        error make --unspanned {
+            msg: "No packages to remove"
+        }
+    }
 
-        if (user-approves) {
-            $to_del
-            |each {|package|
-                remove-package $package
-            }
+    display-action-data $to_del "remove" $long
+    if (user-approves) {
+        $to_del
+        |each {|package|
+            remove-package $package
         }
     }
 }
@@ -445,6 +421,10 @@ export def "nupac search" [
         get-repo-contents
         |where name =~ $query or short-desc =~ $query or long-desc =~ $query or $query in keywords or $query in author
     )
+
+    if ($found|is-empty) {
+        print "No such package found"
+    }
 
     if $all {
         user-readable-pkg-info $found $long
@@ -483,29 +463,28 @@ export def "nupac upgrade" [
     let ignore_self = (get-flag-value $ignore_self "NUPAC_IGNORE_SELF")
     let long = (get-flag-value $long "NUPAC_USE_LONG_DESC")
 
-    if (($packages|length) > 0 or $all) {
-        let to_upgrade = ( packages-to-process (
-                (get-packages $packages $all)
-                |where name not-in (get-ignored)
-                |where name != (if $ignore_self {"nupac"} else {""})
-            ) $long
-        )
-
-        if ($to_upgrade|is-empty) {
-            print "No upgrades found"
-        } else {
-            display-action-data $to_upgrade "upgrade" $long
-
-            if (user-approves) {
-                $to_upgrade
-                |each {|package|
-                    upgrade-package $package
-                }
-            }
-        }
-    } else {
+    if (($packages|is-empty) and (not $all)) {
         error make --unspanned {
           msg: "Either a list of packages or --all flag must be provided"
+        }
+    }
+
+    let to_upgrade = ( packages-to-process (
+        (get-packages $packages $all)
+        |where name not-in (get-ignored)
+        |where name != (if $ignore_self {"nupac"} else {""})
+        ) $long
+    )
+
+    if ($to_upgrade|is-empty) {
+        print "No upgrades found"
+    } else {
+        display-action-data $to_upgrade "upgrade" $long
+        if (user-approves) {
+            $to_upgrade
+            |each {|package|
+                upgrade-package $package
+            }
         }
     }
 }
@@ -515,7 +494,36 @@ export def "nupac use" [
     ...packages: string # packages to use
     --all(-a): bool # use all installed packages
 ] {
-    print "WIP"
+    let all_packages = (get-packages --all)
+
+    let not_found = (
+        $packages
+        |where $it not-in ($all_packages|get name)
+    )
+
+    if not ($not_found|is-empty) {
+        print $not_found
+        error make --unspanned {
+            msg: "The listed packages are not installed by nupac"
+        }
+    }
+
+    let to_add = (if $all {
+        $all_packages
+    } else {
+        $all_packages
+        |where $it.name in $packages
+    })
+
+    for pkg in $to_add {
+        add-to-scope (config-entry ((get-package-location $pkg) | into string))
+    }
+
+    # FIXME: why does this each not work?
+    #$to_add
+    #|each{|package|
+    #    add-to-scope (config-entry ((get-package-location $package) | into string))
+    #}
 }
 
 # Displays verbose nupac version with all its metadata
