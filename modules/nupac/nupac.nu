@@ -172,9 +172,11 @@ def add-to-scope [
     if (not ((nu-pkgs) | path exists)) {
         touch (nu-pkgs)
     }
+
     open (nu-pkgs)
-    |lines -s
+    |lines --skip-empty
     |append $content
+    |uniq
     |str collect (char nl)
     |save (nu-pkgs)
 }
@@ -185,7 +187,7 @@ def remove-from-config [
 ] {
     if ((nu-pkgs) | path exists) {
         open (nu-pkgs)
-        |lines -s
+        |lines --skip-empty
         |where $it != $content
         |str collect (char nl)
         |save (nu-pkgs)
