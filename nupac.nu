@@ -96,9 +96,7 @@ def packages-to-process [
 
 # downloads fresh repository cache
 def update-repo [] {
-    let branch = ($env|get --ignore-errors "NUPAC_DEFAULT_BRANCH"|default 'main')
-
-    fetch $"https://raw.githubusercontent.com/nupac/nupac/($branch)/repo-cache.json"
+    fetch $"https://raw.githubusercontent.com/nupac/packages/main/repo-cache.json"
     |save (repo)
 
     if ($env.LAST_EXIT_CODE == 0) {
