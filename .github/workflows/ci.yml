@@ -35,10 +35,6 @@ jobs:
         run: ./testing/linter.nu
         shell: nu {0}
 
-      - name: Generate new repo cache
-        run: ./generate-repo-cache.nu
-        shell: nu {0}
-
       - name: Generate test list
         id: generate-matrix
         run: ./testing/get-testcases.nu

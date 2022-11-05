@@ -454,12 +454,39 @@ export def "nupac search" [
     )}
 }
 
+# Installs the latest version of nupac (either upgrade or re-install)
+export def "nupac self-upgrade" [] {
+    let default_branch = ($env|get --ignore-errors NUPAC_DEFAULT_BRANCH|default "refactor/metadata-jsons")
+    let nupac_module = $"https://raw.githubusercontent.com/nupac/nupac/($default_branch)/nupac.nu"
+    let nupac_json = $"https://raw.githubusercontent.com/nupac/nupac/($default_branch)/metadata.json"
+
+    let install_path = ($env
+        |get --ignore-errors "NUPAC_DEFAULT_LIB_DIR"
+        |default (
+            $nu.config-path
+            |path dirname
+            |path join "nupac"
+        )
+        |path join "packages"
+        |path join "nupac"
+    )
+
+    print "Upgrading nupac..."
+    print ("Currently installed version: " + (nupac -v | into string))
+
+    fetch $nupac_module
+    |save ($install_path | path join "nupac.nu")
+
+    fetch $nupac_module
+    |save ($install_path | path join "metadata.json")
+
+    print ("Newly installed version: " + (nupac -v | into string))
+}
 
 # Upgrades all or selected packages
 export def "nupac upgrade" [
     ...packages: string # packages to upgrade
     --all(-a): bool # upgrade all upgradeable packages
-    --ignore-self(-i): bool # do not upgrade nupac
     --long(-l): bool # display long package descriptions instead of short ones
     #
     # Examples:
@@ -473,19 +500,22 @@ export def "nupac upgrade" [
     # Upgrade all packages
     #> nupac upgrade --all
     #
-    # Upgrade all packages excluding nupac itself
-    #> nupac upgrade --all --ignore-self
 ] {
+    if ("nupac" in $packages) {
+        error make --unspanned {
+          msg: "To upgrade nupac, use: nupac self-upgrade"
+        }
+    }
+
     mkdir (nupac-path)
 
-    let ignore_self = (get-flag-value $ignore_self "NUPAC_IGNORE_SELF")
     let long = (get-flag-value $long "NUPAC_USE_LONG_DESC")
 
     if (($packages|length) > 0 or $all) {
         let to_upgrade = ( packages-to-process (
                 (get-packages $packages $all)
                 |where name not-in (get-ignored)
-                |where name != (if $ignore_self {"nupac"} else {""})
+                |where name != "nupac"
             ) $long
         )
 
