@@ -225,8 +225,8 @@ def install-package [
     mkdir (get-package-parent $package| into string)
     fetch ($package.raw-url | into string)
     |save (get-package-location $package | into string)
-    fetch ($package.raw-url | into string | str replace --string ($package.name + ".nu") "metadata.json")
-    |save (get-package-location $package | into string | str replace --string ($package.name + ".nu") "metadata.json")
+    fetch ($package.raw-url | into string | str replace --string (($package.name|into string) + ".nu") "metadata.json")
+    |save (get-package-location $package | into string | str replace --string (($package.name|into string) + ".nu") "metadata.json")
 
 # TODO:
 # 1) compare json sha256 with the one in repo
