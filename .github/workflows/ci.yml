@@ -18,7 +18,7 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
-          token: ${{ secrets.RELEASE_ACTION_TOKEN}}
+          token: ${{ secrets.RELEASE_ACTION_TOKEN }}
 
       - name: Setup Nu
         uses: hustcer/setup-nu@v2

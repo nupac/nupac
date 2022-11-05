@@ -1,9 +1,8 @@
 # Description
-
-*description of your pull request here*
+[//]: # (*description of your pull request here*)
 
 # Contributor's checklist
-Please mark as done everything appliable to the current state of your PR
+[//]: # (*Please mark as done everything appliable to the current state of your PR*)
 
 ## General
 - [ ] Newer functionality got documented (if needed, e.g. a new nupac enviroment variable)
@@ -22,5 +21,5 @@ Please mark as done everything appliable to the current state of your PR
 - [ ] The script has proper file permissions (Run `chmod +x` on the file before push)
 
 # Additional context
+[//]: # (*do you have some questions, need some help or anything else?**)
 
-*do you have some questions, need some help or anything else?*
