@@ -27,7 +27,7 @@
       register: nupkgs
 
     - name: Get nushell scope
-      raw: "$nu.scope.commands|get command|to json"
+      raw: "$nu.scope.commands|get name|to json"
       args:
         executable: "{{ nu }}"
       register: scope
