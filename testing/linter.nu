@@ -1,14 +1,24 @@
 #!/usr/bin/env nu
-ls **/*.nu
-|insert lint {|file|
-    if 'modules' in ($file.name|path dirname) {
-        nu-check --as-module $file.name
-    } else {
-        nu-check $file.name
+
+let files = (ls -f **/*.nu | get name)
+$files
+
+let statuses = (
+    $files
+    | each { |file|
+        print -n ""
+        if "modules" in ($file|path dirname) {     
+            nu-check --as-module $file
+        } else {
+            nu-check $file
+        }
     }
-}
-|if not ($in|all lint) {
+)
+
+$statuses
+
+if ($statuses | any {|status| $status == false}) {
     error make --unspanned {
-        msg: $"Following files failed linter check: ($in|where not lint|get name|str collect ', ')"
+        msg: "nu-check failed on some files"
     }
 }
