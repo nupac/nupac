@@ -23,7 +23,7 @@ jobs:
       - name: Setup Nu
         uses: hustcer/setup-nu@v2
         with:
-          version: '0.69.1'
+          version: '0.73.0'
 
       - name: Setup Python 3
         uses: actions/setup-python@v4
