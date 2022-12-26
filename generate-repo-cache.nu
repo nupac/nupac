@@ -77,7 +77,7 @@ get-metadata-jsons
         $metadata
         |upsert checksum {open --raw ($json | str replace "(.+).json$" "$1.nu") | hash sha256}
         |sort
-        |save $json
+        |save --force $json
     }
 
     $metadata
@@ -85,4 +85,4 @@ get-metadata-jsons
     |upsert checksum {open --raw $json | hash sha256}
 }
 |sort
-|save repo-cache.json
+|save --force repo-cache.json
