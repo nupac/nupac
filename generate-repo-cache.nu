@@ -63,8 +63,9 @@ def get-metadata-jsons [] {
     |get name
     |path basename
     |each {|dir|
-        ["modules" $dir ([$dir ".json"] | str collect)]
-        |path join
+        let path_segments = [ "modules" $dir $"($dir).json" ]
+        print ($path_segments | path join | into string)
+        echo ($path_segments | path join | into string)
     }
 }
 
