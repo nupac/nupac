@@ -99,7 +99,7 @@ def update-repo [] {
     let branch = ($env|get --ignore-errors "NUPAC_DEFAULT_BRANCH"|default 'main')
 
     fetch $"https://raw.githubusercontent.com/skelly37/nupac/($branch)/repo-cache.json"
-    |save (repo)
+    |save --force (repo)
 
     if ($env.LAST_EXIT_CODE == 0) {
         print "Repository cache updated successfully"
@@ -178,7 +178,7 @@ def add-to-scope [
     |append $content
     |uniq
     |str collect (char nl)
-    |save (nu-pkgs)
+    |save --force (nu-pkgs)
 }
 
 # removes use statement from config on package removal
@@ -190,7 +190,7 @@ def remove-from-config [
         |lines --skip-empty
         |where $it != $content
         |str collect (char nl)
-        |save (nu-pkgs)
+        |save --force (nu-pkgs)
     }
 }
 
@@ -224,9 +224,9 @@ def install-package [
     (get-package-location $package | into string)
     mkdir (get-package-parent $package| into string)
     fetch ($package.raw-url | into string)
-    |save (get-package-location $package | into string)
+    |save --force (get-package-location $package | into string)
     fetch ($package.raw-url | into string | str replace --string ".nu" ".json")
-    |save (get-package-location $package | into string | str replace --string ".nu" ".json")
+    |save --force (get-package-location $package | into string | str replace --string ".nu" ".json")
 
 # TODO:
 # 1) compare json sha256 with the one in repo
