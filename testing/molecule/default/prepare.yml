@@ -5,6 +5,8 @@
   gather_facts: true
   become: false
   vars:
+    nu_users:
+      - root
     version_regex: '^([1-9]\d*|0)(\.(([1-9]\d*)|0)){2}$'
     command_list:
       - nupac install
