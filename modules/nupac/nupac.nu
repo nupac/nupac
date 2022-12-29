@@ -99,7 +99,7 @@ def update-repo [] {
     let branch = ($env|get --ignore-errors "NUPAC_DEFAULT_BRANCH"|default 'main')
 
     fetch $"https://raw.githubusercontent.com/skelly37/nupac/($branch)/repo-cache.json"
-    |save (repo)
+    |save --force (repo)
 
     if ($env.LAST_EXIT_CODE == 0) {
         print "Repository cache updated successfully"
@@ -178,7 +178,7 @@ def add-to-scope [
     |append $content
     |uniq
     |str collect (char nl)
-    |save (nu-pkgs)
+    |save --force (nu-pkgs)
 }
 
 # removes use statement from config on package removal
@@ -190,7 +190,7 @@ def remove-from-config [
         |lines --skip-empty
         |where $it != $content
         |str collect (char nl)
-        |save (nu-pkgs)
+        |save --force (nu-pkgs)
     }
 }
 
@@ -224,9 +224,9 @@ def install-package [
     (get-package-location $package | into string)
     mkdir (get-package-parent $package| into string)
     fetch ($package.raw-url | into string)
-    |save (get-package-location $package | into string)
+    |save --force (get-package-location $package | into string)
     fetch ($package.raw-url | into string | str replace --string ".nu" ".json")
-    |save (get-package-location $package | into string | str replace --string ".nu" ".json")
+    |save --force (get-package-location $package | into string | str replace --string ".nu" ".json")
 
 # TODO:
 # 1) compare json sha256 with the one in repo
@@ -309,14 +309,16 @@ def display-action-data [
     action: string
     long: bool
 ] {
-    let action = if ($action|str ends-with "e") {
-        $action
-    } else {
-        $action + "e"
-    }
+    if not ($pkgs|is-empty) {
+        let action = if ($action ends-with "e") {
+            $action
+        } else {
+            $action + "e"
+        }
 
-    print (user-readable-pkg-info $pkgs $long)
-    print ($"The listed packages will be ($action)d")
+        print (user-readable-pkg-info $pkgs $long)
+        print ($"The listed packages will be ($action)d")
+    }
 }
 
 # Nushell package manager
@@ -339,6 +341,8 @@ export def "nupac install" [
     ...packages: string # packages to install
     --add-to-scope(-a): bool # add packages to config
     --long(-l): bool # display long package descriptions instead of short ones
+    --noreinstall(-r): bool # skip installed packages that are up to date
+    --noupgrade(-u): bool # skip installed & outdated packages
     #
     # Examples:
     #
@@ -356,19 +360,62 @@ export def "nupac install" [
     let add_to_scope = (get-flag-value $add_to_scope "NUPAC_ADD_TO_SCRIPTS_LIST")
     let long = (get-flag-value $long "NUPAC_USE_LONG_DESC")
 
-    let to_ins = ((
+    let to_ins = (
         packages-to-process (
             get-repo-contents
             |where name in $packages
             |where name not-in (get-ignored)
         ) $long
-    ))
+    )
+
     if ($to_ins|is-empty) {
         print "No packages to install"
     } else {
-        display-action-data $to_ins "install" $long
-        if (user-approves) {
+        let packages_list = (nupac list)
+
+        let new = (
             $to_ins
+            |where name not-in $packages_list.name
+        )
+
+        let up_to_date = if (get-flag-value $noreinstall "NUPAC_INSTALL_NOREINSTALL") {
+            []
+        } else {
+            (
+                $to_ins
+                |where name in $packages_list.name
+                |each { |item|
+                    if ($item.version == (nupac list | where name == $item.name | get version.0)) { $item }
+                }
+            )
+        }
+
+        let outdated = if (get-flag-value $noupgrade "NUPAC_INSTALL_NOUPGRADE") {
+            []
+        } else {
+            (
+                $to_ins
+                |where $it not-in $new
+                |each { |item|
+                    let local_data = (nupac list| where name == $item.name)
+
+                    if ($item.version != $local_data.version.0) {
+                        $item
+                        |upsert version $local_data.version.0
+                        |upsert author ($local_data | get "author(s)" | get 0)
+                        |upsert os ($local_data | get "supported OS" | get 0)
+                        |upsert short-desc $local_data.description.0
+                        |upsert long-desc (nupac list --long | where name == $item.name | get description.0)
+                    }
+                }
+            )
+        }
+
+        display-action-data $outdated "upgrade" $long
+        display-action-data $up_to_date "reinstall" $long
+        display-action-data $new "install" $long
+        if (user-approves) {
+            ($new | append $outdated | append $up_to_date)
             |each {|package|
                 install-package $package $add_to_scope
             }

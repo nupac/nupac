@@ -27,7 +27,7 @@
       register: nupkgs
 
     - name: Get nushell scope
-      raw: "$nu.scope.commands|get command|to json"
+      raw: "$nu.scope.commands|get name|to json"
       args:
         executable: "{{ nu }}"
       register: scope
@@ -39,3 +39,14 @@
           - package_metadata_state.stat.exists
           - "'{{ package }}' not in {{ scope.stdout | from_json }}"
           - "'use packages/{{ package }}/{{ package }}.nu * # added automatically by nupac' not in {{ nupkgs['content'] | b64decode | split('\n') }}"
+
+    - name: Install nupac once again
+      raw: "nupac install {{ package }}"
+      args:
+        executable: "{{ nu }}"
+      register: second_output
+
+    - name: Assert nupac prompts while reinstalling a package
+      assert:
+        that:
+          - "'will be reinstalled' in second_output.stdout"
