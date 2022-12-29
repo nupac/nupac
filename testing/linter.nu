@@ -3,7 +3,7 @@
 let invalid_files = (
     ls -f **/*.nu
     | select name
-    | insert lint-status {|file| 
+    | insert lint-status {|file|
         if 'modules' in ($file.name|path dirname) {
             nu-check --as-module $file.name
         } else {
