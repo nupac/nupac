@@ -106,7 +106,7 @@ if not ($nu_pkgs|path exists) {
         |lines
         |append $"source ($nu_pkgs)"
         |str collect (char nl)
-        |save $nu.config-path
+        |save --force $nu.config-path
     } else {
         print 'You will have to source the nu-pkgs file manually'
     }
