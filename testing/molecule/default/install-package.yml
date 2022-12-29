@@ -41,7 +41,7 @@
           - "'use packages/{{ package }}/{{ package }}.nu * # added automatically by nupac' not in {{ nupkgs['content'] | b64decode | split('\n') }}"
 
     - name: Install nupac once again
-      raw: "nupac install {{ package }} | to json"
+      raw: "nupac install {{ package }}"
       args:
         executable: "{{ nu }}"
       register: second_output
@@ -49,4 +49,4 @@
     - name: Assert nupac prompts while reinstalling a package
       assert:
         that:
-          - "'will be reinstalled' in {{ second_output.stdout | from_json }}"
+          - "'will be reinstalled' in {{ second_output.stdout }}"
