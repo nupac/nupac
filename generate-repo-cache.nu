@@ -46,7 +46,7 @@ def add-optional-attributes [
 ] {
     let attr = (
         $DEFAULT_ATTRIBUTES
-        |merge {$metadata}
+        |merge $metadata
     )
 
     if "long-desc" not-in ($attr|columns) {
@@ -64,7 +64,6 @@ def get-metadata-jsons [] {
     |path basename
     |each {|dir|
         let path_segments = [ "modules" $dir $"($dir).json" ]
-        print ($path_segments | path join | into string)
         echo ($path_segments | path join | into string)
     }
 }
