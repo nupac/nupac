@@ -49,4 +49,4 @@
     - name: Assert nupac prompts while reinstalling a package
       assert:
         that:
-          - "'will be reinstalled' in {{ second_output.stdout | from json }}"
+          - "'will be reinstalled' in {{ second_output.stdout }}"
