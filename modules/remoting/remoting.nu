@@ -78,7 +78,7 @@ export def "ssh script" [
 ] {
     let span = (metadata $script).span
     if $hostname in ("nu-complete nu") {
-        if $script in ($nu.scope.commands|where is_custom|get command) {
+        if $script in ($nu.scope.commands|where is_custom|get name) {
         let host = (hosts|where name == $hostname|get 0)
         let full_command = (build-string (view-source $script) '; ' $script ' ' ($args|str collect ' ') '|to json -r')
         ^ssh (get-url $host) ($full_command)|from json
