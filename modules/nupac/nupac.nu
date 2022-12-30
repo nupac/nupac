@@ -351,53 +351,52 @@ export def "nupac install" [
 
     let packages_list = (nupac list)
 
-            let new = (
-                $to_ins
-                |where name not-in $packages_list.name
-            )
+    let new = (
+        $to_ins
+        |where name not-in $packages_list.name
+    )
 
-            let up_to_date = if (get-flag-value $noreinstall "NUPAC_INSTALL_NOREINSTALL") {
-                []
-            } else {
-                (
-                    $to_ins
-                    |where name in $packages_list.name
-                    |each { |item|
-                        if ($item.version == (nupac list | where name == $item.name | get version.0)) { $item }
-                    }
-                )
+    let up_to_date = if (get-flag-value $noreinstall "NUPAC_INSTALL_NOREINSTALL") {
+        []
+    } else {(
+        $to_ins
+        |where name in $packages_list.name
+        |each { |item|
+            if ($item.version == (nupac list | where name == $item.name | get version.0)) { $item }
+        })
+    }
+
+    let outdated = if (get-flag-value $noupgrade "NUPAC_INSTALL_NOUPGRADE") {
+        []
+    } else {(
+        $to_ins
+        |where $it not-in $new
+        |each { |item|
+            let local_data = (nupac list| where name == $item.name)
+
+            if ($item.version != $local_data.version.0) {
+                $item
+                |upsert version $local_data.version.0
+                |upsert author ($local_data | get "author(s)" | get 0)
+                |upsert os ($local_data | get "supported OS" | get 0)
+                |upsert short-desc $local_data.description.0
+                |upsert long-desc (nupac list --long | where name == $item.name | get description.0)
             }
-
-            let outdated = if (get-flag-value $noupgrade "NUPAC_INSTALL_NOUPGRADE") {
-                []
-            } else {
-                (
-                    $to_ins
-                    |where $it not-in $new
-                    |each { |item|
-                        let local_data = (nupac list| where name == $item.name)
-
-                        if ($item.version != $local_data.version.0) {
-                            $item
-                            |upsert version $local_data.version.0
-                            |upsert author ($local_data | get "author(s)" | get 0)
-                            |upsert os ($local_data | get "supported OS" | get 0)
-                            |upsert short-desc $local_data.description.0
-                            |upsert long-desc (nupac list --long | where name == $item.name | get description.0)
-                        }
-                    }
-                )
-            }
+        })
+    }
 
     display-action-data $outdated "upgrade" $long
     display-action-data $up_to_date "reinstall" $long
     display-action-data $new "install" $long
 
     if (user-approves) {
-                ($new | append $outdated | append $up_to_date)
-                |each {|package|
-                    install-package $package $add_to_scope
-                }
+        (
+            $new
+            |append $outdated
+            |append $up_to_date
+        )
+        |each {|package|
+            install-package $package $add_to_scope
         }
     }
 }
