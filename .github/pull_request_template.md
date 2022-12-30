@@ -21,5 +21,4 @@
 - [ ] The script has proper file permissions (Run `chmod +x` on the file before push)
 
 # Additional context
-[//]: # (*do you have some questions, need some help or anything else?**)
-
+[//]: # (*do you have some questions, need some help or anything else?*)

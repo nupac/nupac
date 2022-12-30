@@ -18,6 +18,8 @@ Each command has its own help accessible with one of these standard, interchange
   - `...packages`: packages to install
   - `--add-to-scope(-a)`: add packages to global scope *optional*
   - `--long(-l):`: display long package descriptions instead of short ones *optional*
+  - `--noreinstall(-r)`: skip installed packages that are up to date
+  - `--noupgrade(-u)`: skip installed & outdated packages
 
 - `nupac list`: *Lists installed nu packages*
   - `--long(-l):`: display long package descriptions instead of short ones *optional*
@@ -64,6 +66,10 @@ Simple nupac config, just declare the specific variable in your env, if you want
   - If not declared, nupac will act as if it's false and it will prompt for a confirmation
 - `$env.NUPAC_USE_LONG_DESC`: *If true, nupac will display long package descriptions*
   - If not declared, nupac will use short package descriptions
+- `$env.NUPAC_INSTALL_NOUPGRADE`: *If true, `nupac install` will skip installed & outdated packages*
+  - If not declared, `nupac install` will upgrade installed & outdated packages
+- `$env.NUPAC_INSTALL_NOREINSTALL`: *If true, `nupac install` will skip installed packages that are up to date*
+  - If not declared, `nupac install` will reinstall installed packages that are up to date
 
 ## Packages paths structure
 

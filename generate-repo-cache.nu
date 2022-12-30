@@ -46,7 +46,7 @@ def add-optional-attributes [
 ] {
     let attr = (
         $DEFAULT_ATTRIBUTES
-        |merge {$metadata}
+        |merge $metadata
     )
 
     if "long-desc" not-in ($attr|columns) {
@@ -63,8 +63,8 @@ def get-metadata-jsons [] {
     |get name
     |path basename
     |each {|dir|
-        ["modules" $dir ([$dir ".json"] | str collect)]
-        |path join
+        let path_segments = [ "modules" $dir $"($dir).json" ]
+        echo ($path_segments | path join | into string)
     }
 }
 
@@ -77,7 +77,7 @@ get-metadata-jsons
         $metadata
         |upsert checksum {open --raw ($json | str replace "(.+).json$" "$1.nu") | hash sha256}
         |sort
-        |save $json
+        |save --force $json
     }
 
     $metadata
@@ -85,4 +85,4 @@ get-metadata-jsons
     |upsert checksum {open --raw $json | hash sha256}
 }
 |sort
-|save repo-cache.json
+|save --force repo-cache.json
