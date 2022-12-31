@@ -3,34 +3,23 @@
   hosts: all
   become: false
   vars:
-    packagefirst: make
-    packagesecond: remoting
+    package: make
 
   tasks:
     - name: Install packages
-      raw: "nupac install {{ packagefirst }} {{ packagesecond }}"
+      raw: "nupac install {{ package }}"
       args:
         executable: "{{ nu }}"
 
-    - name: Stat {{ packagefirst }}.nu
+    - name: Stat {{ package }}.nu
       stat:
-        path: "{{ nupac_dir }}/packages/{{ packagefirst }}/{{ packagefirst }}.nu"
-      register: packagefirst_state
+        path: "{{ nupac_dir }}/packages/{{ package }}/{{ package }}.nu"
+      register: package_state
 
-    - name: Stat {{ packagefirst }}.json
+    - name: Stat {{ package }}.json
       stat:
-        path: "{{ nupac_dir }}/packages/{{ packagefirst }}/{{ packagefirst }}.json"
-      register: packagefirst_metadata_state
-
-    - name: Stat {{ packagesecond }}.nu
-      stat:
-        path: "{{ nupac_dir }}/packages/{{ packagesecond }}/{{ packagesecond }}.nu"
-      register: packagesecond_state
-
-    - name: Stat {{ packagesecond }}.json
-      stat:
-        path: "{{ nupac_dir }}/packages/{{ packagesecond }}/{{ packagesecond }}.json"
-      register: packagesecond_metadata_state
+        path: "{{ nupac_dir }}/packages/{{ package }}/{{ package }}.json"
+      register: package_metadata_state
 
     - name: Check nu-pkgs.nu content
       slurp:
@@ -43,21 +32,13 @@
         executable: "{{ nu }}"
       register: scope
 
-    - name: Assert {{ packagefirst }} files were created and not added to scope
+    - name: Assert {{ package }} files were created and not added to scope
       assert:
         that:
-          - packagefirst_state.stat.exists
-          - packagefirst_metadata_state.stat.exists
-          - "'{{ packagefirst }}' not in {{ scope.stdout | from_json }}"
-          - "'use packages/{{ packagefirst }}/{{ packagefirst }}.nu * # added automatically by nupac' not in {{ nupkgs['content'] | b64decode | split('\n') }}"
-
-    - name: Assert {{ packagesecond }} files were created and not added to scope
-      assert:
-        that:
-          - packagesecond_state.stat.exists
-          - packagesecond_metadata_state.stat.exists
-          - "'{{ packagesecond }}' not in {{ scope.stdout | from_json }}"
-          - "'use packages/{{ packagesecond }}/{{ packagesecond }}.nu * # added automatically by nupac' not in {{ nupkgs['content'] | b64decode | split('\n') }}"
+          - package_state.stat.exists
+          - package_metadata_state.stat.exists
+          - "'{{ package }}' not in {{ scope.stdout | from_json }}"
+          - "'use packages/{{ package }}/{{ package }}.nu * # added automatically by nupac' not in {{ nupkgs['content'] | b64decode | split('\n') }}"
 
     - name: Add all packages to scope
       raw: "nupac use --all"
@@ -75,17 +56,11 @@
         executable: "{{ nu }}"
       register: scopetwo
 
-    - name: Assert {{ packagefirst }} was added to scope
+    - name: Assert {{ package }} was added to scope
       assert:
         that:
-          - "'{{ packagefirst }}' in {{ scopetwo.stdout | from_json }}"
-          - "'use {{ nupac_dir }}/packages/{{ packagefirst }}/{{ packagefirst }}.nu * # added automatically by nupac' in {{ nupkgstwo['content'] | b64decode | split('\n') }}"
-
-    - name: Assert {{ packagesecond }} was added to scope
-      assert:
-        that:
-          - "'{{ packagesecond }}' in {{ scopetwo.stdout | from_json }}"
-          - "'use {{ nupac_dir }}/packages/{{ packagesecond }}/{{ packagesecond }}.nu * # added automatically by nupac' in {{ nupkgstwo['content'] | b64decode | split('\n') }}"
+          - "'{{ package }}' in {{ scopetwo.stdout | from_json }}"
+          - "'use {{ nupac_dir }}/packages/{{ package }}/{{ package }}.nu * # added automatically by nupac' in {{ nupkgstwo['content'] | b64decode | split('\n') }}"
 
     - name: Remove packages from scope
       raw: "nupac unuse --all"
@@ -103,17 +78,11 @@
         executable: "{{ nu }}"
       register: scopethree
 
-    - name: Assert {{ packagefirst }} was removed from scope
+    - name: Assert {{ package }} was removed from scope
       assert:
         that:
-          - "'{{ packagefirst }}' not in {{ scopethree.stdout | from_json }}"
-          - "'use packages/{{ packagefirst }}/{{ packagefirst }}.nu * # added automatically by nupac' not in {{ nupkgsthree['content'] | b64decode | split('\n') }}"
-
-    - name: Assert {{ packagesecond }} was removed from scope
-      assert:
-        that:
-          - "'{{ packagesecond }}' not in {{ scopethree.stdout | from_json }}"
-          - "'use packages/{{ packagesecond }}/{{ packagesecond }}.nu * # added automatically by nupac' not in {{ nupkgsthree['content'] | b64decode | split('\n') }}"
+          - "'{{ package }}' not in {{ scopethree.stdout | from_json }}"
+          - "'use packages/{{ package }}/{{ package }}.nu * # added automatically by nupac' not in {{ nupkgsthree['content'] | b64decode | split('\n') }}"
 
     - name: Assert nupac was not removed from scope
       assert:
