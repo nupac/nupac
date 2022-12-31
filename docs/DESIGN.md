@@ -43,11 +43,13 @@ Each command has its own help accessible with one of these standard, interchange
 - `nuspac unuse`: *Removes provided set of packages or all of them from the nu-pkgs.nu file*
   - `...packages`: packages to remove from nu-pkgs.nu
   - `--all(-a)`: remove all installed packages from nu-pkgs.nu (except for nupac)
+  - `--long(-l):`: display long package descriptions instead of short ones *optional*
   - `--self(-s)`: remove nupac from nu-pkgs.nu
 
 - `nupac use`: *Adds provided set of packages or all of them to nu-pkgs.nu*
   - `...packages`: packages to use
   -  `--all(-a)`: use all installed packages
+  - `--long(-l):`: display long package descriptions instead of short ones *optional*
 
 - `nupac version`: *Displays verbose nupac version with all its metadata*
 
