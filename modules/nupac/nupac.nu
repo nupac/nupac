@@ -542,8 +542,11 @@ export def "nupac upgrade" [
 export def "nupac unuse" [
     ...packages: string # packages to remove from nu-pkgs.nu
     --all(-a): bool # remove all installed packages from nu-pkgs.nu (except for nupac)
+    --long(-l): bool # display long package descriptions instead of short ones
     --self(-s): bool # remove nupac from nu-pkgs.nu
 ] {
+    let long = (get-flag-value $long "NUPAC_USE_LONG_DESC")
+
     let all_packages = ( if $self {
             print (get-packages)
             get-packages --all
@@ -582,16 +585,30 @@ export def "nupac unuse" [
         }
     )
 
-    for pkg in $to_unuse {
-        remove-from-config (config-entry ((get-package-location $pkg) | into string))
+    if ($to_unuse|is-empty) {
+        error make --unspanned {
+            msg: "No packages to remove from scope"
+        }
+    } else {
+        print (user-readable-pkg-info $to_unuse $long)
+        print "The listed packages will be removed from scope"
+        if (user-approves) {
+            for pkg in $to_unuse {
+                remove-from-config (config-entry ((get-package-location $pkg) | into string))
+            }
+        }
     }
+
 }
 
 # Adds provided set of packages or all of them to the nu-pkgs.nu file
 export def "nupac use" [
     ...packages: string # packages to use
     --all(-a): bool # use all installed packages
+    --long(-l): bool # display long package descriptions instead of short ones
 ] {
+    let long = (get-flag-value $long "NUPAC_USE_LONG_DESC")
+
     let all_packages = (get-packages --all)
 
     let not_found = (
@@ -613,8 +630,18 @@ export def "nupac use" [
         |where $it.name in $packages
     })
 
-    for pkg in $to_add {
-        add-to-scope (config-entry ((get-package-location $pkg) | into string))
+    if ($to_add|is-empty) {
+        error make --unspanned {
+            msg: "No packages to add to scope"
+        }
+    } else {
+        print (user-readable-pkg-info $to_add $long)
+        print "The listed packages will be added to scope"
+        if (user-approves) {
+            for pkg in $to_add {
+                add-to-scope (config-entry ((get-package-location $pkg) | into string))
+            }
+        }
     }
 }
 
