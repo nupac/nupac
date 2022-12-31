@@ -38,7 +38,7 @@
           - package_state.stat.exists
           - package_metadata_state.stat.exists
           - "'{{ package }}' not in {{ scope.stdout | from_json }}"
-          - "'use packages/{{ package }}/{{ package }}.nu * # added automatically by nupac' not in {{ nupkgs['content'] | b64decode | split('\n') }}"
+          - "'use {{ nupac_dir }}/packages/{{ package }}/{{ package }}.nu * # added automatically by nupac' not in {{ nupkgs['content'] | b64decode | split('\n') }}"
 
     - name: Add all packages to scope
       raw: "nupac use --all"
@@ -82,13 +82,13 @@
       assert:
         that:
           - "'{{ package }}' not in {{ scopethree.stdout | from_json }}"
-          - "'use packages/{{ package }}/{{ package }}.nu * # added automatically by nupac' not in {{ nupkgsthree['content'] | b64decode | split('\n') }}"
+          - "'use {{ nupac_dir }}/packages/{{ package }}/{{ package }}.nu * # added automatically by nupac' not in {{ nupkgsthree['content'] | b64decode | split('\n') }}"
 
     - name: Assert nupac was not removed from scope
       assert:
         that:
           - "'nupac' in {{ scopethree.stdout | from_json }}"
-          - "'use packages/nupac/nupac.nu * # added automatically by nupac' in {{ nupkgsthree['content'] | b64decode | split('\n') }}"
+          - "'use {{ nupac_dir }}/packages/nupac/nupac.nu * # added automatically by nupac' in {{ nupkgsthree['content'] | b64decode | split('\n') }}"
 
     - name: Remove nupac from scope
       raw: "nupac unuse --self"
@@ -110,4 +110,4 @@
       assert:
         that:
           - "'nupac' not in {{ scopefour.stdout | from_json }}"
-          - "'use packages/nupac/nupac.nu * # added automatically by nupac' not in {{ nupkgsfour['content'] | b64decode | split('\n') }}"
+          - "'use {{ nupac_dir }}/packages/nupac/nupac.nu * # added automatically by nupac' not in {{ nupkgsfour['content'] | b64decode | split('\n') }}"
