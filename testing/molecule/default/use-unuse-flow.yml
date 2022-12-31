@@ -45,19 +45,41 @@
       args:
         executable: "{{ nu }}"
 
+    - name: Check nu-pkgs.nu content second time
+      slurp:
+        src: "{{ nupac_dir }}/nu-pkgs.nu"
+      register: nupkgs-two
+
+    - name: Get nushell scope second time
+      raw: "$nu.scope.commands|get name|to json"
+      args:
+        executable: "{{ nu }}"
+      register: scope-two
+
     - name: Assert package was added to scope
       assert:
         that:
-          - "'{{ package }}' in {{ scope.stdout | from_json }}"
-          - "'use {{ nupac_dir }}/packages/{{ package }}/{{ package }}.nu * # added automatically by nupac' in {{ nupkgs['content'] | b64decode | split('\n') }}"
+          - "'{{ package }}' in {{ scope-two.stdout | from_json }}"
+          - "'use {{ nupac_dir }}/packages/{{ package }}/{{ package }}.nu * # added automatically by nupac' in {{ nupkgs-two['content'] | b64decode | split('\n') }}"
 
     - name: Remove package from scope
       raw: "nupac unuse {{ package }}"
       args:
         executable: "{{ nu }}"
 
+    - name: Check nu-pkgs.nu content third time
+      slurp:
+        src: "{{ nupac_dir }}/nu-pkgs.nu"
+      register: nupkgs-three
+
+    - name: Get nushell scope third time
+      raw: "$nu.scope.commands|get name|to json"
+      args:
+        executable: "{{ nu }}"
+      register: scope-three
+
     - name: Assert package was removed from scope
       assert:
         that:
-          - "'{{ package }}' not in {{ scope.stdout | from_json }}"
-          - "'use {{ nupac_dir }}/packages/{{ package }}/{{ package }}.nu * # added automatically by nupac' not in {{ nupkgs['content'] | b64decode | split('\n') }}"
+          - "'{{ package }}' not in {{ scope-three.stdout | from_json }}"
+          - "'use {{ nupac_dir }}/packages/{{ package }}/{{ package }}.nu * # added automatically by nupac' not in {{ nupkgs-three['content'] | b64decode | split('\n') }}"
