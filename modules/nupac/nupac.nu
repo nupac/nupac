@@ -545,6 +545,7 @@ export def "nupac unuse" [
     --self(-s): bool # remove nupac from nu-pkgs.nu
 ] {
     let all_packages = ( if $self {
+            print (get-packages)
             get-packages --all
         } else {
             (get-packages --all)
@@ -569,6 +570,15 @@ export def "nupac unuse" [
         } else {
             $all_packages
             |where $it.name in $packages
+        }
+    )
+
+    let to_unuse =  (
+        if $self {
+            get-packages "nupac"
+            |merge $to_unuse
+        } else {
+            $to_unuse
         }
     )
 
@@ -606,12 +616,6 @@ export def "nupac use" [
     for pkg in $to_add {
         add-to-scope (config-entry ((get-package-location $pkg) | into string))
     }
-
-    # FIXME: why does this each not work?
-    #$to_add
-    #|each{|package|
-    #    add-to-scope (config-entry ((get-package-location $package) | into string))
-    #}
 }
 
 # Displays verbose nupac version with all its metadata
