@@ -46,7 +46,7 @@
         executable: "{{ nu }}"
       register: second_output
 
-    - name: Assert nupac prompts while reinstalling a package
+    - name: Assert nupac prompts while reinstalling package
       assert:
         that:
           - "'will be reinstalled' in second_output.stdout"
