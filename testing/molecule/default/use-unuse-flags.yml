@@ -1,0 +1,144 @@
+---
+- name: Use and unuse flags
+  hosts: all
+  become: false
+  vars:
+    packagefirst: make
+    packagesecond: remoting
+
+  tasks:
+    - name: Install packages
+      raw: "nupac install {{ packagefirst }} {{ packagesecond }}"
+      args:
+        executable: "{{ nu }}"
+
+    - name: Stat {{ packagefirst }}.nu
+      stat:
+        path: "{{ nupac_dir }}/packages/{{ packagefirst }}/{{ packagefirst }}.nu"
+      register: packagefirst_state
+
+    - name: Stat {{ packagefirst }}.json
+      stat:
+        path: "{{ nupac_dir }}/packages/{{ packagefirst }}/{{ packagefirst }}.json"
+      register: packagefirst_metadata_state
+
+    - name: Stat {{ packagesecond }}.nu
+      stat:
+        path: "{{ nupac_dir }}/packages/{{ packagesecond }}/{{ packagesecond }}.nu"
+      register: packagesecond_state
+
+    - name: Stat {{ packagesecond }}.json
+      stat:
+        path: "{{ nupac_dir }}/packages/{{ packagesecond }}/{{ packagesecond }}.json"
+      register: packagesecond_metadata_state
+
+    - name: Check nu-pkgs.nu content
+      slurp:
+        src: "{{ nupac_dir }}/nu-pkgs.nu"
+      register: nupkgs
+
+    - name: Get nushell scope
+      raw: "$nu.scope.commands|get name|to json"
+      args:
+        executable: "{{ nu }}"
+      register: scope
+
+    - name: Assert {{ packagefirst }} files were created and not added to scope
+      assert:
+        that:
+          - packagefirst_state.stat.exists
+          - packagefirst_metadata_state.stat.exists
+          - "'{{ packagefirst }}' not in {{ scope.stdout | from_json }}"
+          - "'use packages/{{ packagefirst }}/{{ packagefirst }}.nu * # added automatically by nupac' not in {{ nupkgs['content'] | b64decode | split('\n') }}"
+
+    - name: Assert {{ packagesecond }} files were created and not added to scope
+      assert:
+        that:
+          - packagesecond_state.stat.exists
+          - packagesecond_metadata_state.stat.exists
+          - "'{{ packagesecond }}' not in {{ scope.stdout | from_json }}"
+          - "'use packages/{{ packagesecond }}/{{ packagesecond }}.nu * # added automatically by nupac' not in {{ nupkgs['content'] | b64decode | split('\n') }}"
+
+    - name: Add all packages to scope
+      raw: "nupac use --all"
+      args:
+        executable: "{{ nu }}"
+
+    - name: Check nu-pkgs.nu content second time
+      slurp:
+        src: "{{ nupac_dir }}/nu-pkgs.nu"
+      register: nupkgstwo
+
+    - name: Get nushell scope second time
+      raw: "$nu.scope.commands|get name|to json"
+      args:
+        executable: "{{ nu }}"
+      register: scopetwo
+
+    - name: Assert {{ packagefirst }} was added to scope
+      assert:
+        that:
+          - "'{{ packagefirst }}' in {{ scopetwo.stdout | from_json }}"
+          - "'use {{ nupac_dir }}/packages/{{ packagefirst }}/{{ packagefirst }}.nu * # added automatically by nupac' in {{ nupkgstwo['content'] | b64decode | split('\n') }}"
+
+    - name: Assert {{ packagesecond }} was added to scope
+      assert:
+        that:
+          - "'{{ packagesecond }}' in {{ scopetwo.stdout | from_json }}"
+          - "'use {{ nupac_dir }}/packages/{{ packagesecond }}/{{ packagesecond }}.nu * # added automatically by nupac' in {{ nupkgstwo['content'] | b64decode | split('\n') }}"
+
+    - name: Remove packages from scope
+      raw: "nupac unuse --all"
+      args:
+        executable: "{{ nu }}"
+
+    - name: Check nu-pkgs.nu content third time
+      slurp:
+        src: "{{ nupac_dir }}/nu-pkgs.nu"
+      register: nupkgsthree
+
+    - name: Get nushell scope third time
+      raw: "$nu.scope.commands|get name|to json"
+      args:
+        executable: "{{ nu }}"
+      register: scopethree
+
+    - name: Assert {{ packagefirst }} was removed from scope
+      assert:
+        that:
+          - "'{{ packagefirst }}' not in {{ scopethree.stdout | from_json }}"
+          - "'use packages/{{ packagefirst }}/{{ packagefirst }}.nu * # added automatically by nupac' not in {{ nupkgsthree['content'] | b64decode | split('\n') }}"
+
+    - name: Assert {{ packagesecond }} was removed from scope
+      assert:
+        that:
+          - "'{{ packagesecond }}' not in {{ scopethree.stdout | from_json }}"
+          - "'use packages/{{ packagesecond }}/{{ packagesecond }}.nu * # added automatically by nupac' not in {{ nupkgsthree['content'] | b64decode | split('\n') }}"
+
+    - name: Assert nupac was not removed from scope
+      assert:
+        that:
+          - "'nupac' in {{ scopethree.stdout | from_json }}"
+          - "'use packages/nupac/nupac.nu * # added automatically by nupac' in {{ nupkgsthree['content'] | b64decode | split('\n') }}"
+
+    - name: Remove nupac from scope
+      raw: "nupac unuse --self"
+      args:
+        executable: "{{ nu }}"
+
+    - name: Check nu-pkgs.nu content fourth time
+      slurp:
+        src: "{{ nupac_dir }}/nu-pkgs.nu"
+      register: nupkgsfour
+
+    - name: Get nushell scope fourth time
+      raw: "$nu.scope.commands|get name|to json"
+      args:
+        executable: "{{ nu }}"
+      register: scopefour
+
+    - name: Assert nupac was removed from scope
+      assert:
+        that:
+          - "'nupac' not in {{ scopefour.stdout | from_json }}"
+          - "'use packages/nupac/nupac.nu * # added automatically by nupac' not in {{ nupkgsfour['content'] | b64decode | split('\n') }}"
