@@ -6,16 +6,13 @@ driver:
   name: docker
 platforms:
   - name: instance
-    image: "geerlingguy/docker-${MOLECULE_DISTRO:-ubuntu2004}-ansible:latest"
+    image: "ghcr.io/nupac/nupac:${TAG:-latest}"
     pre_build_image: true
     command: ""
     tmpfs:
       - /run
       - /tmp
       - /run/lock
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:rw
-    priviledged: true
     env:
       NUPAC_INSTALLER_BRANCH: ${GITHUB_HEAD_REF:-main}
       NUPAC_DEFAULT_BRANCH: ${GITHUB_HEAD_REF:-main}
