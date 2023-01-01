@@ -1,11 +1,9 @@
 ---
-name: Push docker images to GitHub Container Registry
+name: Delete temporary docker image
 'on':
-  push:
-    branches:
-      - main
-    paths:
-      - 'testing/docker/Dockerfile'
+  pull_request:
+    types:
+      - closed
 
 permissions:
   contents: read
@@ -15,27 +13,14 @@ env:
   image_name: ${{ github.repository }}
 
 jobs:
-  build-and-push-image:
-    name: Build and push Docker images to GitHub registry
+  delete-temp-image:
+    name: Delete image after PR was closed
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Log in to Container registry
-        uses: docker/login-action@v2.0.0
+      - name: Delete image
+        uses: bots-house/ghcr-delete-image-action@v1.0.0
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.RELEASE_ACTION_TOKEN }}
-
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v3.1.0
-        with:
-          registry: ghcr.io
-          context: ./testing/docker
-          push: true
-          tags: ghcr.io/${{ github.repository }}:latest
-
+          owner: ${{ github.owner }}
+          name: nupac
+          token: ${{ secrets.RELEASE_ACTION_TOKEN }}
+          tag: PR-${{github.event.pull_request.number}}
