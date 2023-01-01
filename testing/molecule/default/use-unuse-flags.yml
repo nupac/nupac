@@ -16,9 +16,9 @@
         path: "{{ nupac_dir }}/packages/{{ package }}/{{ package }}.nu"
       register: package_state
 
-    - name: Stat {{ package }}.json
+    - name: Stat metadata.json
       stat:
-        path: "{{ nupac_dir }}/packages/{{ package }}/{{ package }}.json"
+        path: "{{ nupac_dir }}/packages/{{ package }}/metadata.json"
       register: package_metadata_state
 
     - name: Check nu-pkgs.nu content
