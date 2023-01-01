@@ -20,7 +20,7 @@ jobs:
       - name: Delete image
         uses: bots-house/ghcr-delete-image-action@v1.0.0
         with:
-          owner: ${{ github.owner }}
+          owner: nupac
           name: nupac
           token: ${{ secrets.RELEASE_ACTION_TOKEN }}
           tag: PR-${{github.event.pull_request.number}}
