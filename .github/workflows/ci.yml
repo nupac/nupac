@@ -9,6 +9,28 @@ name: CI
       - main
 
 jobs:
+  docker:
+    name: Build Docker image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to Container registry
+        uses: docker/login-action@v2.0.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.RELEASE_ACTION_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3.1.0
+        with:
+          registry: ghcr.io
+          context: ./testing/docker
+          push: true
+          tags: ghcr.io/${{ github.repository }}:${{ format('PR-{0}', github.event.pull_request.number) || 'latest' }}
+
   setup:
     name: Lint, Pre-Commit and Test setup
     runs-on: ubuntu-latest
@@ -62,7 +84,9 @@ jobs:
 
   test:
     name: Tests
-    needs: setup
+    needs:
+      - setup
+      - docker
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -89,3 +113,4 @@ jobs:
           molecule test
         env:
           TEST: ${{ matrix.test }}
+          TAG: ${{ format('PR-{0}', github.event.pull_request.number) || 'latest' }}

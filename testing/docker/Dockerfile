@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 ENV NUSHELL_INSTALL_VERSION=0.73.0
-ENV NUSHELL_INSTALL_DIR=/usr/bin
+ENV NUSHELL_INSTALL_DIR=/usr/local/bin
 ENV ANSIBLE_USER=ansible
 ENV SUDO_GROUP=sudo
 
@@ -28,4 +28,4 @@ RUN set -eu \
   && rm -rf /tmp/*
 USER ${ANSIBLE_USER}
 WORKDIR /home/${ANSIBLE_USER}
-ENTRYPOINT ["nu"]
+CMD ["sleep", "infinity"]
