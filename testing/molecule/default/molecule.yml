@@ -6,7 +6,7 @@ driver:
   name: docker
 platforms:
   - name: instance
-    image: "geerlingguy/docker-${MOLECULE_DISTRO:-ubuntu2004}-ansible:latest"
+    image: "ghcr.io/nupac/nupac:latest"
     pre_build_image: true
     command: ""
     tmpfs:
