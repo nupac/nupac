@@ -2,7 +2,7 @@
 name: Delete temporary docker image
 'on':
   pull_request:
-    type:
+    types:
       - closed
 
 permissions:
