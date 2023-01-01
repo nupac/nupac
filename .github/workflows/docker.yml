@@ -22,5 +22,5 @@ jobs:
         with:
           owner: nupac
           name: nupac
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_ACTION_TOKEN }}
           tag: ${{ github.event.pull_request.number }}
