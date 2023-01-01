@@ -16,8 +16,6 @@
       - nupac search
       - nupac upgrade
       - nupac version
-  roles:
-    - yethal.nushell
   tasks:
     - name: Copy the installer into the container
       copy:
