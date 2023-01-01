@@ -5,6 +5,8 @@
   gather_facts: true
   become: false
   vars:
+    nu_users:
+      - root
     version_regex: '^([1-9]\d*|0)(\.(([1-9]\d*)|0)){2}$'
     command_list:
       - nupac install
@@ -14,8 +16,6 @@
       - nupac search
       - nupac upgrade
       - nupac version
-  roles:
-    - yethal.nushell
   tasks:
     - name: Copy the installer into the container
       copy:
@@ -61,7 +61,9 @@
             success_msg: "{{ item.success }}"
             fail_msg: "{{ item.fail }}"
             that: "{{ item.assertion }}"
-          with_items:
+          loop_control:
+            label: "{{ item.success }}"
+          loop:
             - {
               assertion: '"nupac has been successfully installed" in installer.stdout',
               success: 'Stdout contains expected message',

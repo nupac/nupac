@@ -8,7 +8,35 @@ name: CI
     branches:
       - main
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
+  docker:
+    name: Build Docker image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Container registry
+        uses: docker/login-action@v2.0.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.RELEASE_ACTION_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3.1.0
+        with:
+          registry: ghcr.io
+          context: ./testing/docker
+          push: true
+          tags: ghcr.io/${{ github.repository }}:${{ github.event.pull_request.number || 'latest' }}
+
   setup:
     name: Lint, Pre-Commit and Test setup
     runs-on: ubuntu-latest
@@ -23,7 +51,7 @@ jobs:
       - name: Setup Nu
         uses: hustcer/setup-nu@v3
         with:
-          version: '0.71.0'
+          version: '0.73.0'
 
       - name: Setup Python 3
         uses: actions/setup-python@v4
@@ -62,7 +90,9 @@ jobs:
 
   test:
     name: Tests
-    needs: setup
+    needs:
+      - setup
+      - docker
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -89,3 +119,4 @@ jobs:
           molecule test
         env:
           TEST: ${{ matrix.test }}
+          TAG: ${{ github.event.pull_request.number || 'latest' }}

@@ -46,7 +46,7 @@ def add-optional-attributes [
 ] {
     let attr = (
         $DEFAULT_ATTRIBUTES
-        |merge {$metadata}
+        |merge $metadata
     )
 
     if "long-desc" not-in ($attr|columns) {
@@ -57,6 +57,17 @@ def add-optional-attributes [
     }
 }
 
+def get-metadata-jsons [] {
+    ls modules
+    |where type == dir
+    |get name
+    |path basename
+    |each {|dir|
+        let path_segments = [ "modules" $dir $"($dir).json" ]
+        echo ($path_segments | path join | into string)
+    }
+}
+
 let metadata = (check-required-attributes (add-optional-attributes (get-metadata "metadata.json")))
 
 # otherwise the developer has to manually insert a checksum for their installer
@@ -64,5 +75,5 @@ if ($metadata.installer|is-empty) {
     $metadata
     |upsert checksum {open --raw nupac.nu | hash sha256}
     |sort
-    |save "metadata.json"
+    |save --force "metadata.json"
 }

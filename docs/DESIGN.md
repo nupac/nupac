@@ -15,30 +15,47 @@ Each command has its own help accessible with one of these standard, interchange
 - `nupac`: *Displays help (list of all commands)*
   - `-v/--version`: Displays nupac's version instead of help
 - `nupac install`: *Installs provided set of packages and optionally adds them to the global scope*
-  - `...packages`: packages you want to install
-  - `--add-to-scope(-a)`: add packages to global scope, *optional*
+  - `...packages`: packages to install
+  - `--add-to-scope(-a)`: add packages to global scope *optional*
   - `--long(-l):`: display long package descriptions instead of short ones *optional*
+  - `--noreinstall(-r)`: skip installed packages that are up to date
+  - `--noupgrade(-u)`: skip installed & outdated packages
 
 - `nupac list`: *Lists installed nu packages*
   - `--long(-l):`: display long package descriptions instead of short ones *optional*
 
 - `nupac refresh`: *Refreshes the repo cache*
 
-- `nupac remove`: *Removes provided set of packages and removes use statement from config.nu*
-  - `...packages`: packages you want to remove
+- `nupac remove`: *Removes provided set of packages and removes use statement from nu-pkgs.nu*
+  - `...packages`: packages to remove
 
 - `nupac search`: *Searches remote repository for packages matching query with name, descriptions or keywords*
   - `query`: query to look for
-  - `--all(-a)`: display also packages unsupported by your operating system
+  - `--all(-a)`: display also packages unsupported by the operating system
   - `--long(-l):`: display long package descriptions instead of short ones *optional*
 
 - `nupac self-upgrade`: *Installs the latest version of nupac (either upgrade or re-install)*
 
 - `nupac upgrade`: *Upgrades all or selected packages*
-  - `...packages`: packages you want to upgrade
-  - `--all(-a)`: apply all available upgrades, *optional*
+  - `...packages`: packages to upgrade
+  - `--all(-a)`: apply all available upgrades
+  - `--ignore-self(-i)`: do not upgrade nupac *optional*
   - `--long(-l):`: display long package descriptions instead of short ones *optional*
+
+- `nuspac unuse`: *Removes provided set of packages or all of them from the nu-pkgs.nu file*
+  - `...packages`: packages to remove from nu-pkgs.nu
+  - `--all(-a)`: remove all installed packages from nu-pkgs.nu (except for nupac)
+  - `--long(-l):`: display long package descriptions instead of short ones *optional*
+  - `--self(-s)`: remove nupac from nu-pkgs.nu
+
+- `nupac use`: *Adds provided set of packages or all of them to nu-pkgs.nu*
+  - `...packages`: packages to use
+  -  `--all(-a)`: use all installed packages
+  - `--long(-l):`: display long package descriptions instead of short ones *optional*
+
 - `nupac version`: *Displays verbose nupac version with all its metadata*
+
+## Enviromental variables
 ## Enviroment variables
 Simple nupac config, just declare the specific variable in your env, if you want to override the default value.
 
@@ -54,6 +71,10 @@ Simple nupac config, just declare the specific variable in your env, if you want
   - If not declared, nupac will act as if it's false and it will prompt for a confirmation
 - `$env.NUPAC_USE_LONG_DESC`: *If true, nupac will display long package descriptions*
   - If not declared, nupac will use short package descriptions
+- `$env.NUPAC_INSTALL_NOUPGRADE`: *If true, `nupac install` will skip installed & outdated packages*
+  - If not declared, `nupac install` will upgrade installed & outdated packages
+- `$env.NUPAC_INSTALL_NOREINSTALL`: *If true, `nupac install` will skip installed packages that are up to date*
+  - If not declared, `nupac install` will reinstall installed packages that are up to date
 
 ## Packages paths structure
 

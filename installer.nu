@@ -50,13 +50,13 @@ let nupac_json_path = (
 mkdir $nupac_module_path
 
 fetch $nupac_repo_cache
-|save $repo_cache_path
+|save --force $repo_cache_path
 
 fetch $nupac_module
-|save $nupac_script_path
+|save --force $nupac_script_path
 
 fetch $nupac_json
-|save $nupac_json_path
+|save --force $nupac_json_path
 
 
 if not ($nu_pkgs|path exists) {
@@ -71,7 +71,7 @@ if not ($nu_pkgs|path exists) {
         |lines
         |append $"source ($nu_pkgs)"
         |str collect (char nl)
-        |save $nu.config-path
+        |save --force $nu.config-path
     } else {
         print 'You will have to source the nu-pkgs file manually'
     }
