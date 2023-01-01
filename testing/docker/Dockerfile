@@ -15,12 +15,7 @@ RUN set -eu \
   && wget -q https://raw.githubusercontent.com/nushell/nushell/main/crates/nu-utils/src/sample_config/default_env.nu -O /home/${ANSIBLE_USER}/.config/nushell/env.nu \
   && wget -q https://raw.githubusercontent.com/nushell/nushell/main/crates/nu-utils/src/sample_config/sample_login.nu -O /home/${ANSIBLE_USER}/.config/nushell/login.nu \
   && cd /tmp \
-  && wget -qO - https://api.github.com/repos/nushell/nushell/releases/tags/${NUSHELL_INSTALL_VERSION} \
-  |grep browser_download_url \
-  |grep x86_64 \
-  |grep gnu \
-  |cut -f4 -d '"' \
-  |xargs -I{} wget {} \
+  && wget https://github.com/nushell/nushell/releases/download/${NUSHELL_INSTALL_VERSION}/nu-${NUSHELL_INSTALL_VERSION}-x86_64-unknown-linux-gnu.tar.gz \
   && tar -xzf nu* \
   && chmod +x nu*/nu \
   && mv nu*/nu ${NUSHELL_INSTALL_DIR}/nu \
