@@ -8,6 +8,9 @@ name: CI
     branches:
       - main
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   docker:
     name: Build Docker image
