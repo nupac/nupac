@@ -7,7 +7,7 @@ name: Delete temporary docker image
 
 permissions:
   contents: read
-  packages: write
+  packages: write|read|delete
 
 env:
   image_name: ${{ github.repository }}
