@@ -37,5 +37,5 @@ jobs:
           registry: ghcr.io
           context: ./testing/docker
           push: true
-          tags: ghcr.io/${{ github.repository }}:latest
+          tags: ghcr.io/${{ github.repository }}/${{ github.repository }}:latest
 
