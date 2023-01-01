@@ -1,7 +1,8 @@
 FROM ubuntu:20.04
 ENV NUSHELL_INSTALL_VERSION=0.73.0
-ENV NUSHELL_INSTALL_DIR /usr/bin
-ENV ANSIBLE_USER=ansible SUDO_GROUP=sudo
+ENV NUSHELL_INSTALL_DIR=/usr/bin
+ENV ANSIBLE_USER=ansible
+ENV SUDO_GROUP=sudo
 
 RUN set -eu \
   && apt-get update \
@@ -21,8 +22,8 @@ RUN set -eu \
   |cut -f4 -d '"' \
   |xargs -I{} wget {} \
   && tar -xzf nu* \
-  && chmod +x nu \
-  && mv nu ${NUSHELL_INSTALL_DIR}/nu \
+  && chmod +x nu*/nu \
+  && mv nu*/nu ${NUSHELL_INSTALL_DIR}/nu \
   && chown -R ${ANSIBLE_USER}:${SUDO_GROUP} /home/${ANSIBLE_USER}/.config/nushell \
   && rm -rf /tmp/*
 USER ${ANSIBLE_USER}
