@@ -25,7 +25,7 @@ provisioner:
   playbooks:
     converge: "${TEST:-install-package.yml}"
   env:
-    MOLECULE_NO_LOG: true
+    MOLECULE_NO_LOG: false
   inventory:
     host_vars:
       instance:
