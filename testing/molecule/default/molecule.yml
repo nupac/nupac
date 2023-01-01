@@ -13,9 +13,6 @@ platforms:
       - /run
       - /tmp
       - /run/lock
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:rw
-    priviledged: true
     env:
       NUPAC_INSTALLER_BRANCH: ${GITHUB_HEAD_REF:-main}
       NUPAC_DEFAULT_BRANCH: ${GITHUB_HEAD_REF:-main}
@@ -25,7 +22,7 @@ provisioner:
   playbooks:
     converge: "${TEST:-install-package.yml}"
   env:
-    MOLECULE_NO_LOG: false
+    MOLECULE_NO_LOG: true
   inventory:
     host_vars:
       instance:
