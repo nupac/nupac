@@ -7,7 +7,7 @@
 
   tasks:
     - name: Install package
-      raw: "nupac install {{ package }} -a"
+      raw: "nupac install {{ package }} --add-to-scope"
       args:
         executable: "{{ nu }}"
 
@@ -67,3 +67,13 @@
           - not package_state.stat.exists
           - '"{{ package }}" not in {{ scope.stdout | from_json }}'
           - "'use {{ nupac_dir }}/packages/{{ package }}/{{ package }}.nu * # added automatically by nupac' not in {{ nupkgs['content'] | b64decode | split('\n') }}"
+
+    - name: Install once again
+      raw: "nupac install make"
+      args:
+        executable: "{{ nu }}"
+
+    - name: Test --long flag
+      raw: "nupac remove make --long"
+      args:
+        executable: "{{ nu }}"

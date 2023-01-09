@@ -62,6 +62,11 @@
           - "'{{ package }}' in {{ scopetwo.stdout | from_json }}"
           - "'use {{ nupac_dir }}/packages/{{ package }}/{{ package }}.nu * # added automatically by nupac' in {{ nupkgstwo['content'] | b64decode | split('\n') }}"
 
+    - name: Test --long flag for use
+      raw: "nupac use {{ package }} --long"
+      args:
+        executable: "{{ nu }}"
+
     - name: Remove package from scope
       raw: "nupac unuse {{ package }}"
       args:
@@ -83,3 +88,8 @@
         that:
           - "'{{ package }}' not in {{ scopethree.stdout | from_json }}"
           - "'use {{ nupac_dir }}/packages/{{ package }}/{{ package }}.nu * # added automatically by nupac' not in {{ nupkgsthree['content'] | b64decode | split('\n') }}"
+
+    - name: Test --long flag for unuse
+      raw: "nupac unuse {{ package }} --long"
+      args:
+        executable: "{{ nu }}"

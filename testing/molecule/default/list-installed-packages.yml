@@ -20,12 +20,12 @@
           - "( package_list.stdout | from_json )[0].keys() | list == {{ fields }}"
 
     - name: Install {{ package }}.nu
-      raw: "nupac install {{ package }} -a"
+      raw: "nupac install {{ package }} --add-to-scope"
       args:
         executable: "{{ nu }}"
 
     - name: List installed packages again
-      raw: "nupac list|to json"
+      raw: "nupac list --long |to json"
       args:
         executable: "{{ nu }}"
       register: package_list2
