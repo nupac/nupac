@@ -9,8 +9,8 @@
         executable: "{{ nu }}"
       register: nupac
 
-    - name: Get nupac -h output
-      raw: "nupac -h"
+    - name: Get nupac --help output
+      raw: "nupac --help"
       args:
         executable: "{{ nu }}"
       register: nupach
@@ -20,8 +20,8 @@
         that:
           - "nupac.stdout == nupach.stdout"
 
-    - name: Get nupac -v output
-      raw: "nupac -v"
+    - name: Get nupac --version output
+      raw: "nupac --version"
       args:
         executable: "{{ nu }}"
       register: nupacv

@@ -50,7 +50,7 @@
           register: scope
 
         - name: Get nupac version
-          raw: "nupac -v"
+          raw: "nupac --version"
           args:
             executable: "{{ nu }}"
           register: version

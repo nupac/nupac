@@ -41,7 +41,7 @@
           - "'use {{ nupac_dir }}/packages/{{ package }}/{{ package }}.nu * # added automatically by nupac' not in {{ nupkgs['content'] | b64decode | split('\n') }}"
 
     - name: Install package once again
-      raw: "nupac install {{ package }}"
+      raw: "nupac install --long {{ package }}"
       args:
         executable: "{{ nu }}"
       register: second_output

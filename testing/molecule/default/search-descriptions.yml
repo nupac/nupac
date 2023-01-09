@@ -6,7 +6,7 @@
     package: make
 
   tasks:
-    - name: Search with -l
+    - name: Search with --long
       raw: "nupac search {{ package }} --long | to json"
       args:
         executable: "{{ nu }}"
@@ -16,7 +16,7 @@
       assert:
         that: "'This module contains completions for make build tool' in searchl.stdout | from_json | first | json_query('description')"
 
-    - name: Search without -l
+    - name: Search without --long
       raw: "nupac search {{ package }} | to json"
       args:
         executable: "{{ nu }}"

@@ -7,7 +7,7 @@
 
   tasks:
     - name: Install package
-      raw: "nupac install {{ package }} -a"
+      raw: "nupac install {{ package }} --add-to-scope"
       args:
         executable: "{{ nu }}"
 
