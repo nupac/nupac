@@ -2,7 +2,7 @@
 Nu package manager written entirely in nu
 
 ## Current status:
-**Working on [0.1.0 pre-release](https://github.com/skelly37/nupac/milestone/1)**
+**ARCHIVED TO WORK TOGETHER WITH OTHERS IN NUSHELL PROJECT. Please refer to [nushell/nupm](https://github.com/nushell/nupm)**
 
 ## Installation
 ### Requirements
